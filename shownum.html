@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="author" content="">
+<title>Number</title>
+<link href="include/css/bootstrap.css" rel="stylesheet">
+<link href="include/css/bootstrap-theme.min.css" rel="stylesheet">
+<link href="include/css/bootstrap-theme.css" rel="stylesheet">
+<style type="text/css">
+.dv-img {margin-top:22%;float:right;width:25px;height:70px;background:url('include/img/icon.jpg') no-repeat -138px -145px;cursor:pointer;}
+</style>
+<script src="include/js/jquery-2.1.1.js"></script>
+<script src="include/js/bootstrap.js"></script>
+<script type="text/javascript">
+
+function createXMLHttpRequest(url,dv){
+	xmlhttp=""
+	if(window.ActiveXObject){
+		try{
+		xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
+		}catch(e){
+		xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+		}}
+		else if(window.XMLHttpRequest){
+			xmlhttp = new XMLHttpRequest();
+				if (xmlhttp.overrideMimeType){ xmlhttp.overrideMimeType("text/xml");}
+		}
+		if(!xmlhttp){ window.alert("Do not support XMLHttpRequest!");}
+		xmlhttp.onreadystatechange=XHRChanged;
+		xmlhttp.open("POST", url,false);
+		xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+		xmlhttp.send(dv);
+}
+function XHRChanged(){	//handle return value xmlhttp.responseText
+	if (xmlhttp.readyState==4){
+		getBack(xmlhttp.responseText);}
+}
+function cookieExpiryDate(){
+	date = new Date();
+	return (new Date(date.setDate(date.getYear()+10))).toGMTString();
+}
+
+function getBack(vchReturn){
+	try{
+		$(".alert").html(vchReturn);
+		$(".alert").css('display','block')
+		/*
+		vchReturn=vchReturn.substr(0,vchReturn.length);
+		var vf=vchReturn.split("#")[0];
+		var desc=vchReturn.split("#")[1];
+		if (vf=="1"){
+			document.cookie=document.getElementById("inp-usr").value;
+			$(".alert").html("Welcome");
+			timeid=setTimeout(function(){
+			window.location="query.html";},2000);
+		}else{
+			$(".alert").html(desc);
+			$(".inp-usr").val("");
+			$(".inp-pwd").val("");
+			}
+			*/
+		}catch(e){ alert(e);}
+}
+$(document).ready(function(){
+	document.cookie="1001#96001#eric2"
+	if (!document.cookie){
+		alert("Please Login");
+		window.location="login.html";
+	}
+	$(".dv-img").click(function(){
+		location.href="queryRp.html";
+	})
+	setTimeout(function(){
+	url="get.php?pid="+escape(document.cookie.split('#')[0]);
+	createXMLHttpRequest_dept(url,"fresh=" +Math.random());
+	},600);
+})
+</script>
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+</head>
+<body>
+<noscript>
+	<div>
+        <p>Unfortunately your browser does not hava JavaScript capabilities which are required to exploit full functionality of our site. This could be the result of two possible scenarios:</p>
+        <ol><li>You are using an old web browser, in which case you should upgrade it to a newer version. We recommend the latest version of <a href="http://www.getfirefox.com">Firefox</a>.</li>
+        <li>You have disabled JavaScript in you browser, in which case you will have to enable it to properly use our site. <a href="http://www.google.com/support/bin/answer.py?answer=23852">Learn how to enable JavaScript</a>.</li>
+        </ol>
+    </div>
+</noscript>
+<div class="container">
+
+</div>
+<div class="dv-img"></div>
+
+</body>
+</html>
