@@ -46,7 +46,10 @@ function cookieExpiryDate(){
 
 function getBack(vchReturn){
 	try{
-		$(".alert").html(vchReturn);
+		var vp=vchReturn.split("##")[0];
+		var vt=vchReturn.split("##")[1];
+		var desc="日活："+vp+"<br>"+"总注册数："+vt
+		$(".alert").html(desc+'&nbsp;<a class="close" href="#">&times;</a>');
 		$(".alert").css('display','block')
 		/*
 		vchReturn=vchReturn.substr(0,vchReturn.length);
@@ -88,7 +91,7 @@ $(document).ready(function(){
 <body>
 <div class="container">
 <div id="filelist" class='alert alert-info' >
-&nbsp;<a class="close" href="#">&times;</a>
+<a class="close" href="#">&times;</a>
 </div>
 </div>
 <div class="dv-img"></div>
