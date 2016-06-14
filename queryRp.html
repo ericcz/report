@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Report</title>
+<link rel="stylesheet" href="include/css/bootstrap.css">
+<link rel="stylesheet" href="include/css/bootstrap-datetimepicker.css">
+<style>
+body {margin:20px 50px}
+li.note {margin:0px;font-size:16pt;list-style:none;font-family:Arial;}
+.step {float:left;margin-right:180px;font-family:Arial;}
+.dv-img {margin-top:0px;float:right;width:25px;height:70px;background:url('img/icon.jpg') no-repeat -138px -145px;cursor:pointer;}
+</style>
+<script src="include/js/jquery-2.1.1.js"></script>
+<script src="include/js/bootstrap.min.js"></script>
+<script src="include/js/bootstrap-datetimepicker.js"></script>
+<script src="include/js/highcharts.js"></script>
+<script type="text/javascript">
+function createXMLHttpRequest(url,dv){
+	xmlhttp=""
+	if(window.ActiveXObject){
+		try{
+		xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
+		}catch(e){
+		xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+		}}
+		else if(window.XMLHttpRequest){
+			xmlhttp = new XMLHttpRequest();
+				if (xmlhttp.overrideMimeType){ xmlhttp.overrideMimeType("text/xml");}
+		}
+		if(!xmlhttp){ window.alert("Do not support XMLHttpRequest!");}
+		xmlhttp.onreadystatechange=XHRChanged;
+		xmlhttp.open("POST", url,false);
+		xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+		xmlhttp.send(dv);
+}
+function XHRChanged(){	//handle return value xmlhttp.responseText
+	if (xmlhttp.readyState==4){
+		getBack(xmlhttp.responseText);}
+}
+
+function showChart_columnStacked(cData,cTitle,content,xRay){
+	var chart;
+	var options = {
+			chart: {
+				renderTo: content,
+				defaultSeriesType: 'column'
+			},
+			title: {
+				text: cTitle
+			},
+			xAxis: {
+				categories: xRay
+			},
+			yAxis: {
+				min: 0,
+				title: {
+					text: ''
+				}
+			},
+			legend: {
+				align: 'right',
+				x: -100,
+				verticalAlign: 'top',
+				y: 20,
+				floating: true,
+				backgroundColor: '#FFFFFF',
+				borderColor: '#CCC',
+				borderWidth: 1,
+				shadow: false
+			},
+			tooltip: {
+				formatter: function() {
+					return '<b>'+ this.x +'</b> '+ this.series.name +': '+ this.y +' Total: '+ this.point.stackTotal;
+				}
+			},
+			plotOptions: {
+				column: {
+					stacking: 'normal'
+				}
+			},
+			series: []
+		};
+		var v,arr=new Array(),a=new Array();
+		for (var i=0;i<cData.split(';').length;i++){
+			arr=cData.split(';')[i].split(',');
+			v=arr[0];
+			arr.shift();
+			for(var j=0;j<arr.length;j++){
+				a[j]=parseInt(arr[j]);
+			}
+			options.series.push({name:v,data:a});
+			a=[]
+		}
+		chart = new Highcharts.Chart(options);
+}
+function showChart_lineBasic(cData,cTitle,content,xRay){
+	var chart;
+	var options = {
+			chart: {
+				renderTo: content,
+				defaultSeriesType: 'line',
+				marginRight: 130,
+				marginBottom: 25
+			},
+			title: {
+				text: cTitle,
+				x: -20 //center
+			},
+			subtitle: {
+				text: '',
+				x: -20
+			},
+			xAxis: {
+				categories: xRay
+			},
+			yAxis: {
+				title: {
+					text: ''
+				},
+			plotLines: [{
+				value: 0,
+				width: 1,
+				color: '#808080'
+			}]
+			},
+			tooltip: {
+				formatter: function() {
+						return '<b>'+ this.series.name +'</b>'+
+						this.x +': '+ this.y +'';
+				}},
+			legend: {
+				layout: 'vertical',
+				align: 'right',
+				verticalAlign: 'top',
+				x: -10,
+				y: 100,
+				borderWidth: 0
+			},
+			series:[]
+		};
+		var v,arr=new Array(),a=new Array();
+		for (var i=0;i<cData.split(';').length;i++){
+			arr=cData.split(';')[i].split(',');
+			v=arr[0];
+			arr.shift();
+			for(var j=0;j<arr.length;j++){
+				a[j]=parseInt(arr[j]);
+			}
+			options.series.push({name:v,data:a});
+			a=[]
+		}
+		chart = new Highcharts.Chart(options);
+}
+
+function showChart_pieBasic(cData,cTitle,content){
+	var chart;
+	var options = {
+		chart:{renderTo: content,
+				plotBackgroundColor: null,
+				plotBorderWidth: null,
+				plotShadow: false
+				},
+		title:{text: cTitle},	// title
+		subtitle:{text:'pieBasic'},
+		tooltip:{formatter:function(){
+					return '<b>'+ this.point.name +'</b>: '+ this.y +' %';
+				}},
+		plotOptions:{pie:{allowPointSelect:true,
+							cursor:'pointer',
+							dataLabels:{
+							enabled:true,
+							color:'#000000',
+							connectorColor:'#000000',
+							formatter:function(){
+								return '<b>'+ this.point.name +'</b>: '+ this.y +' %';
+							}}
+						}
+					},
+		series:[{type: 'pie',
+				name: 'Browser share',
+				data:[]
+				}]
+		};
+		var v,arr=new Array(),a=new Array(),b=new Array();
+		a=cData.split(';')
+		for (var j=0;j<a.length;j++){
+			b[0]=a[j].split(',')[0];
+			b[1]=parseFloat(a[j].split(',')[1]);
+			arr[j]=b;
+			b=[]
+		}
+		/*
+		v1=['Firefox',45.0],
+		v2=['IE',26.8],
+		v3=['Opera',6.2],
+		v4=['Others',0.7],
+		va=[v1,v2,v3,v4,{name:'Chrome',y:12.8,sliced:true,selected:true}];*/
+		options.series[0].data = arr;
+		chart = new Highcharts.Chart(options);
+}
+
+function getBack(vchReturn){
+	try{
+	alert(vchReturn)
+	
+		}catch(e){ alert(e);}
+}
+$(document).ready(function(){
+	var user=document.cookie;
+	user="cz"
+	if (user==""){
+		alert("Pls Login");
+		window.location="index.html";
+	}
+	$(".bt-exec").click(function(){
+		url="getWar.php?p="+escape($(".btn-proj").html())+"&t="+escape($(".btn-tag").html())+"&d="+escape($(".hid-pr").val())+"&u="+escape(user);
+		createXMLHttpRequest(url,"fresh="+Math.random());
+	})
+	
+	chdv = "NewSign,21,13,8,12,7,8,12,10,6,29;PastSign,334,167,128,89,106,73,81,80,85,303##4/3,4/4,4/5,4/6,4/7,4/8,4/9,4/10,4/11,4/12##New and old Signer";
+	var arr =new Array
+	var arrX=new Array
+	arr=chdv.split("##");
+	cData=arr[0];
+	arrX=arr[1].split(",");
+	cTitle = arr[2];
+	content="dvNewSigner"
+	showChart_columnStacked(cData,cTitle,content,arrX);
+	
+	chdv="Sign,21,13,8,12,7,8,12,10,6,29##4/3,4/4,4/5,4/6,4/7,4/8,4/9,4/10,4/11,4/12##Recent Ten Days Active"
+	var arr =new Array
+	var arrX=new Array
+	arr=chdv.split("##");
+	cData=arr[0];
+	arrX=arr[1].split(",");
+	cTitle=arr[2];
+	content="dvDailyAct";
+	showChart_lineBasic(cData,cTitle,content,arrX);
+
+	chdv="Sign,21,13,8,12,7,8,12,10,6,29,6,29,21,13,8,12,7,8,12,10,6,19,25,29##1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24##Time Active"
+	var arr =new Array
+	var arrX=new Array
+	arr=chdv.split("##");
+	cData=arr[0];
+	arrX=arr[1].split(",");
+	cTitle=arr[2];
+	content="dvTime";
+	showChart_lineBasic(cData,cTitle,content,arrX);
+	
+	chdv="Firefox,45.0;IE,26.8;Opera,6.2;Others,0.7;Chrome,12.8##Source"
+	var arr =new Array
+	arr=chdv.split("##");
+	cData=arr[0];
+	cTitle=arr[1];
+	content="dvSource";
+	showChart_pieBasic(cData,cTitle,content);
+})
+
+</script>
+</head>
+<body>
+<div id="container">
+<div class="panel panel-default" >
+	<div class="panel-heading">
+		<h2 class="panel-title">Query Note</h2>
+	</div>
+	<div class="panel-body">
+		<ul>
+			<li class='note'>STEP 1.select date</li>
+			<li class='note'>STEP 2.push "Execute" button</li>
+		</ul>
+	</div>
+</div>
+<div id="filelist" class='alert alert-info' >
+&nbsp;<a class="close" href="#">&times;</a>
+</div>
+
+<section class="" style="float:left;width:200px;height:400px;padding:20px;border:1px solid #fff; color:#000; border-radius:6px;background:white;box-shadow:0 0 8px #222; font:11px/1.5em 'Microsoft YaHei';">
+
+<div class="input-group date form_date col-md-2" data-date="" data-date-format="yyyy-mm-dd" data-link-field="iph-d-start" data-link-format="yyyy-mm-dd" >
+<input id="ip-d-start" class="form-control" size="12" type="text" value="" readonly style='width:120px' placeholder="PickDate">
+<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+</div><input type="hidden" id="iph-d-start" value="" /><br>
+<button type="submit" class="btn btn-info bt-exec btn-sm" id="bt-exec" style="float:right;">
+<span>Execute</span>
+</button>
+</section>
+
+<section class="" style="float:left;margin-left:3px;width:60%;height:400px;padding:20px;border:1px solid #fff; color:#000; border-radius:6px;background:white;box-shadow:0 0 8px #222; font:11px/1.5em 'Microsoft YaHei';">
+<ul class="nav nav-tabs" id="myTab">
+<li ><a href="#home" data-toggle="tab">sign ratio</a></li>
+<li class="active"><a href="#profile" data-toggle="tab">dailyActive</a></li>
+<li><a href="#messages" data-toggle="tab">dailyTimeLine</a></li>
+<li><a href="#settings" data-toggle="tab">Source</a></li>
+</ul>
+ 
+<div class="tab-content">
+  <div class="tab-pane " id="home">
+  <div id="dvNewSigner" style="width:600px;height:300px;"></div>
+  </div>
+  <div class="tab-pane active" id="profile">
+    <div id="dvDailyAct" style="width:600px;height:300px;"></div>
+  </div>
+  <div class="tab-pane" id="messages">
+  <div id="dvTime" style="width:600px;height:300px;"></div>
+  </div>
+  <div class="tab-pane" id="settings">
+  <div id="dvSource" style="width:600px;height:300px;"></div>
+  </div>
+</div>
+ 
+</section>
+<br>
+<input type=hidden class='hid-pr'/>
+</div>
+<script type="text/javascript">
+	var dt = new Date();
+	var m="0"+(dt.getMonth()+1);
+	var d="0"+(dt.getDate());
+	vdt=dt.getFullYear()+"-"+m.substr(m.length-2,2)+"-"+d.substr(d.length-2,2);
+	$('#ip-d-start').val(vdt)
+	$('#iph-d-start').val(vdt)
+	
+	$('.form_date').datetimepicker({
+        language: 'en',
+        weekStart: 1,
+        todayBtn:  1,
+		autoclose: 1,
+		todayHighlight: 1,
+		startView: 2,
+		minView: 2,
+		forceParse: 0
+    });
+	$('.form_date').datetimepicker('setEndDate',vdt);
+
+</script>
+</body>
+</html>
