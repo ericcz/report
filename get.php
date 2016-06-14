@@ -1,6 +1,6 @@
 <?php
 include_once "dbcon.php";
-//$p = $_REQUEST['p'];	//project
+$p = $_REQUEST['pid'];
 $dc ="";
 $query ="select count(id) from customer where activeDate>= current_date();";
 $query .="select count(id) from customer where enable=1;";
