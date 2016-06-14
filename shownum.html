@@ -76,7 +76,7 @@ $(document).ready(function(){
 	})
 	setTimeout(function(){
 	url="get.php?pid="+escape(document.cookie.split('#')[0]);
-	createXMLHttpRequest_dept(url,"fresh=" +Math.random());
+	createXMLHttpRequest(url,"fresh=" +Math.random());
 	},600);
 })
 </script>
