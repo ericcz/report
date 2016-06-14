@@ -1,7 +1,7 @@
 ﻿<?php
-	$hostname = "192.168.10.190";
-	$username = "up";
-	$password = "upload";
+	$hostname = "rds50pn92wn3z3b9z1lk.mysql.rds.aliyuncs.com";
+	$username = "all_read";
+	$password = "weshare12";
 	$dbName = "wershare";
 	
 	define('CLIENT_MULTI_RESULTS',131072);
