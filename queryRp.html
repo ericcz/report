@@ -9,7 +9,7 @@
 body {margin:20px 50px}
 li.note {margin:0px;font-size:16pt;list-style:none;font-family:Arial;}
 .step {float:left;margin-right:180px;font-family:Arial;}
-.dv-img {margin-top:0px;float:right;width:25px;height:70px;background:url('img/icon.jpg') no-repeat -138px -145px;cursor:pointer;}
+.dv-img {margin-left:-50px;margin-top:25%;float:left;width:25px;height:70px;background:url('include/img/icon.jpg') no-repeat -108px -145px;cursor:pointer;}
 </style>
 <script src="include/js/jquery-2.1.1.js"></script>
 <script src="include/js/bootstrap.min.js"></script>
@@ -100,7 +100,7 @@ function showChart_lineBasic(cData,cTitle,content,xRay){
 			chart: {
 				renderTo: content,
 				defaultSeriesType: 'line',
-				marginRight: 130,
+				marginRight: 110,
 				marginBottom: 25
 			},
 			title: {
@@ -190,20 +190,25 @@ function showChart_pieBasic(cData,cTitle,content){
 			arr[j]=b;
 			b=[]
 		}
-		/*
-		v1=['Firefox',45.0],
-		v2=['IE',26.8],
-		v3=['Opera',6.2],
-		v4=['Others',0.7],
-		va=[v1,v2,v3,v4,{name:'Chrome',y:12.8,sliced:true,selected:true}];*/
 		options.series[0].data = arr;
 		chart = new Highcharts.Chart(options);
 }
 
 function getBack(vchReturn){
 	try{
-	alert(vchReturn)
+	var dtArr = new Array
+	dtArr=vchReturn.split("##")[2].split(",");
+	var dailyActData=vchReturn.split("##")[3];
+	showChart_lineBasic(dailyActData,"Recent Ten Days Active","dvDailyAct",dtArr);
+
+	var newsignData=vchReturn.split("##")[4];
+	showChart_columnStacked(newsignData,"New and old Signer","dvNewSigner",dtArr);
 	
+	var timArr = new Array
+	timArr=vchReturn.split("##")[5].split(";")[0].split(",");
+	var timeActData=vchReturn.split("##")[5].split(";")[1];
+	showChart_lineBasic(timeActData,"Time Active","dvTime",timArr);
+
 		}catch(e){ alert(e);}
 }
 $(document).ready(function(){
@@ -214,40 +219,15 @@ $(document).ready(function(){
 		window.location="index.html";
 	}
 	$(".bt-exec").click(function(){
-		url="getWar.php?p="+escape($(".btn-proj").html())+"&t="+escape($(".btn-tag").html())+"&d="+escape($(".hid-pr").val())+"&u="+escape(user);
+		url="get.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getchart")+"&dt="+escape($("#iph-d-start").val());
 		createXMLHttpRequest(url,"fresh="+Math.random());
 	})
-	
-	chdv = "NewSign,21,13,8,12,7,8,12,10,6,29;PastSign,334,167,128,89,106,73,81,80,85,303##4/3,4/4,4/5,4/6,4/7,4/8,4/9,4/10,4/11,4/12##New and old Signer";
-	var arr =new Array
-	var arrX=new Array
-	arr=chdv.split("##");
-	cData=arr[0];
-	arrX=arr[1].split(",");
-	cTitle = arr[2];
-	content="dvNewSigner"
-	showChart_columnStacked(cData,cTitle,content,arrX);
-	
-	chdv="Sign,21,13,8,12,7,8,12,10,6,29##4/3,4/4,4/5,4/6,4/7,4/8,4/9,4/10,4/11,4/12##Recent Ten Days Active"
-	var arr =new Array
-	var arrX=new Array
-	arr=chdv.split("##");
-	cData=arr[0];
-	arrX=arr[1].split(",");
-	cTitle=arr[2];
-	content="dvDailyAct";
-	showChart_lineBasic(cData,cTitle,content,arrX);
+	$(".close").click(function(){
+		$(".alert").hide();
+	})
+		
+	/*
 
-	chdv="Sign,21,13,8,12,7,8,12,10,6,29,6,29,21,13,8,12,7,8,12,10,6,19,25,29##1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24##Time Active"
-	var arr =new Array
-	var arrX=new Array
-	arr=chdv.split("##");
-	cData=arr[0];
-	arrX=arr[1].split(",");
-	cTitle=arr[2];
-	content="dvTime";
-	showChart_lineBasic(cData,cTitle,content,arrX);
-	
 	chdv="Firefox,45.0;IE,26.8;Opera,6.2;Others,0.7;Chrome,12.8##Source"
 	var arr =new Array
 	arr=chdv.split("##");
@@ -255,13 +235,14 @@ $(document).ready(function(){
 	cTitle=arr[1];
 	content="dvSource";
 	showChart_pieBasic(cData,cTitle,content);
+	*/
 })
 
 </script>
 </head>
-<body>
+<body><div class="dv-img"></div>
 <div id="container">
-<div class="panel panel-default" >
+<!--div class="panel panel-default" >
 	<div class="panel-heading">
 		<h2 class="panel-title">Query Note</h2>
 	</div>
@@ -271,7 +252,7 @@ $(document).ready(function(){
 			<li class='note'>STEP 2.push "Execute" button</li>
 		</ul>
 	</div>
-</div>
+</div-->
 <div id="filelist" class='alert alert-info' >
 &nbsp;<a class="close" href="#">&times;</a>
 </div>
@@ -287,7 +268,7 @@ $(document).ready(function(){
 </button>
 </section>
 
-<section class="" style="float:left;margin-left:3px;width:60%;height:400px;padding:20px;border:1px solid #fff; color:#000; border-radius:6px;background:white;box-shadow:0 0 8px #222; font:11px/1.5em 'Microsoft YaHei';">
+<section class="" style="float:left;margin-left:3px;width:75%;height:400px;padding:20px;border:1px solid #fff; color:#000; border-radius:6px;background:white;box-shadow:0 0 8px #222; font:11px/1.5em 'Microsoft YaHei';">
 <ul class="nav nav-tabs" id="myTab">
 <li ><a href="#home" data-toggle="tab">sign ratio</a></li>
 <li class="active"><a href="#profile" data-toggle="tab">dailyActive</a></li>
@@ -311,9 +292,10 @@ $(document).ready(function(){
 </div>
  
 </section>
-<br>
+
 <input type=hidden class='hid-pr'/>
 </div>
+
 <script type="text/javascript">
 	var dt = new Date();
 	var m="0"+(dt.getMonth()+1);

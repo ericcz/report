@@ -1,26 +1,58 @@
 <?php
+header('Cache-Control:no-cache,must-revalidate');    
+header('Pragma:no-cache');  
 include_once "dbcon.php";
-$p = $_REQUEST['pid'];
-$dc ="";
-$query ="select count(id) from customer where activeDate>= current_date();";
-$query .="select count(id) from customer where enable=1;";
-$result=mysqli_multi_query($conn,$query);
+
+$pid = $_REQUEST['pid'];
+$obj = $_REQUEST['obj'];
+$desc = "";
+
+switch($obj){
+case 'getnum': $desc = fnNumber();
+break;
+case 'getchart': $desc = fnChart();
+break;
+default:echo "0";
+}
+
+function fnNumber(){
+	$dc="";
+	$pid = $GLOBALS["pid"];
+	$proc='cspcustomer_get';
+	$result=mysqli_real_query($GLOBALS["conn"],"call $proc(@x)");
+	$result=mysqli_real_query($GLOBALS["conn"],"select @x");
+	$result=mysqli_store_result($GLOBALS["conn"]);
 	if( $result == false ){ 
 		$dc = "Error .\n";}
-	if ($result){
-		$result=$conn->store_result();
-		while($row=$result->fetch_array()){
-			$dc.=$row[0];
-		}
-		$result->free();
-		$conn->next_result();
-		$result=mysqli_store_result($conn);
-		while($row=mysqli_fetch_array($result)){
-			$dc.="##".$row[0];
+	if ($result){ 
+		while($row=mysqli_fetch_row($result)){
+			$dc = $row[0];
 		}
 	}else
-		$dc='0';
-	
-echo $dc;
+		$dc = "0";
+	return $dc;
+}
+function fnChart(){
+	$dc="";
+	$pid = $GLOBALS["pid"];
+	$dt = $_REQUEST['dt'];
+	$proc='csphighchart_get';
+	$result=mysqli_real_query($GLOBALS["conn"],"call $proc('$dt',@x)");
+	$result=mysqli_real_query($GLOBALS["conn"],"select @x");
+	while($GLOBALS["conn"]->more_results()){
+	$result=mysqli_store_result($GLOBALS["conn"]);
+	$GLOBALS["conn"]->next_result();
+	}
+	if( $result == false ){ 
+		$dc = "Error .\n";}
+	if ($result){ 
+		while($row=mysqli_fetch_row($result)){
+			$dc = $row[0];
+		}
+	}else
+		$dc = "0";
+	return $dc;
+}
+echo "1##".$obj."##".$desc;
 mysqli_close($conn);
 ?>

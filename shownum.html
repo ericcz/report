@@ -11,7 +11,7 @@
 <link href="include/css/bootstrap-theme.min.css" rel="stylesheet">
 <link href="include/css/bootstrap-theme.css" rel="stylesheet">
 <style type="text/css">
-.dv-img {margin-top:22%;float:right;width:25px;height:70px;background:url('include/img/icon.jpg') no-repeat -138px -145px;cursor:pointer;}
+.dv-img {margin-top:15%;float:right;width:25px;height:70px;background:url('include/img/icon.jpg') no-repeat -138px -145px;cursor:pointer;}
 </style>
 <script src="include/js/jquery-2.1.1.js"></script>
 <script src="include/js/bootstrap.js"></script>
@@ -46,11 +46,15 @@ function cookieExpiryDate(){
 
 function getBack(vchReturn){
 	try{
-		var vp=vchReturn.split("##")[0];
-		var vt=vchReturn.split("##")[1];
-		var desc="日活："+vp+"<br>"+"总注册数："+vt
-		$(".alert").html(desc+'&nbsp;<a class="close" href="#">&times;</a>');
-		$(".alert").css('display','block')
+		if (vchReturn.split("##")[0]=="1"){
+			var obj=vchReturn.split("##")[1];
+			var vp=vchReturn.split("##")[2];
+			var vt=vchReturn.split("##")[3];
+			var desc="日活："+vp+"<br>"+"总注册数："+vt
+			$(".alert").html('<a class="close" href="#">&times;</a>'+desc);
+			$(".alert").css('display','block')
+		}else
+			$(".alert").html("error:"+vchReturn)
 		/*
 		vchReturn=vchReturn.substr(0,vchReturn.length);
 		var vf=vchReturn.split("#")[0];
@@ -77,10 +81,10 @@ $(document).ready(function(){
 	$(".dv-img").click(function(){
 		location.href="queryRp.html";
 	})
-	setTimeout(function(){
-	url="get.php?pid="+escape(document.cookie.split('#')[0]);
+	setInterval(function(){
+	url="get.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getnum");
 	createXMLHttpRequest(url,"fresh=" +Math.random());
-	},600);
+	},1600);
 })
 </script>
 <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -90,11 +94,10 @@ $(document).ready(function(){
 </head>
 <body>
 <div class="container">
-<div id="filelist" class='alert alert-info' >
-<a class="close" href="#">&times;</a>
+<div id="filelist" class='alert alert-info' style="hight:100px">
+<a class="close" href="#">&times;</a><br><br>
 </div>
 </div>
 <div class="dv-img"></div>
-
 </body>
 </html>
