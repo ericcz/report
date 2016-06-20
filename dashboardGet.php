@@ -8,7 +8,9 @@ $obj = $_REQUEST['obj'];
 $desc = "";
 
 switch($obj){
-case 'getnum': $desc = fnNumber();
+case 'getCustomer': $desc = fnNumber();
+break;
+case 'getDashBoard': $desc = fnDashBoard();
 break;
 case 'getchart': $desc = fnChart();
 break;
@@ -22,6 +24,26 @@ function fnNumber(){
 	$result=mysqli_real_query($GLOBALS["conn"],"call $proc(@x)");
 	$result=mysqli_real_query($GLOBALS["conn"],"select @x");
 	$result=mysqli_store_result($GLOBALS["conn"]);
+	if( $result == false ){ 
+		$dc = "Error .\n";}
+	if ($result){ 
+		while($row=mysqli_fetch_row($result)){
+			$dc = $row[0];
+		}
+	}else
+		$dc = "0";
+	return $dc;
+}
+function fnDashBoard(){
+	$dc="";
+	$pid = $GLOBALS["pid"];
+	$proc='cspDashboard_get';
+	$result=mysqli_real_query($GLOBALS["conn"],"call $proc(@x)");
+	$result=mysqli_real_query($GLOBALS["conn"],"select @x");
+	while($GLOBALS["conn"]->more_results()){
+	$result=mysqli_store_result($GLOBALS["conn"]);
+	$GLOBALS["conn"]->next_result();
+	}
 	if( $result == false ){ 
 		$dc = "Error .\n";}
 	if ($result){ 

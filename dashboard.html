@@ -2,12 +2,13 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Report</title>
+<title>DashBoard</title>
 <link rel="stylesheet" href="include/css/bootstrap.css">
 <link rel="stylesheet" href="include/css/bootstrap-datetimepicker.css">
 <style>
-body {margin:20px 50px}
-.dv-img {margin-left:-50px;margin-top:25%;float:left;width:25px;height:70px;background:url('include/img/icon.jpg') no-repeat -108px -145px;cursor:pointer;}
+body {margin:20px;background-color:#eee}
+.dv-img {margin-top:25%;float:right;width:25px;height:70px;background:url('include/img/icon.jpg') no-repeat -138px -145px;cursor:pointer;}
+.alert-st {padding:5px;text-align:center;font:18px/1.5em 'Microsoft YaHei';}
 </style>
 <script src="include/js/jquery-3.0.0.min.js"></script>
 <script src="include/js/bootstrap.min.js"></script>
@@ -103,7 +104,7 @@ function showChart_lineBasic(cData,cTitle,content,xRay){
 			},
 			title: {
 				text: cTitle,
-				x: -20 //center
+				x: -20 
 			},
 			subtitle: {
 				text: '',
@@ -194,19 +195,27 @@ function showChart_pieBasic(cData,cTitle,content){
 
 function getBack(vchReturn){
 	try{
+//	1##dashboard##0##2459##8885##06/01,06/02,06/03,06/04,06/05,06/06,06/07,06/08,06/09,06/10,06/11,06/12,06/13##Daily Active,794,1175,576,547,595,1052,1313,1569,1446,2210,1570,1727,825
+	var vf=vchReturn.split("##")[1]
+	if (vf=="getDashBoard"){
 	var dtArr = new Array
-	dtArr=vchReturn.split("##")[2].split(",");
-	var dailyActData=vchReturn.split("##")[3];
-	showChart_lineBasic(dailyActData,"Recent Ten Days Active","dvDailyAct",dtArr);
+	dtArr=vchReturn.split("##")[5].split(",");
+	var dailyActData=vchReturn.split("##")[6];
+	showChart_lineBasic(dailyActData,"","highchart",dtArr);
+	$(".sect-chart .alert").html(vchReturn.split("##")[7]+" Active Customer")
 
-	var newsignData=vchReturn.split("##")[4];
-	showChart_columnStacked(newsignData,"New and old Signer","dvNewSigner",dtArr);
-	
-	var timArr = new Array
-	timArr=vchReturn.split("##")[5].split(";")[0].split(",");
-	var timeActData=vchReturn.split("##")[5].split(";")[1];
-	showChart_lineBasic(timeActData,"Time Active","dvTime",timArr);
-
+	$(".sect-today .alert").html("Register at Today")
+	$(".customer-today").html(vchReturn.split("##")[2])
+	$(".sect-week .alert").html("Register in Last Week")
+	var c="";
+	if (vchReturn.split("##")[3]>=vchReturn.split("##")[4]){
+		c='<span class="glyphicon glyphicon-arrow-up" aria-hidden="true" style="color:#6f0"></span>'
+	}else{
+		c='<span class="glyphicon glyphicon-arrow-down" aria-hidden="true" style="color:#f60"></span>'
+	}
+	$(".customer-week").html(c+"&nbsp;"+vchReturn.split("##")[3])
+	}else
+		$(".customer-today").html(vchReturn.split("##")[2])
 		}catch(e){ alert(e);}
 }
 $(document).ready(function(){
@@ -216,18 +225,17 @@ $(document).ready(function(){
 		alert("Pls Login");
 		window.location="index.html";
 	}
-	$(".bt-exec").click(function(){
-		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getchart")+"&dt="+escape($("#iph-d-start").val());
-		createXMLHttpRequest(url,"fresh="+Math.random());
-	})
-	$(".close").click(function(){
-		$(".alert").hide();
-	})
+	setTimeout(function(){
+	url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDashBoard");
+	createXMLHttpRequest(url,"fresh=" +Math.random());
+	},600);
 	$(".dv-img").click(function(){
-		location.href="dashboard.html";
+		location.href="queryRp.html";
 	})
-	
-	$(".bt-exec").click();
+	setInterval(function(){
+	url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getCustomer");
+	createXMLHttpRequest(url,"fresh=" +Math.random());
+	},8000);
 	/*
 
 	chdv="Firefox,45.0;IE,26.8;Opera,6.2;Others,0.7;Chrome,12.8##Source"
@@ -244,56 +252,26 @@ $(document).ready(function(){
 </head>
 <body><div class="dv-img"></div>
 <div id="container">
-<!--div class="panel panel-default" >
-	<div class="panel-heading">
-		<h2 class="panel-title">Query Note</h2>
-	</div>
-	<div class="panel-body">
-		<ul>
-			<li class='note'>STEP 1.select date</li>
-			<li class='note'>STEP 2.push "Execute" button</li>
-		</ul>
-	</div>
-</div-->
-<div id="filelist" class='alert alert-info' >
-&nbsp;<a class="close" href="#">&times;</a>
-</div>
-
-<section class="" style="float:left;width:200px;height:400px;padding:20px;border:1px solid #fff; color:#000; border-radius:6px;background:white;box-shadow:0 0 8px #222; font:11px/1.5em 'Microsoft YaHei';">
-
-<div class="input-group date form_date col-md-2" data-date="" data-date-format="yyyy-mm-dd" data-link-field="iph-d-start" data-link-format="yyyy-mm-dd" >
-<input id="ip-d-start" class="form-control" size="12" type="text" value="" readonly style='width:120px' placeholder="PickDate">
-<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-</div><input type="hidden" id="iph-d-start" value="" /><br>
-<button type="submit" class="btn btn-info bt-exec btn-sm" id="bt-exec" style="float:right;">
-<span>Execute</span>
-</button>
+<section class="sect-today" style="float:left;width:30%;height:250px;padding:20px;border:1px solid #fff; color:#000; border-radius:6px;background:white;box-shadow:0 0 8px #222; font:11px/1.5em 'Microsoft YaHei';">
+<div id="filelist" class='alert alert-info alert-st' >&nbsp;</div>
+<div class="customer-today" style="padding:5px;text-align:center;font:80px/1.5em 'Microsoft YaHei';color:#aaa"></div>
 </section>
 
-<section class="" style="float:left;margin-left:3px;width:75%;height:400px;padding:20px;border:1px solid #fff; color:#000; border-radius:6px;background:white;box-shadow:0 0 8px #222; font:11px/1.5em 'Microsoft YaHei';">
-<ul class="nav nav-tabs" id="myTab">
-<li ><a href="#home" data-toggle="tab">sign ratio</a></li>
-<li class="active"><a href="#profile" data-toggle="tab">dailyActive</a></li>
-<li><a href="#messages" data-toggle="tab">dailyTimeLine</a></li>
-<li><a href="#settings" data-toggle="tab">Source</a></li>
-</ul>
- 
-<div class="tab-content">
-  <div class="tab-pane " id="home">
-  <div id="dvNewSigner" style="width:600px;height:300px;"></div>
-  </div>
-  <div class="tab-pane active" id="profile">
-    <div id="dvDailyAct" style="width:600px;height:300px;"></div>
-  </div>
-  <div class="tab-pane" id="messages">
-  <div id="dvTime" style="width:600px;height:300px;"></div>
-  </div>
-  <div class="tab-pane" id="settings">
-  <div id="dvSource" style="width:600px;height:300px;"></div>
-  </div>
-</div>
- 
+<section class="" style="float:left;margin-left:6px;width:35%;height:250px;padding:20px;border:1px solid #fff; color:#000; border-radius:6px;background:white;box-shadow:0 0 8px #222; font:11px/1.5em 'Microsoft YaHei';">
+<div id="filelist" class='alert alert-info alert-st' >&nbsp;</div>
+
 </section>
+
+<section class="sect-week" style="float:left;margin-left:6px;width:30%;height:250px;padding:20px;border:1px solid #fff; color:#000; border-radius:6px;background:white;box-shadow:0 0 8px #222; font:11px/1.5em 'Microsoft YaHei';">
+<div id="filelist" class='alert alert-info alert-st' >&nbsp;</div>
+<div class="customer-week" style="padding:5px;text-align:center;font:50px/1.5em 'Microsoft YaHei';color:#aaa"></div>
+</section>
+<br>
+<section class="sect-chart" style="float:left;margin-top:10px;width:70%;height:400px;padding:10px;border:1px solid #fff; color:#000; border-radius:6px;background:white;box-shadow:0 0 8px #222; font:11px/1.5em 'Microsoft YaHei';">
+<div id="filelist" class='alert alert-info alert-st' >&nbsp;</div>
+<div id="highchart" style="width:600px;height:300px;"></div>
+</section>
+
 
 <input type=hidden class='hid-pr'/>
 </div>
@@ -305,7 +283,7 @@ $(document).ready(function(){
 	vdt=dt.getFullYear()+"-"+m.substr(m.length-2,2)+"-"+d.substr(d.length-2,2);
 	$('#ip-d-start').val(vdt)
 	$('#iph-d-start').val(vdt)
-	
+
 	$('.form_date').datetimepicker({
         language: 'en',
         weekStart: 1,
