@@ -200,10 +200,9 @@ function getBack(vchReturn){
 try{
 	var vf=vchReturn.split("##")[1]
 	if (vf=='getDashBoard'){
-//"1##getDashBoard##download$$07-18,07-19$$106,109##register$$07-19,07-20$$566,27##live$$07-18,07-19$$717,771##leftDaily$$14.34##leftWeekly$$10.32##leftMonth$$1.44##pv$$1687##uv$$208##";
 	var rt,dsc
 	rt=vchReturn.split("##")[2].split("$$")[2].split(",");
-	if (rt[rt.length-1]>rt[rt.length-2]){
+	if (parseInt(rt[rt.length-1])>parseInt(rt[rt.length-2])){
 		dsc='<span class="glyphicon glyphicon-chevron-up" aria-hidden="true" style="color:#6f0"></span>';
 	}else
 		dsc='<span class="glyphicon glyphicon-chevron-down" aria-hidden="true" style="color:#f60"></span>';
@@ -222,7 +221,7 @@ try{
 	$(".dv-register2").html(dsc+"&nbsp;"+Math.round((rt[rt.length-1]-rt[rt.length-2])/rt[rt.length-1]*10000)/100+"%");
 	
 	rt=vchReturn.split("##")[4].split("$$")[2].split(",");
-	if (rt[rt.length-1]>rt[rt.length-2]){
+	if (parseInt(rt[rt.length-1])>parseInt(rt[rt.length-2])){
 		dsc='<span class="glyphicon glyphicon-chevron-up" aria-hidden="true" style="color:#6f0"></span>';
 	}else
 		dsc='<span class="glyphicon glyphicon-chevron-down" aria-hidden="true" style="color:#f60"></span>';
