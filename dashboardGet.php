@@ -96,11 +96,18 @@ function fnDetailPv(){
 	$result=mysqli_store_result($GLOBALS["conn"]);
 	$GLOBALS["conn"]->next_result();
 	}
+	$i=0;
 	if( $result == false ){ 
 		$dc = "Error .\n";}
 	if ($result){ 
 		while($row=mysqli_fetch_row($result)){
-				$dc.="<td>".round($row[1])."</td>";
+		
+			while ($arrDt[$i]!=$row[0] and $i<7){
+				$dc.="<td>0</td>";
+				$i+=1;
+			}
+			$i+=1;
+			$dc.="<td>".round($row[1])."</td>";
 		}
 	}else
 		$dc = "0";
