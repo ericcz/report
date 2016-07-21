@@ -8,31 +8,139 @@ $obj = $_REQUEST['obj'];
 $desc = "";
 
 switch($obj){
-case 'getCustomer': $desc = fnNumber();
+case 'getDetail': $desc = fnDetail();
+break;
+case 'getDetailPv': $desc = fnDetailPv();
+break;
+case 'getDetailLeft': $desc = fnDetailLeft();
 break;
 case 'getDashBoard': $desc = fnDashBoard();
 break;
-case 'getchart': $desc = fnChart();
+case 'getChart': $desc = fnChart();
 break;
 default:echo "0";
 }
 
-function fnNumber(){
+function fnDetail(){
 	$dc="";
+	$chn="";
 	$pid = $GLOBALS["pid"];
-	$proc='cspcustomer_get';
-	$result=mysqli_real_query($GLOBALS["conn"],"call $proc(@x)");
+	$typ = $_REQUEST['typ'];
+	$dt = $_REQUEST['dt'];
+	
+	$arrChn=array("Yingyongbao_android","Xiaomi_yingyong_android","official","m360_mobile_android","ZongHe_01","Baidu_mobile_android","dingbin_04","dingbin_05","dingbin_02","dingbin_01","ZongHe_02","Wandoujia_android","Huazhu_weixin_android","dingbin_07","dingbin_03","dingbin_06","","IOS");
+	
+	$arrDt=[];
+	$th="";
+	$i=-6;
+	while ($i<1){
+		$arrDt[$i+6]=date('m-d',strtotime("$i day",strtotime($dt)));
+		$th.="<td>".date('m-d',strtotime("$i day",strtotime($dt)))."</td>";
+		$i+=1;
+	}
+
+	$proc='cspDashboard_detail';
+	$result=mysqli_real_query($GLOBALS["conn"],"call $proc('$typ',@x)");
 	$result=mysqli_real_query($GLOBALS["conn"],"select @x");
+	while($GLOBALS["conn"]->more_results()){
 	$result=mysqli_store_result($GLOBALS["conn"]);
+	$GLOBALS["conn"]->next_result();
+	}
 	if( $result == false ){ 
 		$dc = "Error .\n";}
 	if ($result){ 
 		while($row=mysqli_fetch_row($result)){
-			$dc = $row[0];
+			if ($chn!=$row[2]){
+				$dc.="</tr><tr><td>";
+				if ($typ=="reg"){
+					$dc.=$row[2]."</td>";
+				}else
+					$dc.=$arrChn[$row[2]-1]."</td>";
+				$chn=$row[2];
+				$i=0;
+			}
+			
+			while ($arrDt[$i]!=$row[0] and $i<7){
+				$dc.="<td>0</td>";
+				$i+=1;
+			}
+
+			$dc.="<td class='col".$i."'>".round($row[1])."</td>";
+			$i+=1;
+
 		}
 	}else
 		$dc = "0";
-	return $dc;
+	return "<table class='table table-striped table-hover table-bordered'><tr><td style='width:10%'></td>".$th."</tr>".substr($dc,5)."</tr></table>";
+}
+function fnDetailPv(){
+	$dc="";
+	$chn="";
+	$pid = $GLOBALS["pid"];
+	$typ = $_REQUEST['typ'];
+	$dt = $_REQUEST['dt'];
+	
+	$arrDt=[];
+	$th="";
+	$i=-6;
+	while ($i<1){
+		$arrDt[$i+6]=date('m-d',strtotime("$i day",strtotime($dt)));
+		$th.="<td>".date('m-d',strtotime("$i day",strtotime($dt)))."</td>";
+		$i+=1;
+	}
+
+	$proc='cspDashboard_detail';
+	$result=mysqli_real_query($GLOBALS["conn"],"call $proc('$typ',@x)");
+	$result=mysqli_real_query($GLOBALS["conn"],"select @x");
+	while($GLOBALS["conn"]->more_results()){
+	$result=mysqli_store_result($GLOBALS["conn"]);
+	$GLOBALS["conn"]->next_result();
+	}
+	if( $result == false ){ 
+		$dc = "Error .\n";}
+	if ($result){ 
+		while($row=mysqli_fetch_row($result)){
+				$dc.="<td>".round($row[1])."</td>";
+		}
+	}else
+		$dc = "0";
+	return "<table class='table table-striped table-hover table-bordered'><tr>".$th."</tr><tr>".$dc."</tr></table>";
+}
+function fnDetailLeft(){
+	$dc="";
+	$chn="";
+	$pid = $GLOBALS["pid"];
+	$typ = $_REQUEST['typ'];
+	$dt = $_REQUEST['dt'];
+	
+	$arrDt=[];
+	$th="";
+	$i=-6;
+	while ($i<1 and $typ=='leftD'){
+		$arrDt[$i+6]=date('m-d',strtotime("$i day",strtotime($dt)));
+		$th.="<td>".date('m-d',strtotime("$i day",strtotime($dt)))."</td>";
+		$i+=1;
+	}
+
+	$proc='cspDashboard_detail';
+	$result=mysqli_real_query($GLOBALS["conn"],"call $proc('$typ',@x)");
+	$result=mysqli_real_query($GLOBALS["conn"],"select @x");
+	while($GLOBALS["conn"]->more_results()){
+	$result=mysqli_store_result($GLOBALS["conn"]);
+	$GLOBALS["conn"]->next_result();
+	}
+	if( $result == false ){ 
+		$dc = "Error .\n";}
+	if ($result){ 
+		while($row=mysqli_fetch_row($result)){
+			$dc.="<td>".$row[1]."%</td>";
+			if ($typ!='leftD'){
+				$th.="<td>".$row[2]."</td>";
+			}
+		}
+	}else
+		$dc = "0";
+	return "<table class='table table-striped table-hover table-bordered'><tr>".$th."</tr><tr>".$dc."</tr></table>";
 }
 function fnDashBoard(){
 	$dc="";
@@ -54,6 +162,7 @@ function fnDashBoard(){
 		$dc = "0";
 	return $dc;
 }
+
 function fnChart(){
 	$dc="";
 	$pid = $GLOBALS["pid"];
