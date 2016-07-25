@@ -112,7 +112,7 @@ $i=0;
 			while ($arrDt[$i]==substr($row[0],5) and $i<7){
 				$i+=1;
 			}
-			$arrDc[$i]="<td>".round($row[1])."</td>";
+			$arrDc[$i-1]="<td>".round($row[1])."</td>";
 			$i+=1;
 		
 		/*
@@ -161,7 +161,7 @@ $i=0;
 			while ($arrDt[$i]==substr($row[0],5) and $i<7){
 				$i+=1;
 			}
-			$arrDc[$i]="<td>".$row[1]."%</td>";
+			$arrDc[$i-1]="<td>".$row[1]."%</td>";
 			$i+=1;
 			}else{
 				$th.="<td>".$row[2]."</td>";
