@@ -38,8 +38,10 @@ function fnDetail(){
 		$th.="<td>".date('m-d',strtotime("$i day",strtotime($dt)))."</td>";
 		$i+=1;
 	}
-
+	$arrDc=[];
+	
 	$proc='cspDashboard_detail';
+	$result=mysqli_query($conn,"set names utf8");
 	$result=mysqli_real_query($GLOBALS["conn"],"call $proc('$typ',@x)");
 	$result=mysqli_real_query($GLOBALS["conn"],"select @x");
 	while($GLOBALS["conn"]->more_results()){
@@ -51,27 +53,31 @@ function fnDetail(){
 	if ($result){ 
 		while($row=mysqli_fetch_row($result)){
 			if ($chn!=$row[2]){
-				$dc.="</tr><tr><td>";
-				if ($typ=="reg"){
+				if ($chn!=""){
+					for ($i=0;$i<7;$i++){ $dc.=$arrDc[$i]; }
+				}
+				$dc.="<tr><td>";
+				if ($typ=="reg" or $typ=="loc"){
 					$dc.=$row[2]."</td>";
 				}else
 					$dc.=$arrChn[$row[2]-1]."</td>";
 				$chn=$row[2];
 				$i=0;
+				$arrDc=array("<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td></tr>");
 			}
 			
 			while ($arrDt[$i]!=$row[0] and $i<7){
-				$dc.="<td>0</td>";
 				$i+=1;
 			}
-
-			$dc.="<td class='col".$i."'>".round($row[1])."</td>";
+			$arrDc[$i]="<td class='col".$i."'>".round($row[1])."</td>";
 			$i+=1;
-
+		}
+		if ($chn!=""){
+			for ($i=0;$i<7;$i++){ $dc.=$arrDc[$i]; }
 		}
 	}else
-		$dc = "0";
-	return "<table class='table table-striped table-hover table-bordered'><tr><td style='width:10%'></td>".$th."</tr>".substr($dc,5)."</tr></table>";
+			$dc = "0";
+	return "<table class='table table-striped table-hover table-bordered'><tr><td ></td>".$th."</tr>".$dc."</tr></table>";	
 }
 function fnDetailPv(){
 	$dc="";
@@ -88,7 +94,8 @@ function fnDetailPv(){
 		$th.="<td>".date('m-d',strtotime("$i day",strtotime($dt)))."</td>";
 		$i+=1;
 	}
-
+$arrDc=array("<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td></tr>");
+$i=0;
 	$proc='cspDashboard_detail';
 	$result=mysqli_real_query($GLOBALS["conn"],"call $proc('$typ',@x)");
 	$result=mysqli_real_query($GLOBALS["conn"],"select @x");
@@ -102,15 +109,24 @@ function fnDetailPv(){
 	if ($result){ 
 		while($row=mysqli_fetch_row($result)){
 		
+			while ($arrDt[$i]==substr($row[0],5) and $i<7){
+				$i+=1;
+			}
+			$arrDc[$i]="<td>".round($row[1])."</td>";
+			$i+=1;
+		
+		/*
 			while ($arrDt[$i]!=$row[0] and $i<7){
 				$dc.="<td>0</td>";
 				$i+=1;
 			}
 			$i+=1;
 			$dc.="<td>".round($row[1])."</td>";
+			*/
 		}
 	}else
 		$dc = "0";
+	for ($i=0;$i<7;$i++){ $dc.=$arrDc[$i]; }
 	return "<table class='table table-striped table-hover table-bordered'><tr>".$th."</tr><tr>".$dc."</tr></table>";
 }
 function fnDetailLeft(){
@@ -128,7 +144,8 @@ function fnDetailLeft(){
 		$th.="<td>".date('m-d',strtotime("$i day",strtotime($dt)))."</td>";
 		$i+=1;
 	}
-
+$arrDc=array("<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td></tr>");
+$i=0;
 	$proc='cspDashboard_detail';
 	$result=mysqli_real_query($GLOBALS["conn"],"call $proc('$typ',@x)");
 	$result=mysqli_real_query($GLOBALS["conn"],"select @x");
@@ -140,13 +157,20 @@ function fnDetailLeft(){
 		$dc = "Error .\n";}
 	if ($result){ 
 		while($row=mysqli_fetch_row($result)){
-			$dc.="<td>".$row[1]."%</td>";
-			if ($typ!='leftD'){
+			if ($typ=='leftD'){
+			while ($arrDt[$i]==substr($row[0],5) and $i<7){
+				$i+=1;
+			}
+			$arrDc[$i]="<td>".$row[1]."%</td>";
+			$i+=1;
+			}else{
 				$th.="<td>".$row[2]."</td>";
+				$dc.="<td>".$row[1]."%</td>";
 			}
 		}
 	}else
 		$dc = "0";
+	if ($typ=='leftD'){	for ($i=0;$i<7;$i++){ $dc.=$arrDc[$i]; }}
 	return "<table class='table table-striped table-hover table-bordered'><tr>".$th."</tr><tr>".$dc."</tr></table>";
 }
 function fnDashBoard(){
@@ -191,6 +215,9 @@ function fnChart(){
 		$dc = "0";
 	return $dc;
 }
+
+
+
 echo "1##".$obj."##".$desc;
 mysqli_close($conn);
 ?>

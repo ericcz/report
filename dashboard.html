@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="include/css/bootstrap.css">
 <link rel="stylesheet" href="include/css/bootstrap-datetimepicker.css">
 <style>
-body {margin:20px;background-color:#eee;width:1300px}
+body {padding:20px;background-color:#eee;}
 .dv-img {margin-right:-30px;margin-top:25%;float:right;width:25px;height:70px;background:url('include/img/icon.jpg') no-repeat -138px -145px;cursor:pointer;}
 .alert-st {padding:5px;text-align:center;font:18px/1.5em 'Microsoft YaHei';}
 .font1 {font:30px/1.5em 'Microsoft YaHei';}
@@ -206,7 +206,7 @@ try{
 		dsc='<span class="glyphicon glyphicon-chevron-up" aria-hidden="true" style="color:#6f0"></span>';
 	}else
 		dsc='<span class="glyphicon glyphicon-chevron-down" aria-hidden="true" style="color:#f60"></span>';
-	$(".sect-download .alert").html("Download at Today");
+	$(".sect-download .alert").html("Download at Yesterday");
 
 	$(".dv-download").html(rt[rt.length-1])
 	$(".dv-download2").html(dsc+"&nbsp;"+Math.round((rt[rt.length-1]-rt[rt.length-2])/rt[rt.length-1]*10000)/100+"%")
@@ -335,6 +335,16 @@ $(document).ready(function(){
 		createXMLHttpRequest(url,"fresh=" +Math.random());
 		},300);
 	})
+	$('.sect-locate').mouseover(function(){
+		$(this).css('border','1px solid #000')
+	}).mouseout(function(){
+		$(this).css('border','0px solid #fff')
+	}).click(function(){
+		setTimeout(function(){
+		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDetail")+"&dt="+escape(vdt)+"&typ="+escape("loc");
+		createXMLHttpRequest(url,"fresh=" +Math.random());
+		},300);
+	})
 	$('.dv-keep-d').click(function(){
 		setTimeout(function(){
 		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDetailLeft")+"&dt="+escape(vdt)+"&typ="+escape("leftD");
@@ -373,9 +383,9 @@ $(document).ready(function(){
 
 </script>
 </head>
-<body><div class="dv-img"></div>
-<div id="container">
-<section class="sect-download" style="float:left;width:30%;height:240px;padding:20px;border:1px solid #fff; color:#000; border-radius:6px;background:white;box-shadow:0 0 8px #222; font:11px/1.5em 'Microsoft YaHei';">
+<body><!--div class="dv-img"></div-->
+<div id="container" >
+<section class="sect-download" style="margin-left:5%;float:left;width:30%;height:240px;padding:20px;border:1px solid #fff; color:#000; border-radius:6px;background:white;box-shadow:0 0 8px #222; font:11px/1.5em 'Microsoft YaHei';">
 <div id="filelist" class='alert alert-info alert-st' >&nbsp;</div>
 <div class="dv-download" style="padding:5px;text-align:center;font:70px/1.5em 'Microsoft YaHei';color:#aaa"></div>
 <div class="dv-download2" style="padding:5px;margin-top:-10px;text-align:right;font:30px/1.5em 'Microsoft YaHei';color:#aaa"></div>
@@ -396,20 +406,24 @@ $(document).ready(function(){
 <style>
 ul,li {list-style:none;float:left;text-align:center;font:18px/1.5em 'Microsoft YaHei';}
 </style>
-<section class="sect-keep" style="float:left;margin:10px 0px 0px 0px;width:91%;height:150px;padding:10px;border:1px solid #fff; color:#000; border-radius:6px;background:white;box-shadow:0 0 8px #222; font:11px/1.5em 'Microsoft YaHei';">
+<section class="sect-keep" style="float:left;margin:10px 0px 0px 5%;width:91%;height:150px;padding:10px;border:1px solid #fff; color:#000; border-radius:6px;background:white;box-shadow:0 0 8px #222; font:11px/1.5em 'Microsoft YaHei';">
 <ul>
 <li><div class="dv-keep-d" style="margin-right:280px;padding:5px;text-align:center;font:50px/1.5em 'Microsoft YaHei';color:#aaa"></div></li>
 <li><div class="dv-keep-w" style="margin-right:280px;padding:5px;text-align:center;font:50px/1.5em 'Microsoft YaHei';color:#aaa"></div></li>
 <li><div class="dv-keep-m" style="padding:5px;text-align:center;font:50px/1.5em 'Microsoft YaHei';color:#aaa"></div></li></ul>
 </section>
 <br>
-<section class="sect-pv" style="float:left;margin:10px 0px 0px 0px;width:30%;height:210px;padding:20px;border:1px solid #fff; color:#000; border-radius:6px;background:white;box-shadow:0 0 8px #222; font:11px/1.5em 'Microsoft YaHei';">
+<section class="sect-pv" style="margin-left:5%;float:left;margin-top:10px;width:30%;height:210px;padding:20px;border:1px solid #fff; color:#000; border-radius:6px;background:white;box-shadow:0 0 8px #222; font:11px/1.5em 'Microsoft YaHei';">
 <div id="filelist" class='alert alert-info alert-st' >pv</div>
 <div class="dv-pv" style="padding:5px;text-align:center;font:50px/1.5em 'Microsoft YaHei';color:#aaa"></div>
 </section>
 <section class="sect-uv" style="float:left;margin:10px 0px 0px 6px;width:30%;height:210px;padding:20px;border:1px solid #fff; color:#000; border-radius:6px;background:white;box-shadow:0 0 8px #222; font:11px/1.5em 'Microsoft YaHei';">
 <div id="filelist" class='alert alert-info alert-st' >uv</div>
 <div class="dv-uv" style="padding:5px;text-align:center;font:50px/1.5em 'Microsoft YaHei';color:#aaa"></div>
+</section>
+<section class="sect-locate" style="float:left;margin:10px 0px 0px 6px;width:30%;height:210px;padding:20px;border:1px solid #fff; color:#000; border-radius:6px;background:white;box-shadow:0 0 8px #222; font:11px/1.5em 'Microsoft YaHei';">
+<div id="filelist" class='alert alert-info alert-st' >locate</div>
+<div class="dv-locate" style="padding:5px;text-align:center;font:50px/1.5em 'Microsoft YaHei';color:#aaa"></div>
 </section>
 <br>
 <!--section class="sect-chart" style="float:left;margin-top:10px;width:70%;height:400px;padding:10px;border:1px solid #fff; color:#000; border-radius:6px;background:white;box-shadow:0 0 8px #222; font:11px/1.5em 'Microsoft YaHei';">
