@@ -242,11 +242,12 @@ try{
 	$(".dv-uv").html(rt[1]);
 	}else if(vf=='getDetail'||vf=='getDetailPv'||vf=='getDetailLeft'){
 		$(".tab").html(vchReturn.split("##")[2]);
+		if (vf=='getDetailPv'){
 		var chartDt= new Array
 		chartDt=vchReturn.split("##")[3].split(",");
 		var chartData=vchReturn.split("##")[4];
 		showChart_lineBasic(chartData.substring(0,chartData.length-1),"","chart",chartDt);
-		
+		}
 		if (vf=='getDetail'){
 		var pr=0;
 		var amount="";
