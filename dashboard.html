@@ -206,7 +206,7 @@ try{
 		dsc='<span class="glyphicon glyphicon-chevron-up" aria-hidden="true" style="color:#6f0"></span>';
 	}else
 		dsc='<span class="glyphicon glyphicon-chevron-down" aria-hidden="true" style="color:#f60"></span>';
-	$(".sect-download .alert").html("Download at Yesterday");
+	$(".sect-download .alert").html("昨日下载数");
 
 	$(".dv-download").html(rt[rt.length-1])
 	$(".dv-download2").html(dsc+"&nbsp;"+Math.round((rt[rt.length-1]-rt[rt.length-2])/rt[rt.length-1]*10000)/100+"%")
@@ -216,7 +216,7 @@ try{
 		dsc='<span class="glyphicon glyphicon-chevron-up" aria-hidden="true" style="color:#6f0"></span>';
 	}else
 		dsc='<span class="glyphicon glyphicon-chevron-down" aria-hidden="true" style="color:#f60"></span>';
-	$(".sect-register .alert").html("Register at Today");
+	$(".sect-register .alert").html("今日注册人数");
 	$(".dv-register").html(rt[rt.length-1]);
 	$(".dv-register2").html(dsc+"&nbsp;"+Math.round((rt[rt.length-1]-rt[rt.length-2])/rt[rt.length-1]*10000)/100+"%");
 	
@@ -225,16 +225,16 @@ try{
 		dsc='<span class="glyphicon glyphicon-chevron-up" aria-hidden="true" style="color:#6f0"></span>';
 	}else
 		dsc='<span class="glyphicon glyphicon-chevron-down" aria-hidden="true" style="color:#f60"></span>';
-	$(".sect-active .alert").html("Active Customer");
+	$(".sect-active .alert").html("昨日活跃用户数");
 	$(".dv-active").html(rt[rt.length-1]);
 	$(".dv-active2").html(dsc+"&nbsp;"+Math.round((rt[rt.length-1]-rt[rt.length-2])/rt[rt.length-1]*10000)/100+"%");
 
 	rt=vchReturn.split("##")[5].split("$$");
-	$(".dv-keep-d").html('<p class=font1>Daily</p><p class=font2>'+rt[1]+'%</p>');
+	$(".dv-keep-d").html('<p class=font1>日留存</p><p class=font2>'+rt[1]+'%</p>');
 	rt=vchReturn.split("##")[6].split("$$");
-	$(".dv-keep-w").html('<p class=font1>Weekly</p><p class=font2>'+rt[1]+'%');
+	$(".dv-keep-w").html('<p class=font1>周留存</p><p class=font2>'+rt[1]+'%');
 	rt=vchReturn.split("##")[7].split("$$");
-	$(".dv-keep-m").html('<p class=font1>Month</p><p class=font2>'+rt[1]+'%');
+	$(".dv-keep-m").html('<p class=font1>月留存</p><p class=font2>'+rt[1]+'%');
 
 	rt=vchReturn.split("##")[8].split("$$");
 	$(".dv-pv").html(rt[1]);
@@ -408,17 +408,17 @@ ul,li {list-style:none;float:left;text-align:center;font:18px/1.5em 'Microsoft Y
 </style>
 <section class="sect-keep" style="float:left;margin:10px 0px 0px 5%;width:91%;height:150px;padding:10px;border:1px solid #fff; color:#000; border-radius:6px;background:white;box-shadow:0 0 8px #222; font:11px/1.5em 'Microsoft YaHei';">
 <ul>
-<li><div class="dv-keep-d" style="margin-right:280px;padding:5px;text-align:center;font:50px/1.5em 'Microsoft YaHei';color:#aaa"></div></li>
-<li><div class="dv-keep-w" style="margin-right:280px;padding:5px;text-align:center;font:50px/1.5em 'Microsoft YaHei';color:#aaa"></div></li>
+<li><div class="dv-keep-d" style="margin-right:270px;padding:5px;text-align:center;font:50px/1.5em 'Microsoft YaHei';color:#aaa"></div></li>
+<li><div class="dv-keep-w" style="margin-right:270px;padding:5px;text-align:center;font:50px/1.5em 'Microsoft YaHei';color:#aaa"></div></li>
 <li><div class="dv-keep-m" style="padding:5px;text-align:center;font:50px/1.5em 'Microsoft YaHei';color:#aaa"></div></li></ul>
 </section>
 <br>
 <section class="sect-pv" style="margin-left:5%;float:left;margin-top:10px;width:30%;height:210px;padding:20px;border:1px solid #fff; color:#000; border-radius:6px;background:white;box-shadow:0 0 8px #222; font:11px/1.5em 'Microsoft YaHei';">
-<div id="filelist" class='alert alert-info alert-st' >pv</div>
+<div id="filelist" class='alert alert-info alert-st' >PV</div>
 <div class="dv-pv" style="padding:5px;text-align:center;font:50px/1.5em 'Microsoft YaHei';color:#aaa"></div>
 </section>
 <section class="sect-uv" style="float:left;margin:10px 0px 0px 6px;width:30%;height:210px;padding:20px;border:1px solid #fff; color:#000; border-radius:6px;background:white;box-shadow:0 0 8px #222; font:11px/1.5em 'Microsoft YaHei';">
-<div id="filelist" class='alert alert-info alert-st' >uv</div>
+<div id="filelist" class='alert alert-info alert-st' >UV</div>
 <div class="dv-uv" style="padding:5px;text-align:center;font:50px/1.5em 'Microsoft YaHei';color:#aaa"></div>
 </section>
 <section class="sect-locate" style="float:left;margin:10px 0px 0px 6px;width:30%;height:210px;padding:20px;border:1px solid #fff; color:#000; border-radius:6px;background:white;box-shadow:0 0 8px #222; font:11px/1.5em 'Microsoft YaHei';">

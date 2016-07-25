@@ -138,9 +138,9 @@ function fnDetailLeft(){
 	
 	$arrDt=[];
 	$th="";
-	$i=-6;
-	while ($i<1 and $typ=='leftD'){
-		$arrDt[$i+6]=date('m-d',strtotime("$i day",strtotime($dt)));
+	$i=-7;
+	while ($i<0 and $typ=='leftD'){
+		$arrDt[$i+7]=date('m-d',strtotime("$i day",strtotime($dt)));
 		$th.="<td>".date('m-d',strtotime("$i day",strtotime($dt)))."</td>";
 		$i+=1;
 	}
