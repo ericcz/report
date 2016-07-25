@@ -242,6 +242,11 @@ try{
 	$(".dv-uv").html(rt[1]);
 	}else if(vf=='getDetail'||vf=='getDetailPv'||vf=='getDetailLeft'){
 		$(".tab").html(vchReturn.split("##")[2]);
+		var chartDt= new Array
+		chartDt=vchReturn.split("##")[3].split(",");
+		var chartData=vchReturn.split("##")[4];
+		showChart_lineBasic(chartData.substring(0,chartData.length-1),"","chart",chartDt);
+		
 		if (vf=='getDetail'){
 		var pr=0;
 		var amount="";
@@ -433,9 +438,10 @@ ul,li {list-style:none;float:left;text-align:center;font:18px/1.5em 'Microsoft Y
 
 <div class="dv-ext" style='z-index:1;left:0px;top:0px;position:absolute;background-color:#666;width:100%;height:100%;filter:alpha(opacity=90);opacity:0.9;display:none;'></div>
 <div class='dv-ext-in' style="z-index:10;left:0px;top:0px;position:absolute;background-color:#fff;width:99%;height:90%;top:5%; border-radius:8px;display:none;">
-<div class=tab style="padding:50px;text-align:center;width:90%"></div>
+<div class="tab" style="padding:50px;text-align:center;width:90%"></div>
 <div style="z-index:12;left:96%;position:absolute;top:3%;float:right;font:80px;cursor:pointer">
 <span class="glyphicon glyphicon-remove tab-close" aria-hidden="true" style="color:#000;"></span></div>
+<div id="chart" style="padding:50px;width:70%;height:300px"></div>
 </div>
 
 

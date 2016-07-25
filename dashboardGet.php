@@ -85,6 +85,8 @@ function fnDetailPv(){
 	$pid = $GLOBALS["pid"];
 	$typ = $_REQUEST['typ'];
 	$dt = $_REQUEST['dt'];
+	$chartDt="";
+	$chartData=$typ.",";
 	
 	$arrDt=[];
 	$th="";
@@ -113,20 +115,13 @@ $i=0;
 			}
 			$arrDc[$i]="<td>".round($row[1])."</td>";
 			$i+=1;
-		
-		/*
-			while ($arrDt[$i]!=$row[0] and $i<7){
-				$dc.="<td>0</td>";
-				$i+=1;
-			}
-			$i+=1;
-			$dc.="<td>".round($row[1])."</td>";
-			*/
+			$chartDt.=$row[0].",";
+			$chartData.=$row[1].",";
 		}
 	}else
 		$dc = "0";
 	for ($i=0;$i<7;$i++){ $dc.=$arrDc[$i]; }
-	return "<table class='table table-striped table-hover table-bordered'><tr>".$th."</tr><tr>".$dc."</tr></table>";
+	return "<table class='table table-striped table-hover table-bordered'><tr>".$th."</tr><tr>".$dc."</tr></table>"."##".$chartDt."##".$chartData;
 }
 function fnDetailLeft(){
 	$dc="";
