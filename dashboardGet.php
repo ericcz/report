@@ -103,16 +103,15 @@ $i=0;
 	$result=mysqli_store_result($GLOBALS["conn"]);
 	$GLOBALS["conn"]->next_result();
 	}
-	$i=0;
 	if( $result == false ){ 
 		$dc = "Error .\n";}
 	if ($result){ 
 		while($row=mysqli_fetch_row($result)){
 		
-			while ($arrDt[$i]==substr($row[0],5) and $i<7){
+			while ($arrDt[$i]!=substr($row[0],5) and $i<7){
 				$i+=1;
 			}
-			$arrDc[$i-1]="<td>".round($row[1])."</td>";
+			$arrDc[$i]="<td>".round($row[1])."</td>";
 			$i+=1;
 		
 		/*
@@ -158,10 +157,10 @@ $i=0;
 	if ($result){ 
 		while($row=mysqli_fetch_row($result)){
 			if ($typ=='leftD'){
-			while ($arrDt[$i]==substr($row[0],5) and $i<7){
+			while ($arrDt[$i]!=substr($row[0],5) and $i<7){
 				$i+=1;
 			}
-			$arrDc[$i-1]="<td>".$row[1]."%</td>";
+			$arrDc[$i]="<td>".$row[1]."%</td>";
 			$i+=1;
 			}else{
 				$th.="<td>".$row[2]."</td>";
