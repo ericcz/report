@@ -1,10 +1,9 @@
 <?php
-header('Cache-Control:no-cache,must-revalidate');    
-header('Pragma:no-cache');  
 include_once "dbcon.php";
 
 $pid = $_REQUEST['pid'];
 $obj = $_REQUEST['obj'];
+
 $desc = "";
 
 switch($obj){
@@ -41,7 +40,7 @@ function fnDetail(){
 	$arrDc=[];
 	
 	$proc='cspDashboard_detail';
-	$result=mysqli_query($conn,"set names utf8");
+	$result=mysqli_query($GLOBALS["conn"],"set names utf8");
 	$result=mysqli_real_query($GLOBALS["conn"],"call $proc('$typ',@x)");
 	$result=mysqli_real_query($GLOBALS["conn"],"select @x");
 	while($GLOBALS["conn"]->more_results()){
@@ -86,7 +85,7 @@ function fnDetailPv(){
 	$typ = $_REQUEST['typ'];
 	$dt = $_REQUEST['dt'];
 	$chartDt="";
-	$chartData=$typ.",";
+	$chartData="";
 	
 	$arrDt=[];
 	$th="";
@@ -109,19 +108,28 @@ $i=0;
 		$dc = "Error .\n";}
 	if ($result){ 
 		while($row=mysqli_fetch_row($result)){
-		
+			if ($chn!=$row[2]){
+				if ($chn!=""){
+					for ($i=0;$i<7;$i++){ $dc.=$arrDc[$i]; }
+				}
+				$dc.="<tr><td>".$row[2]."</td>";
+				$chartData=substr($chartData,0,strlen($chartData)-1).";".$row[2].",";
+				$chn=$row[2];
+				$i=0;
+			}
 			while ($arrDt[$i]!=substr($row[0],5) and $i<7){
 				$i+=1;
+				$chartData.="0".",";
 			}
 			$arrDc[$i]="<td>".round($row[1])."</td>";
 			$i+=1;
-			$chartDt.=$row[0].",";
 			$chartData.=$row[1].",";
 		}
 	}else
 		$dc = "0";
 	for ($i=0;$i<7;$i++){ $dc.=$arrDc[$i]; }
-	return "<table class='table table-striped table-hover table-bordered'><tr>".$th."</tr><tr>".$dc."</tr></table>"."##".$chartDt."##".$chartData;
+	for ($i=0;$i<7;$i++){ $chartDt.=$arrDt[$i].","; }
+	return "<table class='table table-striped table-hover table-bordered'><tr><td></td>".$th."</tr><tr>".$dc."</tr></table>"."##".substr($chartDt,0,strlen($chartDt)-1)."##".substr($chartData,1);
 }
 function fnDetailLeft(){
 	$dc="";

@@ -230,11 +230,11 @@ try{
 	$(".dv-active2").html(dsc+"&nbsp;"+Math.round((rt[rt.length-1]-rt[rt.length-2])/rt[rt.length-1]*10000)/100+"%");
 
 	rt=vchReturn.split("##")[5].split("$$");
-	$(".dv-keep-d").html('<p class=font1>日留存</p><p class=font2>'+rt[1]+'%</p>');
+	$(".dv-keep-d").html('<p class=font2>'+rt[1]+'%</p>');
 	rt=vchReturn.split("##")[6].split("$$");
-	$(".dv-keep-w").html('<p class=font1>周留存</p><p class=font2>'+rt[1]+'%');
+	$(".dv-keep-w").html('<p class=font2>'+rt[1]+'%');
 	rt=vchReturn.split("##")[7].split("$$");
-	$(".dv-keep-m").html('<p class=font1>月留存</p><p class=font2>'+rt[1]+'%');
+	$(".dv-keep-m").html('<p class=font2>'+rt[1]+'%');
 
 	rt=vchReturn.split("##")[8].split("$$");
 	$(".dv-pv").html(rt[1]);
@@ -352,6 +352,8 @@ $(document).ready(function(){
 		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDetail")+"&dt="+escape(vdt)+"&typ="+escape("loc");
 		createXMLHttpRequest(url,"fresh=" +Math.random());
 		},300);
+		$(".tab").css("overflow","scroll").css("overflow-x","hidden").css("height","500px")
+
 	})
 	$('.dv-keep-d').click(function(){
 		setTimeout(function(){
@@ -376,7 +378,8 @@ $(document).ready(function(){
 	$('.tab-close').click(function(){
 		$(".dv-ext").hide();
 		$(".dv-ext-in").hide();
-		$("#chart").hide()
+		$("#chart").hide();
+		$(".tab").css("overflow","auto").css("height","")
 	})
 
 	
@@ -405,21 +408,23 @@ $(document).ready(function(){
 <div class="dv-register" style="padding:0px;text-align:center;font:70px/1.5em 'Microsoft YaHei';color:#aaa"></div>
 <div class="dv-register2" style="padding:0px;text-align:right;font:30px/1.5em 'Microsoft YaHei';color:#aaa"></div>
 </section>
-
 <section class="sect-active" style="float:left;margin-left:6px;width:30%;height:240px;padding:20px;border:1px solid #fff; color:#000; border-radius:6px;background:white;box-shadow:0 0 8px #222; font:11px/1.5em 'Microsoft YaHei';">
 <div id="filelist" class='alert alert-info alert-st' >&nbsp;</div>
 <div class="dv-active" style="padding:0px;text-align:center;font:70px/1.5em 'Microsoft YaHei';color:#aaa"></div>
 <div class="dv-active2" style="padding:0px;text-align:right;font:30px/1.5em 'Microsoft YaHei';color:#aaa"></div>
 </section>
 <br>
-<style>
-ul,li {list-style:none;float:left;text-align:center;font:18px/1.5em 'Microsoft YaHei';}
-</style>
-<section class="sect-keep" style="float:left;margin:10px 0px 0px 5%;width:91%;height:150px;padding:10px;border:1px solid #fff; color:#000; border-radius:6px;background:white;box-shadow:0 0 8px #222; font:11px/1.5em 'Microsoft YaHei';">
-<ul>
-<li><div class="dv-keep-d" style="margin-right:270px;padding:5px;text-align:center;font:50px/1.5em 'Microsoft YaHei';color:#aaa"></div></li>
-<li><div class="dv-keep-w" style="margin-right:270px;padding:5px;text-align:center;font:50px/1.5em 'Microsoft YaHei';color:#aaa"></div></li>
-<li><div class="dv-keep-m" style="padding:5px;text-align:center;font:50px/1.5em 'Microsoft YaHei';color:#aaa"></div></li></ul>
+<section class="sect-keep" style="float:left;margin:10px 0px 0px 5%;width:30%;height:150px;padding:20px;border:1px solid #fff; color:#000; border-radius:6px;background:white;box-shadow:0 0 8px #222; font:11px/1.5em 'Microsoft YaHei';">
+<div class='alert alert-info alert-st' >日留存</div>
+<div class="dv-keep-d" style="padding:0px;text-align:center;font:70px/1.5em 'Microsoft YaHei';color:#aaa"></div>
+</section>
+<section class="sect-keep" style="float:left;margin:10px 0px 0px 6px;width:30%;height:150px;padding:20px;border:1px solid #fff; color:#000; border-radius:6px;background:white;box-shadow:0 0 8px #222; font:11px/1.5em 'Microsoft YaHei';">
+<div class='alert alert-info alert-st' >周留存</div>
+<div class="dv-keep-d" style="padding:0px;text-align:center;font:70px/1.5em 'Microsoft YaHei';color:#aaa"></div>
+</section>
+<section class="sect-keep" style="float:left;margin:10px 0px 0px 6px;width:30%;height:150px;padding:20px;border:1px solid #fff; color:#000; border-radius:6px;background:white;box-shadow:0 0 8px #222; font:11px/1.5em 'Microsoft YaHei';">
+<div class='alert alert-info alert-st' >月留存</div>
+<div class="dv-keep-d" style="padding:0px;text-align:center;font:70px/1.5em 'Microsoft YaHei';color:#aaa"></div>
 </section>
 <br>
 <section class="sect-pv" style="margin-left:5%;float:left;margin-top:10px;width:30%;height:210px;padding:20px;border:1px solid #fff; color:#000; border-radius:6px;background:white;box-shadow:0 0 8px #222; font:11px/1.5em 'Microsoft YaHei';">
@@ -442,10 +447,10 @@ ul,li {list-style:none;float:left;text-align:center;font:18px/1.5em 'Microsoft Y
 
 <div class="dv-ext" style='z-index:1;left:0px;top:0px;position:absolute;background-color:#666;width:100%;height:100%;filter:alpha(opacity=90);opacity:0.9;display:none;'></div>
 <div class='dv-ext-in' style="z-index:10;left:0px;top:0px;position:absolute;background-color:#fff;width:99%;height:90%;top:5%; border-radius:8px;display:none;">
-<div class="tab" style="padding:50px;text-align:center;width:90%"></div>
+<div class="tab" style="padding:50px;text-align:center;width:90%;"></div>
 <div style="z-index:12;left:96%;position:absolute;top:3%;float:right;font:80px;cursor:pointer">
 <span class="glyphicon glyphicon-remove tab-close" aria-hidden="true" style="color:#000;"></span></div>
-<div id="chart" style="padding:50px;width:70%;height:300px;display:none;"></div>
+<div id="chart" style="margin:-40px 0px 0px 50px;width:70%;height:300px;display:none;"></div>
 </div>
 
 
