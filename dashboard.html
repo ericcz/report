@@ -9,14 +9,16 @@
 body {padding:20px;background-color:#eee;}
 .dv-img {margin-right:-30px;margin-top:25%;float:right;width:25px;height:70px;background:url('include/img/icon.jpg') no-repeat -138px -145px;cursor:pointer;}
 .alert-st {padding:5px;text-align:center;font:18px/1.5em 'Microsoft YaHei';}
-.font1 {font:30px/1.5em 'Microsoft YaHei';}
+.font1 {font:24px/1.5em 'Microsoft YaHei';}
 .font2 {font:50px/1.5em 'Microsoft YaHei';}
 section {cursor:pointer}
+ul,li {list-style:none}
 </style>
 <script src="include/js/jquery-3.0.0.min.js"></script>
 <script src="include/js/bootstrap.min.js"></script>
 <script src="include/js/bootstrap-datetimepicker.js"></script>
 <script src="include/js/highcharts.js"></script>
+<script src="include/js/jquery.bootstrap.newsbox.min.js"></script>
 <script type="text/javascript">
 function createXMLHttpRequest(url,dv){
 	xmlhttp=""
@@ -240,6 +242,22 @@ try{
 	$(".dv-pv").html(rt[1]);
 	rt=vchReturn.split("##")[9].split("$$");
 	$(".dv-uv").html(rt[1]);
+	rt=vchReturn.split("##")[10].split("$$");
+	$(".ul-loc").html(rt[1]);
+	
+		$(".ul-loc").bootstrapNews({
+		newsPerPage: 1,
+		autoplay: true,
+		pauseOnHover:true,
+		direction: 'down',
+		newsTickerInterval: 4000,
+		navigation: false,
+		onToDo: function () {
+			//console.log(this);
+		}
+	});
+	
+	
 	}else if(vf=='getDetail'||vf=='getDetailPv'||vf=='getDetailLeft'){
 		$(".tab").html(vchReturn.split("##")[2]);
 		if (vf=='getDetailPv'){
@@ -437,7 +455,11 @@ $(document).ready(function(){
 </section>
 <section class="sect-locate" style="float:left;margin:10px 0px 0px 6px;width:30%;height:210px;padding:20px;border:1px solid #fff; color:#000; border-radius:6px;background:white;box-shadow:0 0 8px #222; font:11px/1.5em 'Microsoft YaHei';">
 <div id="filelist" class='alert alert-info alert-st' >locate</div>
-<div class="dv-locate" style="padding:5px;text-align:center;font:50px/1.5em 'Microsoft YaHei';color:#aaa"></div>
+<div class="panel panel-default font1">
+<div class="panel-body">
+<ul class="ul-loc">
+</ul>
+</div></div>
 </section>
 <br>
 <!--section class="sect-chart" style="float:left;margin-top:10px;width:70%;height:400px;padding:10px;border:1px solid #fff; color:#000; border-radius:6px;background:white;box-shadow:0 0 8px #222; font:11px/1.5em 'Microsoft YaHei';">

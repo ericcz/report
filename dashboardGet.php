@@ -179,6 +179,7 @@ function fnDashBoard(){
 	$dc="";
 	$pid = $GLOBALS["pid"];
 	$proc='cspDashboard_get';
+	$result=mysqli_query($GLOBALS["conn"],"set names utf8");
 	$result=mysqli_real_query($GLOBALS["conn"],"call $proc(@x)");
 	$result=mysqli_real_query($GLOBALS["conn"],"select @x");
 	while($GLOBALS["conn"]->more_results()){
