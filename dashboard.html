@@ -218,7 +218,7 @@ try{
 		dsc='<span class="glyphicon glyphicon-chevron-up" aria-hidden="true" style="color:#6f0"></span>';
 	}else
 		dsc='<span class="glyphicon glyphicon-chevron-down" aria-hidden="true" style="color:#f60"></span>';
-	$(".sect-register .alert").html("注册人数");
+	$(".sect-register .alert").html("昨日注册人数");
 	$(".dv-register").html(rt[rt.length-2]);
 	$(".dv-register2").html("今日注册数："+rt[rt.length-1]+"&nbsp;&nbsp;&nbsp;&nbsp;"+dsc+"&nbsp;"+Math.round((rt[rt.length-2]-rt[rt.length-3])/rt[rt.length-3]*10000)/100+"%");
 	
