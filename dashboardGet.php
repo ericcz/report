@@ -76,7 +76,12 @@ function fnDetail(){
 		}
 	}else
 			$dc = "0";
-	return "<table class='table table-striped table-hover table-bordered'><tr><td ></td>".$th."</tr>".$dc."</tr></table>";	
+	$dc="<table class='table table-striped table-hover table-bordered'><tr><td ></td>".$th."</tr>".$dc."</tr></table>";
+	if ($typ=="reg"){
+		$dc.="<br>注：以上列表仅显示APP注册数";
+	}
+	
+	return $dc;	
 }
 function fnDetailPv(){
 	$dc="";
