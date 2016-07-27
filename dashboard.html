@@ -211,7 +211,7 @@ try{
 	$(".sect-download .alert").html("昨日下载数");
 
 	$(".dv-download").html(rt[rt.length-1])
-	$(".dv-download2").html(dsc+"&nbsp;"+Math.round((rt[rt.length-1]-rt[rt.length-2])/rt[rt.length-1]*10000)/100+"%")
+	$(".dv-download2").html(dsc+"&nbsp;"+Math.round((rt[rt.length-1]-rt[rt.length-2])/rt[rt.length-2]*10000)/100+"%")
 
 	rt=vchReturn.split("##")[3].split("$$")[2].split(",");
 	if (parseInt(rt[rt.length-2])>parseInt(rt[rt.length-3])){
@@ -220,7 +220,7 @@ try{
 		dsc='<span class="glyphicon glyphicon-chevron-down" aria-hidden="true" style="color:#f60"></span>';
 	$(".sect-register .alert").html("注册人数");
 	$(".dv-register").html(rt[rt.length-2]);
-	$(".dv-register2").html("今日注册数："+rt[rt.length-1]+"&nbsp;&nbsp;&nbsp;&nbsp;"+dsc+"&nbsp;"+Math.round((rt[rt.length-2]-rt[rt.length-3])/rt[rt.length-2]*10000)/100+"%");
+	$(".dv-register2").html("今日注册数："+rt[rt.length-1]+"&nbsp;&nbsp;&nbsp;&nbsp;"+dsc+"&nbsp;"+Math.round((rt[rt.length-2]-rt[rt.length-3])/rt[rt.length-3]*10000)/100+"%");
 	
 	rt=vchReturn.split("##")[4].split("$$")[2].split(",");
 	if (parseInt(rt[rt.length-1])>parseInt(rt[rt.length-2])){
@@ -229,7 +229,7 @@ try{
 		dsc='<span class="glyphicon glyphicon-chevron-down" aria-hidden="true" style="color:#f60"></span>';
 	$(".sect-active .alert").html("昨日活跃用户数");
 	$(".dv-active").html(rt[rt.length-1]);
-	$(".dv-active2").html(dsc+"&nbsp;"+Math.round((rt[rt.length-1]-rt[rt.length-2])/rt[rt.length-1]*10000)/100+"%");
+	$(".dv-active2").html(dsc+"&nbsp;"+Math.round((rt[rt.length-1]-rt[rt.length-2])/rt[rt.length-2]*10000)/100+"%");
 
 	rt=vchReturn.split("##")[5].split("$$");
 	$(".dv-keep-d").html('<p class=font2>'+rt[1]+'%</p>');
