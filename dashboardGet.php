@@ -76,9 +76,9 @@ function fnDetail(){
 		}
 	}else
 			$dc = "0";
-	$dc="<table class='table table-striped table-hover table-bordered'><tr><td ></td>".$th."</tr>".$dc."</tr></table>";
+	$dc="<table class='table table-striped table-hover table-bordered' style='text-align:center'><tr><td ></td>".$th."</tr>".$dc."</tr></table>";
 	if ($typ=="reg"){
-		$dc.="<br>注：以上列表仅显示APP注册数";
+		$dc="7日注册数<br>".$dc."<br>注：以上列表仅显示APP注册数";
 	}
 	
 	return $dc;	
@@ -134,7 +134,7 @@ $i=0;
 		$dc = "0";
 	for ($i=0;$i<7;$i++){ $dc.=$arrDc[$i]; }
 	for ($i=0;$i<7;$i++){ $chartDt.=$arrDt[$i].","; }
-	return "<table class='table table-striped table-hover table-bordered'><tr><td></td>".$th."</tr><tr>".$dc."</tr></table>"."##".substr($chartDt,0,strlen($chartDt)-1)."##".substr($chartData,1);
+	return "<table class='table table-striped table-hover table-bordered' style='text-align:center'><tr><td></td>".$th."</tr><tr>".$dc."</tr></table>"."##".substr($chartDt,0,strlen($chartDt)-1)."##".substr($chartData,1);
 }
 function fnDetailLeft(){
 	$dc="";
@@ -178,7 +178,7 @@ $i=0;
 	}else
 		$dc = "0";
 	if ($typ=='leftD'){	for ($i=0;$i<7;$i++){ $dc.=$arrDc[$i]; }}
-	return "<table class='table table-striped table-hover table-bordered'><tr>".$th."</tr><tr>".$dc."</tr></table>";
+	return "<table class='table table-striped table-hover table-bordered' style='text-align:center'><tr>".$th."</tr><tr>".$dc."</tr></table>";
 }
 function fnDashBoard(){
 	$dc="";
