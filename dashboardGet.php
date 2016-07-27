@@ -78,7 +78,7 @@ function fnDetail(){
 			$dc = "0";
 	$dc="<table class='table table-striped table-hover table-bordered'><tr><td ></td>".$th."</tr>".$dc."</tr></table>";
 	if ($typ=="reg"){
-		$dc.="<br>в╒ё╨ртиоап╠М╫Жотй╬APPв╒╡АйЩ";
+		$dc.="<br>ФЁ╗О╪ Д╩╔Д╦┼Е┬≈Х║╗Д╩┘Ф≤╬Г╓╨APPФЁ╗Е├▄Ф∙╟";
 	}
 	
 	return $dc;	
