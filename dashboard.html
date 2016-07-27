@@ -214,13 +214,13 @@ try{
 	$(".dv-download2").html(dsc+"&nbsp;"+Math.round((rt[rt.length-1]-rt[rt.length-2])/rt[rt.length-1]*10000)/100+"%")
 
 	rt=vchReturn.split("##")[3].split("$$")[2].split(",");
-	if (parseInt(rt[rt.length-1])>parseInt(rt[rt.length-2])){
+	if (parseInt(rt[rt.length-2])>parseInt(rt[rt.length-3])){
 		dsc='<span class="glyphicon glyphicon-chevron-up" aria-hidden="true" style="color:#6f0"></span>';
 	}else
 		dsc='<span class="glyphicon glyphicon-chevron-down" aria-hidden="true" style="color:#f60"></span>';
-	$(".sect-register .alert").html("今日注册人数");
-	$(".dv-register").html(rt[rt.length-1]);
-	$(".dv-register2").html(dsc+"&nbsp;"+Math.round((rt[rt.length-1]-rt[rt.length-2])/rt[rt.length-1]*10000)/100+"%");
+	$(".sect-register .alert").html("注册人数");
+	$(".dv-register").html(rt[rt.length-2]);
+	$(".dv-register2").html("今日注册数："+rt[rt.length-1]+"&nbsp;&nbsp;&nbsp;&nbsp;"+dsc+"&nbsp;"+Math.round((rt[rt.length-2]-rt[rt.length-3])/rt[rt.length-2]*10000)/100+"%");
 	
 	rt=vchReturn.split("##")[4].split("$$")[2].split(",");
 	if (parseInt(rt[rt.length-1])>parseInt(rt[rt.length-2])){
@@ -298,12 +298,14 @@ $(document).ready(function(){
 	createXMLHttpRequest(url,"fresh=" +Math.random());
 	},300);
 	$(".dv-img").click(function(){
-		location.href="queryRp.html";
+		//location.href="queryRp.html";
 	})
-	/*setInterval(function(){
-	url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getCustomer");
-	createXMLHttpRequest(url,"fresh=" +Math.random());
-	},8000);*/
+	setInterval(function(){
+		if ($(".dv-ext").css("display")=="none"){
+			url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDashBoard");
+			createXMLHttpRequest(url,"fresh=" +Math.random());
+		}
+	},10000);
 
 	var dt = new Date();
 	var m="0"+(dt.getMonth()+1);
@@ -424,7 +426,7 @@ $(document).ready(function(){
 <section class="sect-register" style="float:left;margin-left:6px;width:30%;height:240px;padding:20px;border:1px solid #fff; color:#000; border-radius:6px;background:white;box-shadow:0 0 8px #222; font:11px/1.5em 'Microsoft YaHei';">
 <div id="filelist" class='alert alert-info alert-st' >&nbsp;</div>
 <div class="dv-register" style="padding:0px;text-align:center;font:70px/1.5em 'Microsoft YaHei';color:#aaa"></div>
-<div class="dv-register2" style="padding:0px;text-align:right;font:30px/1.5em 'Microsoft YaHei';color:#aaa"></div>
+<div class="dv-register2" style="padding:0px;text-align:right;font:20px/1.5em 'Microsoft YaHei';color:#aaa"></div>
 </section>
 <section class="sect-active" style="float:left;margin-left:6px;width:30%;height:240px;padding:20px;border:1px solid #fff; color:#000; border-radius:6px;background:white;box-shadow:0 0 8px #222; font:11px/1.5em 'Microsoft YaHei';">
 <div id="filelist" class='alert alert-info alert-st' >&nbsp;</div>
