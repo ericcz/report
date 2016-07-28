@@ -78,7 +78,7 @@ function fnDetail(){
 			$dc = "0";
 	$dc="<table class='table table-striped table-hover table-bordered' style='text-align:center'><tr><td ></td>".$th."</tr>".$dc."</tr></table>";
 	if ($typ=="reg"){
-		$dc="7日注册数<br>".$dc."<br>注：以上列表仅显示APP注册数";
+		$dc="7日注册数<br>".$dc;
 	}
 	
 	return $dc;	
