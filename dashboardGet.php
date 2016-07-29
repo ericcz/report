@@ -152,6 +152,7 @@ function fnDetailLeft(){
 		$i+=1;
 	}
 $arrDc=array("<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td></tr>");
+$arrDs=array("<td></td>","<td></td>","<td></td>","<td></td></tr>");
 $i=0;
 	$proc='cspDashboard_detail';
 	$result=mysqli_real_query($GLOBALS["conn"],"call $proc('$typ',@x)");
@@ -171,14 +172,25 @@ $i=0;
 			$arrDc[$i]="<td>".$row[1]."%</td>";
 			$i+=1;
 			}else{
-				$th.="<td>".$row[2]."</td>";
-				$dc.="<td>".$row[1]."%</td>";
+				if ($chn!=$row[0]){
+					$dc.="<tr><td>".$row[0]."</td>";
+					$chn=$row[0];
+				}
+				while ($row[2]!=($i+1)){
+					$i+=1;
+				}
+				$arrDs[$i]="<td>".$row[1]."%</td>";
+				$i+=1;
 			}
 		}
 	}else
 		$dc = "0";
 	if ($typ=='leftD'){	for ($i=0;$i<7;$i++){ $dc.=$arrDc[$i]; }}
-	return "<table class='table table-striped table-hover table-bordered' style='text-align:center'><tr>".$th."</tr><tr>".$dc."</tr></table>";
+	else {
+		for ($i=0;$i<4;$i++){ $dc.=$arrDs[$i]; }
+		$th="<td>第1周</td><td>第2周</td><td>第3周</td><td>第4周</td>";
+	}
+	return "<table class='table table-striped table-hover table-bordered' style='text-align:center'><tr><td></td>".$th."</tr>".$dc."</tr></table>";
 }
 function fnDashBoard(){
 	$dc="";
