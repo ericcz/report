@@ -176,7 +176,7 @@ $i=0;
 					$dc.="<tr><td>".$row[0]."</td>";
 					$chn=$row[0];
 				}
-				while ($row[2]!=($i+1)){
+				while ($row[2]!=($i+1) and $i<4){
 					$i+=1;
 				}
 				$arrDs[$i]="<td>".$row[1]."%</td>";
@@ -188,9 +188,9 @@ $i=0;
 	if ($typ=='leftD'){	for ($i=0;$i<7;$i++){ $dc.=$arrDc[$i]; }}
 	else {
 		for ($i=0;$i<4;$i++){ $dc.=$arrDs[$i]; }
-		$th="<td>第1周</td><td>第2周</td><td>第3周</td><td>第4周</td>";
+		$th="<td></td><td>第1周</td><td>第2周</td><td>第3周</td><td>第4周</td>";
 	}
-	return "<table class='table table-striped table-hover table-bordered' style='text-align:center'><tr><td></td>".$th."</tr>".$dc."</tr></table>";
+	return "<table class='table table-striped table-hover table-bordered' style='text-align:center'><tr>".$th."</tr>".$dc."</tr></table>";
 }
 function fnDashBoard(){
 	$dc="";
