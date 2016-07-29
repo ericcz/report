@@ -173,8 +173,12 @@ $i=0;
 			$i+=1;
 			}else{
 				if ($chn!=$row[0]){
+					if ($chn!=""){
+					for ($i=0;$i<4;$i++){ $dc.=$arrDs[$i]; }}
 					$dc.="<tr><td>".$row[0]."</td>";
 					$chn=$row[0];
+					$i=0;
+					$arrDs=array("<td></td>","<td></td>","<td></td>","<td></td></tr>");
 				}
 				while ($row[2]!=($i+1) and $i<4){
 					$i+=1;
