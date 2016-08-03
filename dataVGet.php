@@ -25,7 +25,7 @@ $query="select curdate()";
 		$dc = "0";
 
 
-echo '[ {"pv":234} ]';
+echo '[ {"value":234} ]';
 
 mysqli_close($conn);
 ?>
