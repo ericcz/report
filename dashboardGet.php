@@ -103,7 +103,7 @@ function fnDetailPv(){
 $arrDc=array("<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td></tr>");
 $i=0;
 	$proc='cspDashboard_detail';
-	$result=mysqli_real_query($GLOBALS["conn"],"call $proc('$typ',@x)");
+	$result=mysqli_real_query($GLOBALS["conn"],"call $proc('$typ','$dt',@x)");
 	$result=mysqli_real_query($GLOBALS["conn"],"select @x");
 	while($GLOBALS["conn"]->more_results()){
 	$result=mysqli_store_result($GLOBALS["conn"]);
@@ -155,7 +155,7 @@ $arrDc=array("<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td>","<
 $arrDs=array("<td></td>","<td></td>","<td></td>","<td></td>","<td></td>","<td></td>","<td></td></tr>");
 $i=0;
 	$proc='cspDashboard_detail';
-	$result=mysqli_real_query($GLOBALS["conn"],"call $proc('$typ',@x)");
+	$result=mysqli_real_query($GLOBALS["conn"],"call $proc('$typ','$dt',@x)");
 	$result=mysqli_real_query($GLOBALS["conn"],"select @x");
 	while($GLOBALS["conn"]->more_results()){
 	$result=mysqli_store_result($GLOBALS["conn"]);
