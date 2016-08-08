@@ -80,7 +80,7 @@ function fnDetail(){
 	if ($typ=="reg"){
 		$dc="7日注册数<br>".$dc;
 	}
-	*/
+
 	return $dc;	
 }
 function fnDetailPv(){
