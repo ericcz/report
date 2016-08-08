@@ -42,22 +42,13 @@ function fnDetail(){
 	$proc='cspDashboard_detail';
 	$result=mysqli_query($GLOBALS["conn"],"set names utf8");
 	$result=mysqli_real_query($GLOBALS["conn"],"call $proc('$typ','$dt',@x)");
-	$result=mysqli_real_query($GLOBALS["conn"],"select @x");
+	//$result=mysqli_real_query($GLOBALS["conn"],"select @x");
 	while($GLOBALS["conn"]->more_results()){
 	$result=mysqli_store_result($GLOBALS["conn"]);
 	$GLOBALS["conn"]->next_result();
 	}
 	if( $result == false ){ 
 		$dc = "Error .\n";}
-		
-	if ($result){ 
-		while($row=mysqli_fetch_row($result)){
-			$dc = $row[0].$row[1].$row[2].'<br>';
-		}
-	}else
-		$dc = "0";
-		
-		/*
 	if ($result){ 
 		while($row=mysqli_fetch_row($result)){
 			if ($chn!=$row[2]){
