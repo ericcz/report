@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<style>
+ul,li{list-style:none}
+</style>
+<head>
+<meta charset="utf-8" />
+    <title>jQuery Bootstrap News plugin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+
+<script src="include/js/jquery-3.0.0.min.js"></script>
+<script src="include/js/jquery.bootstrap.newsbox.min.js" ></script>
+</head>
+
+<body>
+<div class="panel panel-default">
+<div class="panel-body">
+<ul class="dv-loc">
+</ul>
+</div></div>
+
+
+
+
+<script>
+var ch
+ch='[{"channel":"app","days":[{"day":"08-01"},{"day":"08-02"},{"day":"08-03"}],"con":[{"num":"102"},{"num":"104"},{"num":"153"}]},{"channel":"android","days":[{"day":"08-02"},{"day":"08-04"}],"con":[{"num":"56"},{"num":"76"}]}]';
+ch=eval("("+ch+")")
+alert(ch[1].days[1].day)
+
+dv='<li class="news-item">first</li><li class="news-item">second</li><li class="news-item">third</li>'
+$(".dv-loc").html(dv);
+
+        $(".dv-loc").bootstrapNews({
+            newsPerPage: 1,
+            autoplay: true,
+			pauseOnHover:true,
+            direction: 'up',
+            newsTickerInterval: 4000,
+            onToDo: function () {
+                //console.log(this);
+            }
+        });
+</script>
+</body>
+</html>
