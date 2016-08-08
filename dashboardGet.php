@@ -38,7 +38,8 @@ function fnDetail(){
 		$i+=1;
 	}
 	$arrDc=[];
-	
+	echo $dt;
+	return;
 	$proc='cspDashboard_detail';
 	$result=mysqli_query($GLOBALS["conn"],"set names utf8");
 	$result=mysqli_real_query($GLOBALS["conn"],"call $proc('$typ','$dt',@x)");
