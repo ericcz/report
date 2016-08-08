@@ -41,7 +41,7 @@ function fnDetail(){
 	
 	$proc='cspDashboard_detail';
 	$result=mysqli_query($GLOBALS["conn"],"set names utf8");
-	$result=mysqli_real_query($GLOBALS["conn"],"call $proc('$typ',@x)");
+	$result=mysqli_real_query($GLOBALS["conn"],"call $proc('$typ','$dt',@x)");
 	$result=mysqli_real_query($GLOBALS["conn"],"select @x");
 	while($GLOBALS["conn"]->more_results()){
 	$result=mysqli_store_result($GLOBALS["conn"]);
