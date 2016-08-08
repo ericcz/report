@@ -49,6 +49,15 @@ function fnDetail(){
 	}
 	if( $result == false ){ 
 		$dc = "Error .\n";}
+		
+	if ($result){ 
+		while($row=mysqli_fetch_row($result)){
+			$dc = $row[0].$row[1].$row[2].'<br>';
+		}
+	}else
+		$dc = "0";
+		
+		/*
 	if ($result){ 
 		while($row=mysqli_fetch_row($result)){
 			if ($chn!=$row[2]){
@@ -80,7 +89,7 @@ function fnDetail(){
 	if ($typ=="reg"){
 		$dc="7日注册数<br>".$dc;
 	}
-	
+	*/
 	return $dc;	
 }
 function fnDetailPv(){
