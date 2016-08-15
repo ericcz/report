@@ -6,13 +6,16 @@
 <link rel="stylesheet" href="include/css/bootstrap.css">
 <link rel="stylesheet" href="include/css/bootstrap-datetimepicker.css">
 <style>
-body {padding:20px;background-color:#eee;}
-.dv-img {margin-right:-30px;margin-top:25%;float:right;width:25px;height:70px;background:url('include/img/icon.jpg') no-repeat -138px -145px;cursor:pointer;}
-.alert-st {padding:5px;text-align:center;font:18px/1.5em 'Microsoft YaHei';}
-.font1 {font:24px/1.5em 'Microsoft YaHei';}
-.font2 {font:50px/1.5em 'Microsoft YaHei';}
-section {cursor:pointer}
+body {padding:20px;background-color:#777;}
 ul,li {list-style:none}
+.sect {float:left;border-radius:4px;background:white;box-shadow:0 0 8px #222; font:16px/1.5em 'Microsoft YaHei';width:30%;height:220px;background-color:#fff}
+.dv-title {width:100%;height:40px;background-color:#eee;padding:10px}
+.font1 {font:80px/1.5em 'Microsoft YaHei';color:#33cccc;}
+.font2 {font:60px/1.5em 'Microsoft YaHei';color:#cc6666;}
+.font3 {font:30px/1.5em 'Microsoft YaHei';color:#0099CC;}
+.font4 {font:20px/1.5em 'Microsoft YaHei';color:#f60;}
+.dv-register {padding:2px;float:left;margin:1px;background-color:#e06;color:#fff;width:49%;height:40%;}
+.th {cursor:pointer;}
 </style>
 <script src="include/js/jquery-3.0.0.min.js"></script>
 <script src="include/js/bootstrap.min.js"></script>
@@ -20,84 +23,6 @@ ul,li {list-style:none}
 <script src="include/js/highcharts.js"></script>
 <script src="include/js/jquery.bootstrap.newsbox.min.js"></script>
 <script type="text/javascript">
-function createXMLHttpRequest(url,dv){
-	xmlhttp=""
-	if(window.ActiveXObject){
-		try{
-		xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
-		}catch(e){
-		xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-		}}
-		else if(window.XMLHttpRequest){
-			xmlhttp = new XMLHttpRequest();
-				if (xmlhttp.overrideMimeType){ xmlhttp.overrideMimeType("text/xml");}
-		}
-		if(!xmlhttp){ window.alert("Do not support XMLHttpRequest!");}
-		xmlhttp.onreadystatechange=XHRChanged;
-		xmlhttp.open("POST", url,false);
-		xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-		xmlhttp.send(dv);
-}
-function XHRChanged(){	//handle return value xmlhttp.responseText
-	if (xmlhttp.readyState==4){
-		getBack(xmlhttp.responseText);}
-}
-
-function showChart_columnStacked(cData,cTitle,content,xRay){
-	var chart;
-	var options = {
-			chart: {
-				renderTo: content,
-				defaultSeriesType: 'column'
-			},
-			title: {
-				text: cTitle
-			},
-			xAxis: {
-				categories: xRay
-			},
-			yAxis: {
-				min: 0,
-				title: {
-					text: ''
-				}
-			},
-			legend: {
-				align: 'right',
-				x: -100,
-				verticalAlign: 'top',
-				y: 20,
-				floating: true,
-				backgroundColor: '#FFFFFF',
-				borderColor: '#CCC',
-				borderWidth: 1,
-				shadow: false
-			},
-			tooltip: {
-				formatter: function() {
-					return '<b>'+ this.x +'</b> '+ this.series.name +': '+ this.y +' Total: '+ this.point.stackTotal;
-				}
-			},
-			plotOptions: {
-				column: {
-					stacking: 'normal'
-				}
-			},
-			series: []
-		};
-		var v,arr=new Array(),a=new Array();
-		for (var i=0;i<cData.split(';').length;i++){
-			arr=cData.split(';')[i].split(',');
-			v=arr[0];
-			arr.shift();
-			for(var j=0;j<arr.length;j++){
-				a[j]=parseInt(arr[j]);
-			}
-			options.series.push({name:v,data:a});
-			a=[]
-		}
-		chart = new Highcharts.Chart(options);
-}
 function showChart_lineBasic(cData,cTitle,content,xRay){
 	var chart;
 	var options = {
@@ -156,95 +81,72 @@ function showChart_lineBasic(cData,cTitle,content,xRay){
 		}
 		chart = new Highcharts.Chart(options);
 }
-
-function showChart_pieBasic(cData,cTitle,content){
-	var chart;
-	var options = {
-		chart:{renderTo: content,
-				plotBackgroundColor: null,
-				plotBorderWidth: null,
-				plotShadow: false
-				},
-		title:{text: null},	// title
-		subtitle:{text:''},
-		tooltip:{formatter:function(){
-					return '<b>'+ this.point.name +'</b>: '+ this.y +' %';
-				}},
-		plotOptions:{pie:{allowPointSelect:true,
-							cursor:'pointer',
-							dataLabels:{
-							enabled:true,
-							color:'#000000',
-							connectorColor:'#000000',
-							formatter:function(){
-								return '<b>'+ this.point.name +'</b>: '+ this.y +' %';
-							}}
-						}
-					},
-		series:[{type: 'pie',
-				name: 'Browser share',
-				data:[]
-				}]
-		};
-		var v,arr=new Array(),a=new Array(),b=new Array();
-		a=cData.split(';')
-		for (var j=0;j<a.length;j++){
-			b[0]=a[j].split(',')[0];
-			b[1]=parseFloat(a[j].split(',')[1]);
-			arr[j]=b;
-			b=[]
+function createXMLHttpRequest(url,dv){
+	xmlhttp=""
+	if(window.ActiveXObject){
+		try{
+		xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
+		}catch(e){
+		xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+		}}
+		else if(window.XMLHttpRequest){
+			xmlhttp = new XMLHttpRequest();
+				if (xmlhttp.overrideMimeType){ xmlhttp.overrideMimeType("text/xml");}
 		}
-		options.series[0].data = arr;
-		chart = new Highcharts.Chart(options);
+		if(!xmlhttp){ window.alert("Do not support XMLHttpRequest!");}
+		xmlhttp.onreadystatechange=XHRChanged;
+		xmlhttp.open("POST", url,false);
+		xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+		xmlhttp.send(dv);
 }
-
+function XHRChanged(){	//handle return value xmlhttp.responseText
+	if (xmlhttp.readyState==4){
+		getBack(xmlhttp.responseText);}
+}
 function getBack(vchReturn){
 try{
 	var vf=vchReturn.split("##")[1]
 	if (vf=='getDashBoard'){
-	var rt,dsc
-	rt=vchReturn.split("##")[2].split("$$")[2].split(",");
-	if (parseInt(rt[rt.length-1])>parseInt(rt[rt.length-2])){
+		var rt,dsc
+		rt=vchReturn.split("##")[2].split("$$")[2].split(",");
+		if (parseInt(rt[rt.length-1])>parseInt(rt[rt.length-2])){
+			dsc='<span class="glyphicon glyphicon-chevron-up" aria-hidden="true" style="color:#6f0"></span>';
+		}else
+			dsc='<span class="glyphicon glyphicon-chevron-down" aria-hidden="true" style="color:#f60"></span>';
+		$(".dv-down1").html("<span class=font1>"+rt[rt.length-1]+"</span><span class=font3>"+dsc+Math.round((rt[rt.length-1]-rt[rt.length-2])/rt[rt.length-2]*10000)/100+"%</span>")
+		$(".dv-down2").html("<br><span class=font4>总下载数："+vchReturn.split("##")[2].split("$$")[3]+"</span>")
+
+		rt=vchReturn.split("##")[3].split("$$")[2].split(",");
+		if (parseInt(rt[rt.length-2])>parseInt(rt[rt.length-3])){
 		dsc='<span class="glyphicon glyphicon-chevron-up" aria-hidden="true" style="color:#6f0"></span>';
-	}else
+		}else
 		dsc='<span class="glyphicon glyphicon-chevron-down" aria-hidden="true" style="color:#f60"></span>';
-	$(".sect-download .alert").html("昨日下载数");
+		$(".dv-register-l1").html(rt[rt.length-1]);
+		$(".dv-register-l2").html(vchReturn.split('##')[3].split('$$')[3]);
+		$(".dv-register-r1").html(rt[rt.length-2]+"<br><span style='font-size:20px'>"+Math.round((rt[rt.length-2]-rt[rt.length-3])/rt[rt.length-3]*10000)/100+"%</span>");
+		
+		rt=vchReturn.split("##")[4].split("$$")[2].split(",");
+		if (parseInt(rt[rt.length-1])>parseInt(rt[rt.length-2])){
+			dsc='<span style="color:#fff">+</span>';
+		}else
+			dsc='<span style="color:#fff"></span>';
+		$(".dv-act1").html("<span class=font1 style='color:#fff'>"+rt[rt.length-1]+"</span>");
+		$(".dv-act2").html("<span class=font3 style='color:#fff'>"+dsc+"&nbsp;"+Math.round((rt[rt.length-1]-rt[rt.length-2])/rt[rt.length-2]*10000)/100+"%</span>");
+		
+		rt=vchReturn.split("##")[5].split("$$");
+		$(".td-lv-d").html(rt[1]+'%');
+		rt=vchReturn.split("##")[6].split("$$");
+		$(".td-lv-w").html(rt[1]+'%');
+		rt=vchReturn.split("##")[7].split("$$");
+		$(".td-lv-m").html(rt[1]+'%');
 
-	$(".dv-download").html(rt[rt.length-1])
-	$(".dv-download2").html(dsc+"&nbsp;"+Math.round((rt[rt.length-1]-rt[rt.length-2])/rt[rt.length-2]*10000)/100+"%"+"<br>总下载数："+vchReturn.split("##")[2].split("$$")[3])
-
-	rt=vchReturn.split("##")[3].split("$$")[2].split(",");
-	if (parseInt(rt[rt.length-2])>parseInt(rt[rt.length-3])){
-		dsc='<span class="glyphicon glyphicon-chevron-up" aria-hidden="true" style="color:#6f0"></span>';
-	}else
-		dsc='<span class="glyphicon glyphicon-chevron-down" aria-hidden="true" style="color:#f60"></span>';
-	$(".sect-register .alert").html("昨日注册人数");
-	$(".dv-register").html(rt[rt.length-2]);
-	$(".dv-register2").html(dsc+"&nbsp;"+Math.round((rt[rt.length-2]-rt[rt.length-3])/rt[rt.length-3]*10000)/100+"%"+"<br>今日注册："+rt[rt.length-1]+"&nbsp;总注册："+vchReturn.split("##")[3].split("$$")[3]);
-	
-	rt=vchReturn.split("##")[4].split("$$")[2].split(",");
-	if (parseInt(rt[rt.length-1])>parseInt(rt[rt.length-2])){
-		dsc='<span class="glyphicon glyphicon-chevron-up" aria-hidden="true" style="color:#6f0"></span>';
-	}else
-		dsc='<span class="glyphicon glyphicon-chevron-down" aria-hidden="true" style="color:#f60"></span>';
-	$(".sect-active .alert").html("昨日活跃用户数");
-	$(".dv-active").html(rt[rt.length-1]);
-	$(".dv-active2").html(dsc+"&nbsp;"+Math.round((rt[rt.length-1]-rt[rt.length-2])/rt[rt.length-2]*10000)/100+"%");
-
-	rt=vchReturn.split("##")[5].split("$$");
-	$(".dv-keep-d").html('<p class=font2>'+rt[1]+'%</p>');
-	rt=vchReturn.split("##")[6].split("$$");
-	$(".dv-keep-w").html('<p class=font2>'+rt[1]+'%');
-	rt=vchReturn.split("##")[7].split("$$");
-	$(".dv-keep-m").html('<p class=font2>'+rt[1]+'%');
-
-	rt=vchReturn.split("##")[8].split("$$");
-	$(".dv-pv").html(rt[1]);
-	rt=vchReturn.split("##")[9].split("$$");
-	$(".dv-uv").html(rt[1]);
-	rt=vchReturn.split("##")[10].split("$$");
-	$(".ul-loc").html(rt[1]);
-	
+		rt=vchReturn.split("##")[8].split("$$");
+		$(".td-pv").html(rt[1]);
+		rt=vchReturn.split("##")[9].split("$$");
+		$(".td-uv").html(rt[1]);
+		
+		rt=vchReturn.split("##")[10].split("$$");
+		$(".ul-loc").html(rt[1]);
 		$(".ul-loc").bootstrapNews({
 		newsPerPage: 1,
 		autoplay: true,
@@ -252,240 +154,192 @@ try{
 		direction: 'down',
 		newsTickerInterval: 4000,
 		navigation: false,
-		onToDo: function () {
+		onToDo: function (){
 			//console.log(this);
-		}
-	});
-	
-	
-	}else if(vf=='getDetail'||vf=='getDetailPv'||vf=='getDetailLeft'){
+			}
+		});
+
+	}else{
 		$(".tab").html(vchReturn.split("##")[2]);
-		if (vf=='getDetailPv'){
-		var chartDt= new Array
-		chartDt=vchReturn.split("##")[3].split(",");
-		var chartData=vchReturn.split("##")[4];
-		showChart_lineBasic(chartData.substring(0,chartData.length-1),"","chart",chartDt);
-		$("#chart").show()
+		if($(".hid-pr").val().substr(0,4)!="left"){
+			var pr=0;
+			var amount="";
+			for (i=0;i<7;i++){
+				pr=0
+				$(".col"+i).each(function(){
+					pr+=parseInt($(this).html());
+				});
+				amount+="<td>"+pr+"</td>"
+			}
+			amount="<tr><td style='width:10%'>合计</td>"+amount+"</table>"
+			$(".tab").html($(".tab").html().replace('</table>',amount));
 		}
-		if (vf=='getDetail'){
-		var pr=0;
-		var amount="";
-		for (i=0;i<7;i++){
-			pr=0
-			$(".col"+i).each(function(){
-				pr+=parseInt($(this).html());
-			});
-			amount+="<td>"+pr+"</td>"
+		if ($(".hid-pr").val()=="pv"||$(".hid-pr").val()=="uv"){
+			var chartDt= new Array
+			chartDt=vchReturn.split("##")[3].split(",");
+			var chartData=vchReturn.split("##")[4];
+			showChart_lineBasic(chartData.substring(0,chartData.length-1),"","chart",chartDt);
+			$("#chart").show()
 		}
-		amount="<tr><td style='width:10%'>合计</td>"+amount+"</table>"
-		$(".tab").html($(".tab").html().replace('</table>',amount));
+		if($(".hid-pr").val()=="loc"){
+			$(".tab").css("overflow","scroll").css("overflow-x","hidden").css("height","500px")
 		}
 		$(".dv-ext").show();
-		$(".dv-ext-in").show()
-		
-	}else{}
+		$(".dv-ext-in").show();
+		$(".th").click(function(){
+			var arr,vJason="",dc=""
+			arr=$(".tbody").html().split("<tr");
+			$(".col"+$(this).attr('type')).each(function(index){
+				vJason+='{"val":'+parseInt($(this).html())+',"id":'+(index+1)+'},';
+			});	
+			vJason=vJason.substr(0,vJason.length-1)
+			vJason=eval("(["+vJason+"])")
+			vJason.sort(function(a,b){
+				return b.val - a.val;
+			});
+			for(i=0;i<vJason.length;i++){
+				dc+= "<tr"+arr[vJason[i].id]
+			}
+			$(".tbody").html(dc)
+		})
+	}
 		}catch(e){ alert(e);}
 }
 $(document).ready(function(){
-	var user=document.cookie;
-	user="cz"
-	if (user==""){
-		alert("Pls Login");
-		window.location="index.html";
-	}
+
 	setTimeout(function(){
 	url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDashBoard");
 	createXMLHttpRequest(url,"fresh=" +Math.random());
 	},300);
-	$(".dv-img").click(function(){
-		//location.href="queryRp.html";
-	})
-	/*
-	setInterval(function(){
-		if ($(".dv-ext").css("display")=="none"){
-			url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDashBoard");
-			createXMLHttpRequest(url,"fresh=" +Math.random());
-		}
-	},10000);
-*/
-	var dt = new Date();
-	var m="0"+(dt.getMonth()+1);
-	var d="0"+(dt.getDate()-1);
-	vdt=dt.getFullYear()+"-"+m.substr(m.length-2,2)+"-"+d.substr(d.length-2,2);
 	
-	$('.sect-download').mouseover(function(){
-		$(this).css('border','1px solid #000')
-	}).mouseout(function(){
-		$(this).css('border','0px solid #fff')
-	}).click(function(){
-		setTimeout(function(){
-		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDetail")+"&dt="+escape(vdt)+"&typ="+escape("down");
+	$(".tr-lv").click(function(){
+		$(".hid-pr").val($(this).attr("type"));
+		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDetail")+"&dt="+escape($('#iph-d-start').val())+"&typ="+escape($(this).attr("type"));
 		createXMLHttpRequest(url,"fresh=" +Math.random());
-		},300);
 	})
-	
-	$('.sect-register').mouseover(function(){
-		$(this).css('border','1px solid #000')
-	}).mouseout(function(){
-		$(this).css('border','0px solid #fff')
-	}).click(function(){
-		setTimeout(function(){
-		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDetail")+"&dt="+escape(vdt)+"&typ="+escape("reg");
+	$(".tr-pv").click(function(){
+		$(".hid-pr").val($(this).attr("type"));
+		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDetail")+"&dt="+escape($('#iph-d-start').val())+"&typ="+escape($(this).attr("type"));
 		createXMLHttpRequest(url,"fresh=" +Math.random());
-		},300);
 	})
-	$('.sect-active').mouseover(function(){
-		$(this).css('border','1px solid #000')
-	}).mouseout(function(){
-		$(this).css('border','0px solid #fff')
-	}).click(function(){
-		setTimeout(function(){
-		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDetail")+"&dt="+escape(vdt)+"&typ="+escape("lively");
+	$('.tab-show').click(function(){
+		$(".hid-pr").val($(this).attr("type"));
+		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDetail")+"&dt="+escape($('#iph-d-start').val())+"&typ="+escape($(".hid-pr").val());
 		createXMLHttpRequest(url,"fresh=" +Math.random());
-		},300);
 	})
-	$('.sect-pv').mouseover(function(){
-		$(this).css('border','1px solid #000')
-	}).mouseout(function(){
-		$(this).css('border','0px solid #fff')
-	}).click(function(){
-		setTimeout(function(){
-		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDetailPv")+"&dt="+escape(vdt)+"&typ="+escape("pv");
+	$('.bt-exec').click(function(){
+		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDetail")+"&dt="+escape($('#iph-d-start').val())+"&typ="+escape($(".hid-pr").val());
 		createXMLHttpRequest(url,"fresh=" +Math.random());
-		},300);
 	})
-	$('.sect-uv').mouseover(function(){
-		$(this).css('border','1px solid #000')
-	}).mouseout(function(){
-		$(this).css('border','0px solid #fff')
-	}).click(function(){
-		setTimeout(function(){
-		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDetailPv")+"&dt="+escape(vdt)+"&typ="+escape("uv");
-		createXMLHttpRequest(url,"fresh=" +Math.random());
-		},300);
-	})
-	$('.sect-locate').mouseover(function(){
-		$(this).css('border','1px solid #000')
-	}).mouseout(function(){
-		$(this).css('border','0px solid #fff')
-	}).click(function(){
-		setTimeout(function(){
-		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDetail")+"&dt="+escape(vdt)+"&typ="+escape("loc");
-		createXMLHttpRequest(url,"fresh=" +Math.random());
-		},300);
-		$(".tab").css("overflow","scroll").css("overflow-x","hidden").css("height","500px")
 
-	})
-	$('.dv-keep-d').click(function(){
-		setTimeout(function(){
-		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDetailLeft")+"&dt="+escape(vdt)+"&typ="+escape("leftD");
-		createXMLHttpRequest(url,"fresh=" +Math.random());
-		},300);
-	})
-	$('.dv-keep-w').click(function(){
-		setTimeout(function(){
-		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDetailLeft")+"&dt="+escape(vdt)+"&typ="+escape("leftW");
-		createXMLHttpRequest(url,"fresh=" +Math.random());
-		},300);
-	})	
-	$('.dv-keep-m').click(function(){
-		setTimeout(function(){
-		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDetailLeft")+"&dt="+escape(vdt)+"&typ="+escape("leftM");
-		createXMLHttpRequest(url,"fresh=" +Math.random());
-		},300);
-	})
-	
-	
 	$('.tab-close').click(function(){
 		$(".dv-ext").hide();
 		$(".dv-ext-in").hide();
+		$('#ip-d-start').val(vdt)
+		$('#iph-d-start').val(vdt)
 		$("#chart").hide();
 		$(".tab").css("overflow","auto").css("height","")
 	})
 
-	
-	chdv="Firefox,45.0;IE,26.8;Opera,6.2;Others,0.7;Chrome,12.8##Source"
-	var arr =new Array
-	arr=chdv.split("##");
-	cData=arr[0];
-	cTitle="";
-	content="customer-pie";
-	showChart_pieBasic(cData,cTitle,content);
-
 })
-
 </script>
 </head>
-<body><!--div class="dv-img"></div-->
+<body>
 <div id="container" >
-<section class="sect-download" style="margin-left:5%;float:left;width:30%;height:240px;padding:20px;border:1px solid #fff; color:#000; border-radius:6px;background:white;box-shadow:0 0 8px #222; font:11px/1.5em 'Microsoft YaHei';">
-<div id="filelist" class='alert alert-info alert-st' >&nbsp;</div>
-<div class="dv-download" style="padding:0px;text-align:center;font:70px/1.5em 'Microsoft YaHei';color:#aaa"></div>
-<div class="dv-download2" style="padding:0px;text-align:right;font:20px/1.5em 'Microsoft YaHei';color:#aaa"></div>
+<section class="sect-down sect" style="margin-left:4%;">
+<div class="dv-title">昨日下载
+<span class="glyphicon glyphicon-th-list tab-show" aria-hidden="true" style="float:right;cursor:pointer" type="down"></span>
+</div>
+<div class="dv-down1" style="padding:10px;width:100%;height:50%;text-align:center"></div>
+<div class="dv-down2" style="padding:10px;width:100%;height:30%;text-align:right"></div>
 </section>
 
-<section class="sect-register" style="float:left;margin-left:6px;width:30%;height:240px;padding:20px;border:1px solid #fff; color:#000; border-radius:6px;background:white;box-shadow:0 0 8px #222; font:11px/1.5em 'Microsoft YaHei';">
-<div id="filelist" class='alert alert-info alert-st' >&nbsp;</div>
-<div class="dv-register" style="padding:0px;text-align:center;font:70px/1.5em 'Microsoft YaHei';color:#aaa"></div>
-<div class="dv-register2" style="padding:0px;text-align:right;font:20px/1.5em 'Microsoft YaHei';color:#aaa"></div>
+<section class="sect-reg sect" style="margin-left:15px;">
+<div class="dv-title">注册
+<span class="glyphicon glyphicon-th-list tab-show" aria-hidden="true" style="float:right;cursor:pointer" type="reg"></span>
+</div>
+<div class="dv-register">
+<div>今日</div><div class="dv-register-l1" style="font-size:60px;text-align:center"></div>
+</div>
+<div class="dv-register">
+<div>昨日</div><div class="dv-register-r1" style="font-size:40px;text-align:center"></div>
+</div>
+<div class="dv-register" style="width:99%;">
+<div>总注册</div><div class="dv-register-l2" style="font-size:70px;text-align:center"></div>
+</div>
 </section>
-<section class="sect-active" style="float:left;margin-left:6px;width:30%;height:240px;padding:20px;border:1px solid #fff; color:#000; border-radius:6px;background:white;box-shadow:0 0 8px #222; font:11px/1.5em 'Microsoft YaHei';">
-<div id="filelist" class='alert alert-info alert-st' >&nbsp;</div>
-<div class="dv-active" style="padding:0px;text-align:center;font:70px/1.5em 'Microsoft YaHei';color:#aaa"></div>
-<div class="dv-active2" style="padding:0px;text-align:right;font:30px/1.5em 'Microsoft YaHei';color:#aaa"></div>
+
+<section class="sect-active sect" style="margin-left:15px;background-color:#ffcc00">
+<div class="dv-title">昨日活跃
+<span class="glyphicon glyphicon-th-list tab-show" aria-hidden="true" style="float:right;cursor:pointer" type="lively"></span>
+</div>
+<div class="dv-act1" style="padding:10px;width:100%;height:50%;text-align:center"></div>
+<div class="dv-act2" style="padding:10px;width:100%;height:30%;text-align:right"></div>
 </section>
 <br>
-<section class="sect-keep" style="float:left;margin:10px 0px 0px 5%;width:30%;height:150px;padding:20px;border:1px solid #fff; color:#000; border-radius:6px;background:white;box-shadow:0 0 8px #222; font:11px/1.5em 'Microsoft YaHei';">
-<div class='alert alert-info alert-st' >日留存</div>
-<div class="dv-keep-d" style="padding:0px;text-align:center;font:70px/1.5em 'Microsoft YaHei';color:#aaa"></div>
+
+<section class="sect-left sect" style="margin-left:4%;margin-top:10px">
+<div class="dv-title">留存率</div>
+<table class="table table-hover font4" style="height:80%;cursor:pointer;">
+<tr class='tr-lv info' type='leftD'><td>日留存</td><td class='td-lv-d'></td></tr>
+<tr class='tr-lv warning' type='leftW'><td>周留存</td><td class='td-lv-w'></td></tr>
+<tr class='tr-lv active' type='leftM'><td>月留存</td><td class='td-lv-m'></td></tr>
+</table>
 </section>
-<section class="sect-keep" style="float:left;margin:10px 0px 0px 6px;width:30%;height:150px;padding:20px;border:1px solid #fff; color:#000; border-radius:6px;background:white;box-shadow:0 0 8px #222; font:11px/1.5em 'Microsoft YaHei';">
-<div class='alert alert-info alert-st' >周留存</div>
-<div class="dv-keep-w" style="padding:0px;text-align:center;font:70px/1.5em 'Microsoft YaHei';color:#aaa"></div>
+
+<section class="sect-pv sect" style="margin-left:15px;margin-top:10px;">
+<div class="dv-title">PV & UV</div>
+<table class="table table-hover font3" style="height:80%;cursor:pointer;">
+<tr class='tr-pv info' type='pv'><td>PV</td><td class='td-pv'></td></tr>
+<tr class='tr-pv warning' type='uv'><td>UV</td><td class='td-uv'></td></tr>
+</table>
 </section>
-<section class="sect-keep" style="float:left;margin:10px 0px 0px 6px;width:30%;height:150px;padding:20px;border:1px solid #fff; color:#000; border-radius:6px;background:white;box-shadow:0 0 8px #222; font:11px/1.5em 'Microsoft YaHei';">
-<div class='alert alert-info alert-st' >月留存</div>
-<div class="dv-keep-m" style="padding:0px;text-align:center;font:70px/1.5em 'Microsoft YaHei';color:#aaa"></div>
+
+<section class="sect-ca sect" style="margin-left:15px;margin-top:10px;">
+<div class="dv-title">Casual</div>
+<table class="table table-hover font4" style="height:80%;cursor:pointer;">
+<tr class='tr-ca info' type='pv'><td>积分范围</td><td class='td-point'></td></tr>
+<tr class='tr-ca warning' type='uv'><td>APP时段</td><td class='td-time'></td></tr>
+<tr class='tr-ca active' type='leftM'><td>APP启动数</td><td class='td-launch'></td></tr>
+<tr class='tr-ca active' type='leftM'><td>客户区域分布</td><td class='td-area'></td></tr>
+</table>
 </section>
 <br>
-<section class="sect-pv" style="margin-left:5%;float:left;margin-top:10px;width:30%;height:210px;padding:20px;border:1px solid #fff; color:#000; border-radius:6px;background:white;box-shadow:0 0 8px #222; font:11px/1.5em 'Microsoft YaHei';">
-<div id="filelist" class='alert alert-info alert-st' >PV</div>
-<div class="dv-pv" style="padding:5px;text-align:center;font:50px/1.5em 'Microsoft YaHei';color:#aaa"></div>
-</section>
-<section class="sect-uv" style="float:left;margin:10px 0px 0px 6px;width:30%;height:210px;padding:20px;border:1px solid #fff; color:#000; border-radius:6px;background:white;box-shadow:0 0 8px #222; font:11px/1.5em 'Microsoft YaHei';">
-<div id="filelist" class='alert alert-info alert-st' >UV</div>
-<div class="dv-uv" style="padding:5px;text-align:center;font:50px/1.5em 'Microsoft YaHei';color:#aaa"></div>
-</section>
-<section class="sect-locate" style="float:left;margin:10px 0px 0px 6px;width:30%;height:210px;padding:20px;border:1px solid #fff; color:#000; border-radius:6px;background:white;box-shadow:0 0 8px #222; font:11px/1.5em 'Microsoft YaHei';">
-<div id="filelist" class='alert alert-info alert-st' >locate</div>
-<div class="panel panel-default font1">
+<section class="sect-loc sect" style="margin-left:4%;margin-top:10px;height:160px;">
+<div class="dv-title">Location
+<span class="glyphicon glyphicon-th-list tab-show" aria-hidden="true" style="float:right;cursor:pointer" type="loc"></span>
+</div>
+<div class="panel panel-default font3" style="margin-top:10px">
 <div class="panel-body">
 <ul class="ul-loc">
 </ul>
 </div></div>
 </section>
-<br>
-<!--section class="sect-chart" style="float:left;margin-top:10px;width:70%;height:400px;padding:10px;border:1px solid #fff; color:#000; border-radius:6px;background:white;box-shadow:0 0 8px #222; font:11px/1.5em 'Microsoft YaHei';">
-<div id="filelist" class='alert alert-info alert-st' >&nbsp;</div>
-<div id="highchart" style="width:600px;height:300px;"></div>
-</section-->
 
 <div class="dv-ext" style='z-index:1;left:0px;top:0px;position:absolute;background-color:#666;width:100%;height:100%;filter:alpha(opacity=90);opacity:0.9;display:none;'></div>
 <div class='dv-ext-in' style="z-index:10;left:0px;top:0px;position:absolute;background-color:#fff;width:99%;height:90%;top:5%; border-radius:8px;display:none;">
-<div class="tab" style="padding:50px;width:90%;"></div>
-<div style="z-index:12;left:96%;position:absolute;top:3%;float:right;font:80px;cursor:pointer">
-<span class="glyphicon glyphicon-remove tab-close" aria-hidden="true" style="color:#000;"></span></div>
-<div id="chart" style="margin:-40px 0px 0px 50px;width:70%;height:300px;display:none;"></div>
+<div class="cale" style="padding:20px;width:300px;">
+	<div class="input-group date form_date col-md-2" data-date="" data-date-format="yyyy-mm-dd" data-link-field="iph-d-start" data-link-format="yyyy-mm-dd" >
+	<input id="ip-d-start" class="form-control" size="12" type="text" value="" readonly style='width:120px' placeholder="PickDate">
+	<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+	</div>
+	<button type="submit" class="btn btn-info bt-exec btn-sm" id="bt-exec" style="margin-top:-54px;margin-left:165px">
+	<span>Execute</span>
+	</button><input type="hidden" id="iph-d-start" value="" />
 </div>
-
+<div class="tab" style="margin-top:-20px;padding:0px 20px 20px 20px;width:90%;"></div>
+<div style="z-index:12;left:96%;position:absolute;top:3%;cursor:pointer">
+<span class="glyphicon glyphicon-remove tab-close" aria-hidden="true" style="color:#000;"></span></div>
+<div id="chart" style="margin:-40px 0px 0px 50px;width:70%;height:250px;display:none;"></div>
+</div>
 
 <input type=hidden class='hid-pr'/>
 </div>
-
+</body>
 <script type="text/javascript">
 	var dt = new Date();
 	var m="0"+(dt.getMonth()+1);
-	var d="0"+(dt.getDate());
+	var d="0"+(dt.getDate()-1);
 	vdt=dt.getFullYear()+"-"+m.substr(m.length-2,2)+"-"+d.substr(d.length-2,2);
 	$('#ip-d-start').val(vdt)
 	$('#iph-d-start').val(vdt)
@@ -503,5 +357,4 @@ $(document).ready(function(){
 	$('.form_date').datetimepicker('setEndDate',vdt);
 
 </script>
-</body>
 </html>
