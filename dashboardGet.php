@@ -49,6 +49,7 @@ function fnDetail(){
 	}
 	if( $result == false ){ 
 		$dc = "Error .\n";}
+		
 	if ($result){ 
 		while($row=mysqli_fetch_row($result)){
 			if ($chn!=$row[2]){
@@ -64,7 +65,7 @@ function fnDetail(){
 				$i=0;
 				$arrDc=array("<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td></tr>");
 			}
-			
+
 			while ($arrDt[$i]!=$row[0] and $i<7){
 				$i+=1;
 			}
@@ -166,7 +167,7 @@ $i=0;
 	if ($result){ 
 		while($row=mysqli_fetch_row($result)){
 			if ($typ=='leftD'){
-			while ($arrDt[$i]!=substr($row[0],5) and $i<7){
+			while ($arrDt[$i]!=$row[0] and $i<7){
 				$i+=1;
 			}
 			$arrDc[$i]="<td>".$row[1]."%</td>";
