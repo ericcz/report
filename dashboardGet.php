@@ -75,7 +75,7 @@ function fnDetail(){
 	$th="";
 	$i=-6;
 	while ($i<1){
-		if ($typ=="leftW"){
+		if ($typ=="leftW" or $typ=="leftM"){
 			$arrDt[$i+6]=$i+7;
 		}else
 			$arrDt[$i+6]=date('m-d',strtotime("$i day",strtotime($dt)));
@@ -85,6 +85,9 @@ function fnDetail(){
 	if ($typ=="leftW"){
 		$arrDs=array("<td></td>","<td></td>","<td></td>","<td></td>","<td></td>","<td></td>","<td></td>");
 		$th="<td>第1周</td><td>第2周</td><td>第3周</td><td>第4周</td><td>第5周</td><td>第6周</td><td>第7周</td>";
+	}elseif($typ=="leftM"){
+		$arrDs=array("<td></td>","<td></td>","<td></td>","<td></td>","<td></td>","<td></td>","<td></td>");
+		$th="<td>第1月</td><td>第2月</td><td>第3月</td><td>第4月</td><td>第5月</td><td>第6月</td><td>第7月</td>";
 	}else
 		$arrDs=array("<td class='col0'>0</td>","<td class='col1'>0</td>","<td class='col2'>0</td>","<td class='col3'>0</td>","<td class='col4'>0</td>","<td class='col5'>0</td>","<td class='col6'>0</td>");
 	$arrDc=$arrDs;
