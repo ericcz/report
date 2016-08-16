@@ -105,6 +105,7 @@ function XHRChanged(){	//handle return value xmlhttp.responseText
 }
 function getBack(vchReturn){
 try{
+
 	var vf=vchReturn.split("##")[1]
 	if (vf=='getDashBoard'){
 		var rt,dsc
@@ -161,7 +162,8 @@ try{
 
 	}else{
 		$(".tab").html(vchReturn.split("##")[2]);
-		if($(".hid-pr").val().substr(0,4)!="left"){
+		var v=$(".hid-pr").val();
+		if(v.substr(0,4)!="left" && v!="point" && v!="time"){
 			var pr=0;
 			var amount="";
 			for (i=0;i<7;i++){
@@ -174,15 +176,15 @@ try{
 			amount="<tr><td style='width:10%'>合计</td>"+amount+"</table>"
 			$(".tab").html($(".tab").html().replace('</table>',amount));
 		}
-		if ($(".hid-pr").val()=="pv"||$(".hid-pr").val()=="uv"){
+		if (v=="pv"||v=="uv"){
 			var chartDt= new Array
 			chartDt=vchReturn.split("##")[3].split(",");
 			var chartData=vchReturn.split("##")[4];
 			showChart_lineBasic(chartData.substring(0,chartData.length-1),"","chart",chartDt);
 			$("#chart").show()
 		}
-		if($(".hid-pr").val()=="loc"){
-			$(".tab").css("overflow","scroll").css("overflow-x","hidden").css("height","500px")
+		if(v=="loc" || v=="time"){
+			$(".tab").css("overflow","scroll").css("overflow-x","hidden").css("height","450px")
 		}
 		$(".dv-ext").show();
 		$(".dv-ext-in").show();
@@ -217,9 +219,9 @@ $(document).ready(function(){
 		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDetail")+"&dt="+escape($('#iph-d-start').val())+"&typ="+escape($(this).attr("type"));
 		createXMLHttpRequest(url,"fresh=" +Math.random());
 	})
-	$(".tr-pv").click(function(){
+	$(".tr-point").click(function(){
 		$(".hid-pr").val($(this).attr("type"));
-		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDetail")+"&dt="+escape($('#iph-d-start').val())+"&typ="+escape($(this).attr("type"));
+		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDetailPoint")+"&dt="+escape($('#iph-d-start').val())+"&typ="+escape($(this).attr("type"));
 		createXMLHttpRequest(url,"fresh=" +Math.random());
 	})
 	$('.tab-show').click(function(){
@@ -290,18 +292,18 @@ $(document).ready(function(){
 <section class="sect-pv sect" style="margin-left:15px;margin-top:10px;">
 <div class="dv-title">PV & UV</div>
 <table class="table table-hover font3" style="height:80%;cursor:pointer;">
-<tr class='tr-pv info' type='pv'><td>PV</td><td class='td-pv'></td></tr>
-<tr class='tr-pv warning' type='uv'><td>UV</td><td class='td-uv'></td></tr>
+<tr class='tr-lv info' type='pv'><td>PV</td><td class='td-pv'></td></tr>
+<tr class='tr-lv warning' type='uv'><td>UV</td><td class='td-uv'></td></tr>
 </table>
 </section>
 
 <section class="sect-ca sect" style="margin-left:15px;margin-top:10px;">
 <div class="dv-title">Casual</div>
 <table class="table table-hover font4" style="height:80%;cursor:pointer;">
-<tr class='tr-ca info' type='pv'><td>积分范围</td><td class='td-point'></td></tr>
-<tr class='tr-ca warning' type='uv'><td>APP时段</td><td class='td-time'></td></tr>
-<tr class='tr-ca active' type='leftM'><td>APP启动数</td><td class='td-launch'></td></tr>
-<tr class='tr-ca active' type='leftM'><td>客户区域分布</td><td class='td-area'></td></tr>
+<tr class='tr-point info' type='point'><td>积分范围</td><td class='td-point'></td></tr>
+<tr class='tr-lv active' type='launch'><td>APP启动数</td><td class='td-launch'></td></tr>
+<tr class='tr-lv warning' type='time'><td>APP时段</td><td class='td-time'></td></tr>
+<tr class='success' type='area'><td>客户区域分布</td><td class='td-area'></td></tr>
 </table>
 </section>
 <br>

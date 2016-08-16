@@ -8,9 +8,7 @@ $desc = "";
 switch($obj){
 case 'getDetail': $desc = fnDetail();
 break;
-case 'getDetailPv': $desc = fnDetailPv();
-break;
-case 'getDetailLeft': $desc = fnDetailLeft();
+case 'getDetailPoint': $desc = fnDetailPoint();
 break;
 case 'getDashBoard': $desc = fnDashBoard();
 break;
@@ -40,7 +38,30 @@ function fnDashBoard(){
 		$dc = "0";
 	return $dc;
 }
-
+function fnDetailPoint(){
+	$dc="";
+	$pid = $GLOBALS["pid"];
+	$typ = $_REQUEST['typ'];
+	$dt = $_REQUEST['dt'];
+	$proc='cspDashboard_detail';
+	$result=mysqli_query($GLOBALS["conn"],"set names utf8");
+	$result=mysqli_real_query($GLOBALS["conn"],"call $proc('$typ','$dt')");
+	while($GLOBALS["conn"]->more_results()){
+	$result=mysqli_store_result($GLOBALS["conn"]);
+	$GLOBALS["conn"]->next_result();
+	}
+	$dc="<table class='table table-striped table-hover table-bordered' style='text-align:center;width:40%'><tr><td ></td><td>Point</td></tr>";
+	if( $result == false ){ 
+		$dc = "Error .\n";}
+	if ($result){ 
+		while($row=mysqli_fetch_row($result)){
+			$dc.= "<tr><td>".$row[0]."</td><td>".$row[1]."</td></tr>";
+		}
+	}else
+		$dc = "0";
+	$dc.="</table>";
+	return $dc;
+}
 function fnDetail(){
 	$dc="";
 	$chn="";
