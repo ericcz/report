@@ -91,7 +91,7 @@ function fnDetail(){
 	}else
 		$arrDs=array("<td class='col0'>0</td>","<td class='col1'>0</td>","<td class='col2'>0</td>","<td class='col3'>0</td>","<td class='col4'>0</td>","<td class='col5'>0</td>","<td class='col6'>0</td>");
 	$arrDc=$arrDs;
-	
+	$j=0;
 	$proc='cspDashboard_detail';
 	$result=mysqli_query($GLOBALS["conn"],"set names utf8");
 	$result=mysqli_real_query($GLOBALS["conn"],"call $proc('$typ','$dt')");
@@ -108,7 +108,11 @@ function fnDetail(){
 				if ($chn!=""){
 					for ($i=0;$i<7;$i++){ $dc.=$arrDc[$i]; }
 				}
-				$dc.="</tr><tr><td>".$row[2]."</td>";
+				if($typ=='interval'){
+					$dc.="</tr><tr class=tr".$j." type=".$row[3]."><td>".$row[2]."</td>";
+					$j+=1;
+				}else
+					$dc.="</tr><tr><td>".$row[2]."</td>";
 				$chartData=substr($chartData,0,strlen($chartData)-1).";".$row[2].",";
 				$chn=$row[2];
 				$i=0;

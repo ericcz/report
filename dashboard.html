@@ -105,7 +105,6 @@ function XHRChanged(){	//handle return value xmlhttp.responseText
 }
 function getBack(vchReturn){
 try{
-
 	var vf=vchReturn.split("##")[1]
 	if (vf=='getDashBoard'){
 		var rt,dsc
@@ -163,7 +162,7 @@ try{
 	}else{
 		$(".tab").html(vchReturn.split("##")[2]);
 		var v=$(".hid-pr").val();
-		if(v.substr(0,4)!="left" && v!="point" && v!="time"){
+		if(v.substr(0,4)!="left" && v!="point" && v!="time" && v!="interval"){
 			var pr=0;
 			var amount="";
 			for (i=0;i<7;i++){
@@ -174,6 +173,22 @@ try{
 				amount+="<td>"+pr+"</td>"
 			}
 			amount="<tr><td style='width:10%'>合计</td>"+amount+"</table>"
+			$(".tab").html($(".tab").html().replace('</table>',amount));
+		}
+		if(v=="interval"){
+			var pr=0,total=0;
+			var amount="";
+			for (i=0;i<7;i++){
+				pr=0
+				$(".col"+i).each(function(index){
+					pr+=parseInt($(this).html());
+					total+=parseInt($(this).html())*parseInt($(".tr"+index).attr('type'));
+				});
+				if (pr>0){
+				pr=Math.round((total/pr/60)*100)/100;}
+				amount+="<td>"+pr+"</td>"
+			}
+			amount="<tr><td style='width:10%'>平均时长(分钟)</td>"+amount+"</table>"
 			$(".tab").html($(".tab").html().replace('</table>',amount));
 		}
 		if (v=="pv"||v=="uv"){
@@ -303,7 +318,7 @@ $(document).ready(function(){
 <tr class='tr-point info' type='point'><td>积分范围</td><td class='td-point'></td></tr>
 <tr class='tr-lv active' type='launch'><td>APP启动数</td><td class='td-launch'></td></tr>
 <tr class='tr-lv warning' type='time'><td>APP时段</td><td class='td-time'></td></tr>
-<tr class='success' type='area'><td>客户区域分布</td><td class='td-area'></td></tr>
+<tr class='tr-lv success' type='interval'><td>APP用户时长</td><td class='td-interval'></td></tr>
 </table>
 </section>
 <br>
