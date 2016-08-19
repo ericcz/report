@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+<link rel="stylesheet" href="include/css/bootstrap.css">
 <style>
 ul,li{list-style:none;width:100px}
 </style>
@@ -11,24 +12,51 @@ ul,li{list-style:none;width:100px}
 
 
 <script src="include/js/jquery-3.0.0.min.js"></script>
+<script src="include/js/bootstrap.min.js"></script>
 <script src="include/js/jquery.bootstrap.newsbox.min.js" ></script>
 </head>
 
 <body>
-<div class="panel panel-default">
+<div class="panel panel-default" style="width:200px">
 <div class="panel-body">
-<ul class="dv-loc">
+<ul class="dv-loc" style="width:200px">
 </ul>
 </div></div>
 
-
-
-
+<div class='tab'>
+<table class="table table-striped" style="border:2px solid #000;width:200px">
+<th class="th" type=1>id</th><th class="th" type=2>id2</th><th class="th" type=3>id3</th><tbody class=tbody>
+<tr class='tr1' type='11'><td class=col1>1</td><td class=col2>5</td><td >a</td></tr>
+<tr class='tr2' type='14'><td class=col1>4</td><td class=col2>3</td><td >b</td></tr>
+<tr><td class=col1>11</td><td class=col2>12</td><td >c</td></tr>
+<tr><td class=col1>3</td><td class=col2>3</td><td >d</td></tr>
+</tbody></table>
+</div>
 <script>
+
+$(".th").click(function(){
+alert(0/8)
+return;
+	var arr,vJason="",dc=""
+	arr=$(".tbody").html().split("<tr");
+	$(".col"+$(this).attr('type')).each(function(index){
+		vJason+='{"val":'+parseInt($(this).html())+',"id":'+(index+1)+'},';
+	});	
+	vJason=vJason.substr(0,vJason.length-1)
+	vJason=eval("(["+vJason+"])")
+	vJason.sort(function(a,b){
+		return b.val - a.val;
+	});
+	for(i=0;i<vJason.length;i++){
+		dc+= "<tr"+arr[vJason[i].id]
+	}
+	$(".tbody").html(dc)
+})
+	
 var ch
 ch='[{"channel":"app","days":[{"day":"08-01"},{"day":"08-02"},{"day":"08-03"}],"con":[{"num":"102"},{"num":"104"},{"num":"153"}]},{"channel":"android","days":[{"day":"08-02"},{"day":"08-04"}],"con":[{"num":"56"},{"num":"76"}]}]';
 ch=eval("("+ch+")")
-alert(ch[1].days[1].day)
+//alert(ch[1].days[1].day)
 
 dv='<li class="news-item">first</li><li class="news-item">second</li><li class="news-item">third</li>'
 $(".dv-loc").html(dv);
@@ -39,10 +67,33 @@ $(".dv-loc").html(dv);
 			pauseOnHover:true,
             direction: 'up',
             newsTickerInterval: 4000,
+			navigation: false,
             onToDo: function () {
                 //console.log(this);
             }
         });
+	/*	
+function bubbleSort(arr) {
+    var i = arr.length, j;
+    var tempExchangVal;
+    while (i > 0) {
+        for (j = 0; j < i - 1; j++) {
+            if (arr[j] > arr[j + 1]) {
+                tempExchangVal = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = tempExchangVal;
+            }
+        }
+        i--;
+    }
+    return arr;
+}
+ 
+var arr = [3, 2, 4, 9, 1, 5, 7, 6, 8];
+alert(arr)
+var arrSorted = bubbleSort(arr);
+console.log(arrSorted);
+alert(arrSorted);*/
 </script>
 </body>
 </html>
