@@ -50,7 +50,7 @@ function fnDetailPoint(){
 	$result=mysqli_store_result($GLOBALS["conn"]);
 	$GLOBALS["conn"]->next_result();
 	}
-	$dc="<table class='table table-striped table-hover table-bordered' style='text-align:center;width:40%'><tr><td ></td><td>Point</td></tr>";
+	$dc="<table class='table table-striped table-hover table-bordered' style='text-align:center;width:40%'><tr><td>积分范围</td><td>客户数量</td></tr>";
 	if( $result == false ){ 
 		$dc = "Error .\n";}
 	if ($result){ 

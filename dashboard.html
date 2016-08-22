@@ -110,17 +110,17 @@ try{
 		var rt,dsc
 		rt=vchReturn.split("##")[2].split("$$")[2].split(",");
 		if (parseInt(rt[rt.length-1])>parseInt(rt[rt.length-2])){
-			dsc='<span class="glyphicon glyphicon-chevron-up" aria-hidden="true" style="color:#6f0"></span>';
+			dsc='<span style="color:#fff">+</span>';
 		}else
-			dsc='<span class="glyphicon glyphicon-chevron-down" aria-hidden="true" style="color:#f60"></span>';
-		$(".dv-down1").html("<span class=font1>"+rt[rt.length-1]+"</span><span class=font3>"+dsc+Math.round((rt[rt.length-1]-rt[rt.length-2])/rt[rt.length-2]*10000)/100+"%</span>")
+			dsc='<span style="color:#fff"></span>';
+		$(".dv-down1").html("<span class=font1>"+rt[rt.length-1]+"</span><span class=font3>"+Math.round((rt[rt.length-1]-rt[rt.length-2])/rt[rt.length-2]*10000)/100+"%</span>")
 		$(".dv-down2").html("<br><span class=font4>总下载数："+vchReturn.split("##")[2].split("$$")[3]+"</span>")
 
 		rt=vchReturn.split("##")[3].split("$$")[2].split(",");
 		if (parseInt(rt[rt.length-2])>parseInt(rt[rt.length-3])){
-		dsc='<span class="glyphicon glyphicon-chevron-up" aria-hidden="true" style="color:#6f0"></span>';
+			dsc='<span style="color:#fff">+</span>';
 		}else
-		dsc='<span class="glyphicon glyphicon-chevron-down" aria-hidden="true" style="color:#f60"></span>';
+			dsc='<span style="color:#fff"></span>';
 		$(".dv-register-l1").html(rt[rt.length-1]);
 		$(".dv-register-l2").html(vchReturn.split('##')[3].split('$$')[3]);
 		$(".dv-register-r1").html(rt[rt.length-2]+"<br><span style='font-size:20px'>"+Math.round((rt[rt.length-2]-rt[rt.length-3])/rt[rt.length-3]*10000)/100+"%</span>");
