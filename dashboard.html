@@ -14,6 +14,7 @@ ul,li {list-style:none}
 .font2 {font:60px/1.5em 'Microsoft YaHei';color:#cc6666;}
 .font3 {font:30px/1.5em 'Microsoft YaHei';color:#0099CC;}
 .font4 {font:20px/1.5em 'Microsoft YaHei';color:#f60;}
+.font5 {font:40px/1.5em 'Microsoft YaHei';color:#0099CC;}
 .dv-register {padding:2px;float:left;margin:1px;background-color:#e06;color:#fff;width:49%;height:40%;}
 .th {cursor:pointer;}
 </style>
@@ -110,10 +111,10 @@ try{
 		var rt,dsc
 		rt=vchReturn.split("##")[2].split("$$")[2].split(",");
 		if (parseInt(rt[rt.length-1])>parseInt(rt[rt.length-2])){
-			dsc='<span style="color:#fff">+</span>';
+			dsc='<span style="color:#0099CC">+</span>';
 		}else
 			dsc='<span style="color:#fff"></span>';
-		$(".dv-down1").html("<span class=font1>"+rt[rt.length-1]+"</span><span class=font3>"+Math.round((rt[rt.length-1]-rt[rt.length-2])/rt[rt.length-2]*10000)/100+"%</span>")
+		$(".dv-down1").html("<span class=font1>"+rt[rt.length-1]+"</span><span class=font3>"+dsc+"&nbsp;"+Math.round((rt[rt.length-1]-rt[rt.length-2])/rt[rt.length-2]*10000)/100+"%</span>")
 		$(".dv-down2").html("<br><span class=font4>总下载数："+vchReturn.split("##")[2].split("$$")[3]+"</span>")
 
 		rt=vchReturn.split("##")[3].split("$$")[2].split(",");
@@ -123,15 +124,15 @@ try{
 			dsc='<span style="color:#fff"></span>';
 		$(".dv-register-l1").html(rt[rt.length-1]);
 		$(".dv-register-l2").html(vchReturn.split('##')[3].split('$$')[3]);
-		$(".dv-register-r1").html(rt[rt.length-2]+"<br><span style='font-size:20px'>"+Math.round((rt[rt.length-2]-rt[rt.length-3])/rt[rt.length-3]*10000)/100+"%</span>");
+		$(".dv-register-r1").html(rt[rt.length-2]+"<br><span style='font-size:20px'>"+dsc+Math.round((rt[rt.length-2]-rt[rt.length-3])/rt[rt.length-3]*10000)/100+"%</span>");
 		
 		rt=vchReturn.split("##")[4].split("$$")[2].split(",");
 		if (parseInt(rt[rt.length-1])>parseInt(rt[rt.length-2])){
-			dsc='<span style="color:#fff">+</span>';
+			dsc='<span style="color:#fff;font-size:36px">+</span>';
 		}else
-			dsc='<span style="color:#fff"></span>';
+			dsc='<span style="color:#fff;"></span>';
 		$(".dv-act1").html("<span class=font1 style='color:#fff'>"+rt[rt.length-1]+"</span>");
-		$(".dv-act2").html("<span class=font3 style='color:#fff'>"+dsc+"&nbsp;"+Math.round((rt[rt.length-1]-rt[rt.length-2])/rt[rt.length-2]*10000)/100+"%</span>");
+		$(".dv-act2").html("<span class=font3 style='color:#fff;'>"+dsc+Math.round((rt[rt.length-1]-rt[rt.length-2])/rt[rt.length-2]*10000)/100+"%</span>");
 		
 		rt=vchReturn.split("##")[5].split("$$");
 		$(".td-lv-d").html(rt[1]+'%');
@@ -140,10 +141,19 @@ try{
 		rt=vchReturn.split("##")[7].split("$$");
 		$(".td-lv-m").html(rt[1]+'%');
 
-		rt=vchReturn.split("##")[8].split("$$");
-		$(".td-pv").html(rt[1]);
-		rt=vchReturn.split("##")[9].split("$$");
-		$(".td-uv").html(rt[1]);
+		rt=vchReturn.split("##")[8].split("$$")[2].split(",");
+		if (parseInt(rt[rt.length-1])>parseInt(rt[rt.length-2])){
+			dsc='<span style="color:#0099CC">+</span>';
+		}else
+			dsc='<span style="color:#fff"></span>';
+		$(".td-pv").html(rt[1]+"<span class=font4 style='color:#0099CC'>"+dsc+"&nbsp;&nbsp;&nbsp;"+Math.round((rt[rt.length-1]-rt[rt.length-2])/rt[rt.length-2]*10000)/100+"%</span>");
+		
+		rt=vchReturn.split("##")[9].split("$$")[2].split(",");
+		if (parseInt(rt[rt.length-1])>parseInt(rt[rt.length-2])){
+			dsc='<span style="color:#0099CC">+</span>';
+		}else
+			dsc='<span style="color:#fff"></span>';
+		$(".td-uv").html(rt[1]+"<span class=font4 style='color:#0099CC'>"+dsc+"&nbsp;&nbsp;&nbsp;"+Math.round((rt[rt.length-1]-rt[rt.length-2])/rt[rt.length-2]*10000)/100+"%</span>");
 		
 		rt=vchReturn.split("##")[10].split("$$");
 		$(".ul-loc").html(rt[1]);
@@ -219,6 +229,44 @@ try{
 			}
 			$(".tbody").html(dc)
 		})
+		switch(v){
+			case 'down':
+				$(".title").html("下载渠道");
+				break;
+			case 'reg':
+				$(".title").html("注册来源");
+				break;
+			case 'lively':
+				$(".title").html("活跃渠道");
+				break;
+			case 'pv':
+				$(".title").html("PV版块");
+				break;
+			case 'uv':
+				$(".title").html("UV版块");
+				break;
+			case 'leftD':
+				$(".title").html("日留存");
+				break;
+			case 'leftW':
+				$(".title").html("周留存");
+				break;
+			case 'leftM':
+				$(".title").html("月留存");
+				break;
+			case 'time':
+				$(".title").html("APP使用时点");
+				break;
+			case 'launch':
+				$(".title").html("APP启动");
+				break;
+			case 'interval':
+				$(".title").html("APP使用时长");
+				break;
+			case 'point':
+				$(".title").html("积分范围");
+				break;
+		}
 	}
 		}catch(e){ alert(e);}
 }
@@ -231,12 +279,12 @@ $(document).ready(function(){
 	
 	$(".tr-lv").click(function(){
 		$(".hid-pr").val($(this).attr("type"));
-		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDetail")+"&dt="+escape($('#iph-d-start').val())+"&typ="+escape($(this).attr("type"));
-		createXMLHttpRequest(url,"fresh=" +Math.random());
-	})
-	$(".tr-point").click(function(){
-		$(".hid-pr").val($(this).attr("type"));
-		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDetailPoint")+"&dt="+escape($('#iph-d-start').val())+"&typ="+escape($(this).attr("type"));
+		var v
+		if ($(this).attr("type")=="point"){
+			v="getDetailPoint";
+		}else
+			v="getDetail";
+		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape(v)+"&dt="+escape($('#iph-d-start').val())+"&typ="+escape($(this).attr("type"));
 		createXMLHttpRequest(url,"fresh=" +Math.random());
 	})
 	$('.tab-show').click(function(){
@@ -245,6 +293,9 @@ $(document).ready(function(){
 		createXMLHttpRequest(url,"fresh=" +Math.random());
 	})
 	$('.bt-exec').click(function(){
+		if($(".hid-pr").val()=="point"){
+			return false;
+		}
 		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDetail")+"&dt="+escape($('#iph-d-start').val())+"&typ="+escape($(".hid-pr").val());
 		createXMLHttpRequest(url,"fresh=" +Math.random());
 	})
@@ -255,7 +306,7 @@ $(document).ready(function(){
 		$('#ip-d-start').val(vdt)
 		$('#iph-d-start').val(vdt)
 		$("#chart").hide();
-		$(".tab").css("overflow","auto").css("height","")
+		$(".tab").css("overflow","auto").css("height","");
 	})
 
 })
@@ -306,16 +357,16 @@ $(document).ready(function(){
 
 <section class="sect-pv sect" style="margin-left:15px;margin-top:10px;">
 <div class="dv-title">PV & UV</div>
-<table class="table table-hover font3" style="height:80%;cursor:pointer;">
-<tr class='tr-lv info' type='pv'><td>PV</td><td class='td-pv'></td></tr>
+<table class="table table-hover font5" style="height:80%;cursor:pointer;">
+<tr class='tr-lv info' type='pv'><td valign="middle">PV</td><td class='td-pv'></td></tr>
 <tr class='tr-lv warning' type='uv'><td>UV</td><td class='td-uv'></td></tr>
 </table>
 </section>
 
 <section class="sect-ca sect" style="margin-left:15px;margin-top:10px;">
 <div class="dv-title">Casual</div>
-<table class="table table-hover font4" style="height:80%;cursor:pointer;">
-<tr class='tr-point info' type='point'><td>积分范围</td><td class='td-point'></td></tr>
+<table class="table table-hover font4" style="cursor:pointer;">
+<tr class='tr-lv info' type='point'><td>积分范围</td><td class='td-point'></td></tr>
 <tr class='tr-lv active' type='launch'><td>APP启动数</td><td class='td-launch'></td></tr>
 <tr class='tr-lv warning' type='time'><td>APP时段</td><td class='td-time'></td></tr>
 <tr class='tr-lv success' type='interval'><td>APP用户时长</td><td class='td-interval'></td></tr>
@@ -340,7 +391,7 @@ $(document).ready(function(){
 	<input id="ip-d-start" class="form-control" size="12" type="text" value="" readonly style='width:120px' placeholder="PickDate">
 	<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 	</div>
-	<button type="submit" class="btn btn-info bt-exec btn-sm" id="bt-exec" style="margin-top:-54px;margin-left:165px">
+	<button type="submit" class="btn btn-info bt-exec btn-sm" id="bt-exec" style="margin-top:-54px;margin-left:165px" type=''>
 	<span>Execute</span>
 	</button><input type="hidden" id="iph-d-start" value="" />
 </div>

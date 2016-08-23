@@ -50,7 +50,7 @@ function fnDetailPoint(){
 	$result=mysqli_store_result($GLOBALS["conn"]);
 	$GLOBALS["conn"]->next_result();
 	}
-	$dc="<table class='table table-striped table-hover table-bordered' style='text-align:center;width:40%'><tr><td>积分范围</td><td>客户数量</td></tr>";
+	$dc="<table class='table table-striped table-hover table-bordered' style='text-align:center;width:40%'><tr><td class=title></td><td>客户数量</td></tr>";
 	if( $result == false ){ 
 		$dc = "Error .\n";}
 	if ($result){ 
@@ -135,7 +135,7 @@ function fnDetail(){
 	}else
 			$dc = "0";
 	
-	$dc="<table class='table table-striped table-hover table-bordered' style='text-align:center'><tr><td ></td>".$th."<tbody class='tbody'>".$dc."</tr></tbody></table>";
+	$dc="<table class='table table-striped table-hover table-bordered' style='text-align:center'><tr><td  class='title'></td>".$th."<tbody class='tbody'>".$dc."</tr></tbody></table>";
 	if ($typ=="pv" or $typ=="uv"){
 		$dc.="##".substr($chartDt,0,strlen($chartDt)-1)."##".substr($chartData,1);
 	}
