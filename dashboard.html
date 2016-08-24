@@ -15,7 +15,7 @@ ul,li {list-style:none}
 .font3 {font:30px/1.5em 'Microsoft YaHei';color:#0099CC;}
 .font4 {font:20px/1.5em 'Microsoft YaHei';color:#f60;}
 .font5 {font:40px/1.5em 'Microsoft YaHei';color:#0099CC;}
-.dv-register {padding:2px;float:left;margin:1px;background-color:#e06;color:#fff;width:49%;height:40%;}
+.dv-register {padding:5px;float:left;margin:1px;background-color:#e06;color:#fff;width:49.2%;height:40%;}
 .th {cursor:pointer;}
 </style>
 <script src="include/js/jquery-3.0.0.min.js"></script>
@@ -124,7 +124,7 @@ try{
 			dsc='<span style="color:#fff"></span>';
 		$(".dv-register-l1").html(rt[rt.length-1]);
 		$(".dv-register-l2").html(vchReturn.split('##')[3].split('$$')[3]);
-		$(".dv-register-r1").html(rt[rt.length-2]+"<br><span style='font-size:20px'>"+dsc+Math.round((rt[rt.length-2]-rt[rt.length-3])/rt[rt.length-3]*10000)/100+"%</span>");
+		$(".dv-register-r1").html(rt[rt.length-2]+"<br><span style='font-size:20px'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+dsc+Math.round((rt[rt.length-2]-rt[rt.length-3])/rt[rt.length-3]*10000)/100+"%</span>");
 		
 		rt=vchReturn.split("##")[4].split("$$")[2].split(",");
 		if (parseInt(rt[rt.length-1])>parseInt(rt[rt.length-2])){
@@ -146,14 +146,14 @@ try{
 			dsc='<span style="color:#0099CC">+</span>';
 		}else
 			dsc='<span style="color:#fff"></span>';
-		$(".td-pv").html(rt[1]+"<span class=font4 style='color:#0099CC'>"+dsc+"&nbsp;&nbsp;&nbsp;"+Math.round((rt[rt.length-1]-rt[rt.length-2])/rt[rt.length-2]*10000)/100+"%</span>");
+		$(".td-pv").html(rt[1]+"<span class=font4 style='color:#0099CC'>"+"&nbsp;&nbsp;&nbsp;"+dsc+Math.round((rt[rt.length-1]-rt[rt.length-2])/rt[rt.length-2]*10000)/100+"%</span>");
 		
 		rt=vchReturn.split("##")[9].split("$$")[2].split(",");
 		if (parseInt(rt[rt.length-1])>parseInt(rt[rt.length-2])){
 			dsc='<span style="color:#0099CC">+</span>';
 		}else
 			dsc='<span style="color:#fff"></span>';
-		$(".td-uv").html(rt[1]+"<span class=font4 style='color:#0099CC'>"+dsc+"&nbsp;&nbsp;&nbsp;"+Math.round((rt[rt.length-1]-rt[rt.length-2])/rt[rt.length-2]*10000)/100+"%</span>");
+		$(".td-uv").html(rt[1]+"<span class=font4 style='color:#0099CC'>"+"&nbsp;&nbsp;&nbsp;"+dsc+Math.round((rt[rt.length-1]-rt[rt.length-2])/rt[rt.length-2]*10000)/100+"%</span>");
 		
 		rt=vchReturn.split("##")[10].split("$$");
 		$(".ul-loc").html(rt[1]);
@@ -330,7 +330,7 @@ $(document).ready(function(){
 <div>今日</div><div class="dv-register-l1" style="font-size:60px;text-align:center"></div>
 </div>
 <div class="dv-register">
-<div>昨日</div><div class="dv-register-r1" style="font-size:40px;text-align:center"></div>
+<div>昨日</div><div class="dv-register-r1" style="font-size:40px;text-align:center;"></div>
 </div>
 <div class="dv-register" style="width:99%;">
 <div>总注册</div><div class="dv-register-l2" style="font-size:70px;text-align:center"></div>
