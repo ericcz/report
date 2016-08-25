@@ -15,7 +15,7 @@ ul,li {list-style:none}
 .font3 {font:30px/1.5em 'Microsoft YaHei';color:#0099CC;}
 .font4 {font:20px/1.5em 'Microsoft YaHei';color:#f60;}
 .font5 {font:40px/1.5em 'Microsoft YaHei';color:#0099CC;}
-.dv-register {padding:5px;float:left;margin:1px;background-color:#e06;color:#fff;width:49.2%;height:40%;}
+.dv-register {padding:5px;float:left;margin:1px;background-color:#e06;color:#fff;width:49.24%;height:40%;}
 .th {cursor:pointer;}
 </style>
 <script src="include/js/jquery-3.0.0.min.js"></script>
@@ -265,6 +265,8 @@ try{
 				break;
 			case 'point':
 				$(".title").html("积分范围");
+				$(".cale").css('display','none')
+				$(".tab").css('margin-top','60px')
 				break;
 		}
 	}
@@ -306,7 +308,8 @@ $(document).ready(function(){
 		$('#ip-d-start').val(vdt)
 		$('#iph-d-start').val(vdt)
 		$("#chart").hide();
-		$(".tab").css("overflow","auto").css("height","");
+		$(".tab").css("overflow","auto").css("height","").css("margin-top","-20px");
+		$(".cale").css("display","block")
 	})
 
 })
