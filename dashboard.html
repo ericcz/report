@@ -189,7 +189,8 @@ try{
 			var pr=0,total=0;
 			var amount="";
 			for (i=0;i<7;i++){
-				pr=0
+				pr=0;
+				total=0;
 				$(".col"+i).each(function(index){
 					pr+=parseInt($(this).html());
 					total+=parseInt($(this).html())*parseInt($(".tr"+index).attr('type'));
@@ -317,6 +318,7 @@ $(document).ready(function(){
 </head>
 <body>
 <div id="container" >
+
 <section class="sect-down sect" style="margin-left:4%;">
 <div class="dv-title">昨日下载
 <span class="glyphicon glyphicon-th-list tab-show" aria-hidden="true" style="float:right;cursor:pointer" type="down"></span>
@@ -367,7 +369,7 @@ $(document).ready(function(){
 </section>
 
 <section class="sect-ca sect" style="margin-left:15px;margin-top:10px;">
-<div class="dv-title">Casual</div>
+<div class="dv-title">用户行为</div>
 <table class="table table-hover font4" style="cursor:pointer;">
 <tr class='tr-lv info' type='point'><td>积分范围</td><td class='td-point'></td></tr>
 <tr class='tr-lv active' type='launch'><td>APP启动数</td><td class='td-launch'></td></tr>
@@ -377,7 +379,7 @@ $(document).ready(function(){
 </section>
 <br>
 <section class="sect-loc sect" style="margin-left:4%;margin-top:10px;height:160px;">
-<div class="dv-title">Location
+<div class="dv-title">日活省分布
 <span class="glyphicon glyphicon-th-list tab-show" aria-hidden="true" style="float:right;cursor:pointer" type="loc"></span>
 </div>
 <div class="panel panel-default font3" style="margin-top:10px">
