@@ -196,10 +196,10 @@ try{
 					total+=parseInt($(this).html())*parseInt($(".tr"+index).attr('type'));
 				});
 				if (pr>0){
-				pr=Math.round((total/pr/60)*100)/100;}
+				pr=Math.round((total/pr)*100)/100;}
 				amount+="<td>"+pr+"</td>"
 			}
-			amount="<tr><td style='width:10%'>平均时长(分钟)</td>"+amount+"</table>"
+			amount="<tr><td style='width:10%'>平均时长(秒)</td>"+amount+"</table>"
 			$(".tab").html($(".tab").html().replace('</table>',amount));
 		}
 		if (v=="pv"||v=="uv"){
