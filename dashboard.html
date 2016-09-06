@@ -266,6 +266,9 @@ try{
 				break;
 			case 'point':
 				$(".title").html("积分范围");
+				break;
+			case 'wheel':
+				$(".title").html("大转盘日期");
 				$(".cale").css('display','none')
 				$(".tab").css('margin-top','60px')
 				break;
@@ -283,8 +286,8 @@ $(document).ready(function(){
 	$(".tr-lv").click(function(){
 		$(".hid-pr").val($(this).attr("type"));
 		var v
-		if ($(this).attr("type")=="point"||$(this).attr("type")=="wheel"){
-			v="getDetailPoint";
+		if ($(this).attr("type")=="wheel"){
+			v="getDetailWheel";
 		}else
 			v="getDetail";
 		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape(v)+"&dt="+escape($('#iph-d-start').val())+"&typ="+escape($(this).attr("type"));
@@ -296,7 +299,7 @@ $(document).ready(function(){
 		createXMLHttpRequest(url,"fresh=" +Math.random());
 	})
 	$('.bt-exec').click(function(){
-		if($(".hid-pr").val()=="point"||$(".hid-pr").val()=="wheel"){
+		if($(".hid-pr").val()=="wheel"){
 			return false;
 		}
 		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDetail")+"&dt="+escape($('#iph-d-start').val())+"&typ="+escape($(".hid-pr").val());
