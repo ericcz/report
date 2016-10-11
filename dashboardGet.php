@@ -14,7 +14,42 @@ case 'getDashBoard': $desc = fnDashBoard();
 break;
 case 'getChart': $desc = fnChart();
 break;
+case 'getFunnel': $desc = fnFunnel();
+break;
 default:echo "0";
+}
+
+function fnFunnel(){
+	$dc="";$step="";$op="";$val="";$tab="";$tmp="";$tmp2="";
+	$sid=$_REQUEST["sid"];
+	$dt=$_REQUEST["dt"];
+	$proc='cspDashboard_funnel';
+	$result=mysqli_query($GLOBALS["conn"],"set names utf8");
+	$result=mysqli_real_query($GLOBALS["conn"],"call $proc('$sid','$dt')");
+	$result=mysqli_real_query($GLOBALS["conn"],"select @x");
+	while($GLOBALS["conn"]->more_results()){
+		$result=mysqli_store_result($GLOBALS["conn"]);
+		$GLOBALS["conn"]->next_result();
+	}
+	if( $result == false ){ 
+		$dc = "Error .\n";}
+	if ($result){ 
+		while($row=mysqli_fetch_row($result)){
+			$step.=$row[0].",";
+			$op.=$row[1].",";
+			$val.=$row[2].",";
+			if ($tmp==""){
+				$tmp="100%";
+				$tmp2=$row[2];
+			}else
+				$tmp=(@($row[2]/$tmp)?round($row[2]/$tmp*100,2).'%':0);
+			$tab.="<tr><td>".$row[0]."</td><td>".$row[1]."</td><td>".$row[2]."</td><td>".$tmp."</td><td>".(@(round($row[2]/$tmp2*100,2)))."%</td></tr>";
+			$tmp=$row[2];
+		}
+		$dc=$op."##".$val."##"."<table class='table table-hover table-striped' style='line-height:10px'><tr><td>步骤序号</td><td>名称</td><td>次数</td><td>上一比</td><td>总比</td></tr>".$tab."</table>";
+	}else
+		$dc = "0";
+	return $dc;
 }
 
 function fnDashBoard(){
@@ -25,8 +60,8 @@ function fnDashBoard(){
 	$result=mysqli_real_query($GLOBALS["conn"],"call $proc(@x)");
 	$result=mysqli_real_query($GLOBALS["conn"],"select @x");
 	while($GLOBALS["conn"]->more_results()){
-	$result=mysqli_store_result($GLOBALS["conn"]);
-	$GLOBALS["conn"]->next_result();
+		$result=mysqli_store_result($GLOBALS["conn"]);
+		$GLOBALS["conn"]->next_result();
 	}
 	if( $result == false ){ 
 		$dc = "Error .\n";}
@@ -43,12 +78,12 @@ function fnDetailWheel(){
 	$pid = $GLOBALS["pid"];
 	$typ = $_REQUEST['typ'];
 	$dt = $_REQUEST['dt'];
-	$proc='cspDashboard_detail';
+	$proc ='cspDashboard_detail';
 	$result=mysqli_query($GLOBALS["conn"],"set names utf8");
 	$result=mysqli_real_query($GLOBALS["conn"],"call $proc('$typ','$dt')");
 	while($GLOBALS["conn"]->more_results()){
-	$result=mysqli_store_result($GLOBALS["conn"]);
-	$GLOBALS["conn"]->next_result();
+		$result=mysqli_store_result($GLOBALS["conn"]);
+		$GLOBALS["conn"]->next_result();
 	}
 	$dc="<table class='table table-striped table-hover table-bordered' style='text-align:center;width:40%'><tr><td class=title></td><td>人数</td></tr>";
 	if( $result == false ){ 
@@ -63,15 +98,10 @@ function fnDetailWheel(){
 	return $dc;
 }
 function fnDetail(){
-	$dc="";
-	$chn="";
+	$dc="";$chartDt="";$chartData="";$chartDataT="";$t="";$ro="";
 	$pid = $GLOBALS["pid"];
 	$typ = $_REQUEST['typ'];
 	$dt = $_REQUEST['dt'];
-	$chartDt="";
-	$chartData="";
-	
-	$t="";
 	if ($typ=="leftD"){
 		$t="天";
 	}elseif ($typ=="leftW"){
@@ -79,7 +109,6 @@ function fnDetail(){
 	}elseif ($typ=="leftM"){
 		$t="月";
 	}
-	
 	$arrDt=[];	//日期数组
 	$arrDs=[];	//表格行数组
 	$th="";
@@ -96,13 +125,13 @@ function fnDetail(){
 		}
 		$i+=1;
 	}
-
 	$arrDc=$arrDs;
 	$j=0;
+	$i=0;
+	
 	$proc='cspDashboard_detail';
 	$result=mysqli_query($GLOBALS["conn"],"set names utf8");
 	$result=mysqli_real_query($GLOBALS["conn"],"call $proc('$typ','$dt')");
-	//$result=mysqli_real_query($GLOBALS["conn"],"select @x");
 	while($GLOBALS["conn"]->more_results()){
 		$result=mysqli_store_result($GLOBALS["conn"]);
 		$GLOBALS["conn"]->next_result();
@@ -111,44 +140,45 @@ function fnDetail(){
 		$dc = "Error .\n";}
 	if ($result){ 
 		while($row=mysqli_fetch_row($result)){
-			if ($chn!=$row[2]){
-				if ($chn!=""){
-					for ($i=0;$i<7;$i++){ $dc.=$arrDc[$i]; }
+			if ($ro!=$row[2] or $i==0){
+				if ($i<>0){
+					for ($i=0;$i<7;$i++){ $dc.=$arrDc[$i];}
+					$chartData.=substr($chartDataT,0,strlen($chartDataT)-1).";";
+					$chartDataT="";
 				}
+				$arrDc=$arrDs;
+				$ro=$row[2];
+				$i=0;
 				if($typ=='interval'){
 					$dc.="</tr><tr class=tr".$j." type=".$row[3]."><td>".$row[2]."</td>";
 					$j+=1;
-				}else
+				}else{
 					$dc.="</tr><tr><td>".$row[2]."</td>";
-				$chartData=substr($chartData,0,strlen($chartData)-1).";".$row[2].",";
-				$chn=$row[2];
-				$i=0;
-				$arrDc=$arrDs;
+					$chartData.=" ".$row[2].",";
+				}
 			}
-			while ($arrDt[$i]!=$row[0] and $i<7){
+			while ($i<7 and $arrDt[$i]!=$row[0]){
 				$i+=1;
-				$chartData.="0,";
+				$chartDataT.="0,";
 			}
 			if (substr($typ,0,4)=='left'){
 				$arrDc[$i]="<td class='col".$i."'>".$row[1]."</td>";
 			}else
 				$arrDc[$i]="<td class='col".$i."'>".round($row[1])."</td>";
+			$chartDataT.=$row[1].",";
 			$i+=1;
-			$chartData.=$row[1].",";
 		}
-		for ($i=0;$i<7;$i++){
-			$dc.=$arrDc[$i];
-			$chartDt.=$arrDt[$i].",";}
+		for ($i=0;$i<7;$i++){ $dc.=$arrDc[$i];}
+		$chartData.=substr($chartDataT,0,strlen($chartDataT)-1).";";
+		for ($i=0;$i<7;$i++){ $chartDt.=$arrDt[$i].",";}
 	}else
 			$dc = "0";
-	
+
 	$dc="<table class='table table-striped table-hover table-bordered' style='text-align:center'><tr><td  class='title'></td>".$th."<tbody class='tbody'>".$dc."</tr></tbody></table>";
 	if ($typ=="pv" or $typ=="uv"){
-		$dc.="##".substr($chartDt,0,strlen($chartDt)-1)."##".substr($chartData,1);
-	}
+		$dc.="##".substr($chartDt,0,strlen($chartDt)-1)."##".substr($chartData,1);}
 	return $dc;
 }
-
 
 function fnChart(){
 	$dc="";
