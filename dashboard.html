@@ -305,6 +305,12 @@ try{
 		dsc=$.getSymbol(rt[rt.length-1],rt[rt.length-2])
 		$(".dv-uv1").html(rt[1]);
 		$(".dv-uv2").html(dsc+$.isInfinity(Math.round((rt[rt.length-1]-rt[rt.length-2])/rt[rt.length-2]*10000)/100)+"%");
+		
+		//	Talkingdata pv uv
+		rt=vchReturn.split("##")[11].split("$$");
+		$(".td-pv").html(rt[1]);
+		$(".td-uv").html(rt[2]);
+		
 		//	日活区域分布
 		rt=vchReturn.split("##")[10].split("$$");
 		$(".ul-loc").html(rt[1]);
