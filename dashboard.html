@@ -2,16 +2,13 @@
 <html lang="zh-CN">
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" charset="UTF-8">
-<title>DashBoard 3.0</title>
+<title>DashBoard 4.0</title>
 <link rel="stylesheet" href="include/css/bootstrap.css">
 <link rel="stylesheet" href="include/css/bootstrap-datetimepicker.css">
 <style>
 body {padding:0px;background-color:#ccc;}
 ul,li {list-style:none}
-.sect {position:absolute;height:100%;font:18px/1.5em 'Microsoft YaHei';}
-.sect-nav {width:200px;background-color:#111;min-width:200px}
-.sect-body {margin-left:0%;width:100%;background-color:#ccc;padding:60px 20px 20px 20px}
-.sect-rp {border-radius:4px;background:white;box-shadow:0 0 8px #222; font:16px/1.5em 'Microsoft YaHei';}
+.sect {border-radius:4px;background:white;box-shadow:0 0 8px #222; font:16px/1.5em 'Microsoft YaHei';}
 .dv-title {width:100%;height:35px;background-color:#eee;padding:8px 10px 0px 10px;}
 .dv-register {padding:10px;float:left;margin:1px;background-color:#e06;color:#fff;width:49.36%;height:130px;}
 .th {cursor:pointer;}
@@ -250,6 +247,13 @@ $.getRegist = function(arrVal){
 	val+="<br><div class='font4 fontWhite' style='padding:5px;width:100%;text-align:right;margin-top:-30px'>"+dsc+$.isInfinity(Math.round((arrVal[arrVal.length-2]-arrVal[arrVal.length-3])/arrVal[arrVal.length-3]*10000)/100)+"%</div>"
 	return val;
 }
+$.getLaunch = function(arrVal){
+	var val="";
+	dsc=$.getSymbol(arrVal[arrVal.length-1],arrVal[arrVal.length-2])
+	val="<span>"+arrVal[arrVal.length-1]+"</span>"
+	val+="<br><div class='font4 fontWhite' style='padding:5px;width:100%;text-align:right;margin-top:-30px'>"+dsc+$.isInfinity(Math.round((arrVal[arrVal.length-1]-arrVal[arrVal.length-2])/arrVal[arrVal.length-2]*10000)/100)+"%</div>"
+	return val;
+}
 function getBack(vchReturn){
 try{
 	var vf=vchReturn.split("##")[1]
@@ -288,11 +292,11 @@ try{
 		$(".dv-register-r1").html("<br>"+$.isInfinity(Math.round(avg/7)))
 		//	留存率
 		rt=vchReturn.split("##")[5].split("$$");
-		$(".td-lv-d").html(rt[1]+'%');
+		$(".dv-left-d").html(rt[1]+'%');
 		rt=vchReturn.split("##")[6].split("$$");
-		$(".td-lv-w").html(rt[1]+'%');
+		$(".dv-left-w").html(rt[1]+'%');
 		rt=vchReturn.split("##")[7].split("$$");
-		$(".td-lv-m").html(rt[1]+'%');
+		$(".dv-left-m").html(rt[1]+'%');
 
 		//	pv
 		rt=vchReturn.split("##")[8].split("$$")[2].split(",");
@@ -310,6 +314,11 @@ try{
 		rt=vchReturn.split("##")[11].split("$$");
 		$(".td-pv").html(rt[1]);
 		$(".td-uv").html(rt[2]);
+
+		//	launch
+		rt=vchReturn.split("##")[12].split("$$")[2].split(",");
+		$(".dv-launch").html($.getLaunch(rt));
+
 		
 		//	日活区域分布
 		rt=vchReturn.split("##")[10].split("$$");
@@ -351,7 +360,7 @@ try{
 	}else if(vf=='getDetail'||vf=='getDetailWheel'){
 		$(".tab").html(vchReturn.split("##")[2]);
 		var v=$(".hid-pr").val();
-		if(v.substr(0,4)!="left" && v!="point" && v!="time" && v!="interval" && v!="wheel"){
+		if(v.substr(0,4)!="left" && v!="point" && v!="time" && v!="interval" && v!="wheel" && v!="interval-c"){
 			var pr=0;
 			var amount="";
 			for (i=0;i<7;i++){
@@ -462,7 +471,7 @@ $(document).ready(function(){
 	createXMLHttpRequest(url,"fresh=" +Math.random());
 	},300);
 	
-	$(".tr-lv").click(function(){
+	$(".dv-lv").click(function(){
 		$(".hid-pr").val($(this).attr("type"));
 		var v
 		if ($(this).attr("type")=="wheel"){
@@ -472,12 +481,14 @@ $(document).ready(function(){
 		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape(v)+"&dt="+escape($('#iph-d-start').val())+"&typ="+escape($(this).attr("type"));
 		createXMLHttpRequest(url,"fresh=" +Math.random());
 		scroll(0,0);
+		$(".navi").hide()
 	})
 	$('.tab-show').click(function(){
 		$(".hid-pr").val($(this).attr("type"));
 		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDetail")+"&dt="+escape($('#iph-d-start').val())+"&typ="+escape($(".hid-pr").val());
 		createXMLHttpRequest(url,"fresh=" +Math.random());
 		scroll(0,0);
+		$(".navi").hide()
 	})
 	$('.bt-exec').click(function(){
 		if($(".hid-pr").val()=="wheel"){
@@ -494,6 +505,7 @@ $(document).ready(function(){
 		$("#chart").hide();
 		$(".tab").css("overflow","auto").css("height","").css("margin-top","-20px");
 		$(".cale").css("display","block")
+		$(".navi").show()
 	})
 	$(".btn-nav").click(function(){
 		if($(".btn-nav .glyphicon").hasClass("glyphicon-chevron-left")){
@@ -532,68 +544,89 @@ $(document).ready(function(){
 </script>
 </head>
 <body>
-<div id="container-fluid" style="">
-<button type="button" class="btn btn-default btn-nav"  aria-haspopup="true" aria-expanded="false" style="position:absolute;margin-left:0%;z-index:10">
-<span class="glyphicon glyphicon-chevron-right"></span>
-</button>
+<div id="container-fluid">
 
-<section class='sect sect-nav' style="float:left;z-index:11;margin-left:-200px" ><nav class="navbar" role="navigation" >
-<ul class="nav nav-stacked nav-pills" style="margin-top:40px" >
-<li role="presentation" class="active">
-<a href="#dash" data-toggle="tab" class="nav-link"><span class="glyphicon glyphicon-dashboard"></span>&nbsp;&nbsp;数据统计</a>
-</li>
-<li role="presentation"><a href="#act" data-toggle="tab" class="nav-link"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;&nbsp;用户行为统计</a></li>
-<li role="presentation"><a href="#collapseOne" data-toggle="tab" class=" conv" ><span class="glyphicon glyphicon-filter"></span>&nbsp;&nbsp;转化率<span style="margin-left:20px" class="glyphicon glyphicon-chevron-left conv-icon"></span></a>
-
-<div id="collapseOne" class="panel-collapse collapse">
-<ul class='nav' data-toggle="tab" data-parent="">
-<li ><a href="#conv" data-toggle="tab" class="nav-link conv-show" data-type="33" ></span>&nbsp;&nbsp;<span class="glyphicon glyphicon-glass"></span>&nbsp;&nbsp;度假--支付成功</a></li>
-<li><a href="#conv" data-toggle="tab" class="nav-link conv-show" data-type="34"></span>&nbsp;&nbsp;<span class="glyphicon glyphicon-glass"></span>&nbsp;&nbsp;搜索--支付成功</a></li>
-<li><a href="#conv" data-toggle="tab" class="nav-link conv-show" data-type="35"></span>&nbsp;&nbsp;<span class="glyphicon glyphicon-glass"></span>&nbsp;&nbsp;小banner--预约成功</a></li>
-<li><a href="#conv" data-toggle="tab" class="nav-link conv-show" data-type="36"></span>&nbsp;&nbsp;<span class="glyphicon glyphicon-glass"></span>&nbsp;&nbsp;了解我享--预约成功</a></li>
-<li><a href="#conv" data-toggle="tab" class="nav-link conv-show" data-type="37"></span>&nbsp;&nbsp;<span class="glyphicon glyphicon-glass"></span>&nbsp;&nbsp;换住目的地--支付成功</a></li>
-<li><a href="#conv" data-toggle="tab" class="nav-link conv-show" data-type="38"></span>&nbsp;&nbsp;<span class="glyphicon glyphicon-glass"></span>&nbsp;&nbsp;人气度假屋具体项目</a></li>
-<li><a href="#conv" data-toggle="tab" class="nav-link conv-show" data-type="39"></span>&nbsp;&nbsp;<span class="glyphicon glyphicon-glass"></span>&nbsp;&nbsp;banner--支付成功</a></li>
-<li><a href="#conv" data-toggle="tab" class="nav-link conv-show" data-type="40"></span>&nbsp;&nbsp;<span class="glyphicon glyphicon-glass"></span>&nbsp;&nbsp;当季热门--支付成功</a></li>
-<li><a href="#conv" data-toggle="tab" class="nav-link conv-show" data-type="41"></span>&nbsp;&nbsp;<span class="glyphicon glyphicon-glass"></span>&nbsp;&nbsp;加入-预约</a></li>
-
-
-</ul>
+<nav class="navbar navbar-default navbar-fixed-top navbar-inverse navi" role="navigation">
+<div class="container-fluid">
+<div class="navbar-header">
+	<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+	<span class="icon-bar"></span>
+	<span class="icon-bar"></span>
+	<span class="icon-bar"></span>
+	</button>
+	<a class="navbar-brand" href="#">Weshare</a>
 </div>
-</li>
-</ul></nav>
-</section>
-<section class="sect sect-body row">
-<div class="tab-content">
+<div class="collapse navbar-collapse" id="navbar-collapse">
+	<ul class="nav navbar-nav">
+	<li class="active" style="margin-left:20px"><a href="#dash" data-toggle="tab"><span class="glyphicon glyphicon-dashboard"></span>&nbsp;&nbsp;Dashboard</a></li>
+	<li style="margin-left:20px"><a href="#act" data-toggle="tab"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;&nbsp;APP Behavior</a></li>
+	<li style="margin-left:20px"><a href="#ret" data-toggle="tab"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;&nbsp;APP Retention</a></li>
+	<li class="dropdown" style="margin-left:20px">
+	<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-filter"></span>&nbsp;&nbsp;ConversionRate<span class="caret"></span></a>
+		<ul class="dropdown-menu" role="menu">
+		<li><a href="#conv" class="conv-show" data-toggle="tab" data-type="33">
+		<span class="glyphicon glyphicon-glass"></span>&nbsp;&nbsp;度假--支付成功</a></li>
+		<li><a href="#conv" class="conv-show" data-toggle="tab" data-type="34">
+		<span class="glyphicon glyphicon-glass"></span>&nbsp;&nbsp;搜索--支付成功</a></li></a></li>
+		<li><a href="#conv" class="conv-show" data-toggle="tab" data-type="35">
+		<span class="glyphicon glyphicon-glass"></span>&nbsp;&nbsp;小banner--预约成功</a></li></a></li>
+		<li><a href="#conv" class="conv-show" data-toggle="tab" data-type="36">
+		<span class="glyphicon glyphicon-glass"></span>&nbsp;&nbsp;了解我享--预约成功</a></li></a></li>
+		<li><a href="#conv" class="conv-show" data-toggle="tab" data-type="37">
+		<span class="glyphicon glyphicon-glass"></span>&nbsp;&nbsp;换住目的地--支付成功</a></li></a></li>
+		<li><a href="#conv" class="conv-show" data-toggle="tab" data-type="38">
+		<span class="glyphicon glyphicon-glass"></span>&nbsp;&nbsp;人气度假屋具体项目</a></li></a></li>
+		<li><a href="#conv" class="conv-show" data-toggle="tab" data-type="39">
+		<span class="glyphicon glyphicon-glass"></span>&nbsp;&nbsp;banner--支付成功</a></li></a></li>
+		<li><a href="#conv" class="conv-show" data-toggle="tab" data-type="40">
+		<span class="glyphicon glyphicon-glass"></span>&nbsp;&nbsp;当季热门--支付成功</a></li></a></li>
+		<li class="divider"></li>
+		<li><a href="#conv" class="conv-show" data-toggle="tab" data-type="41">
+		<span class="glyphicon glyphicon-glass"></span>&nbsp;&nbsp;加入-预约</a></li></a></li>
+		</ul>
+        </li>
+      </ul>
+      <!--form class="navbar-form navbar-right" role="search" >
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search">
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+      </form-->
+    
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+<div class="row" style="margin:20px 0px 0px 0px;padding:50px;"><div class="tab-content">
 <!--	Area1	-->
-<div class="tab-pane fade  in active" id="dash">
-<div class="col-xs-12 col-sm-8 col-md-4" style="padding:10px">
-<section class="sect-down sect-rp" style="height:180px;background-color:#00BFFF">
+<div class="tab-pane fade in active" id="dash">
+<div class="col-xs-12 col-sm-8 col-md-4" style="min-width:250px;max-width:350px">
+<section class="sect sect-down" style="height:180px;background-color:#00BFFF;margin-bottom:20px">
 <div class="dv-title">昨日下载
 <span class="glyphicon glyphicon-th-list tab-show" aria-hidden="true" style="float:right;cursor:pointer" type="down"></span>
 </div>
 <div class="dv-down font1 fontWhite" style="padding:5px;width:100%;height:50%;text-align:center;"></div>
 </section></div>
 
-<div class="col-xs-12 col-sm-8 col-md-4" style="padding:10px">
-<section class="sect-active sect-rp" style="height:180px;background-color:#ffcc00">
+<div class="col-xs-12 col-sm-8 col-md-4" style="min-width:250px;max-width:350px">
+<section class="sect sect-active" style="height:180px;background-color:#ffcc00;margin-bottom:20px">
 <div class="dv-title">昨日活跃
 <span class="glyphicon glyphicon-th-list tab-show" aria-hidden="true" style="float:right;cursor:pointer;" type="lively"></span>
 </div>
 <div class="dv-act font1 fontWhite" style="padding:5px;width:100%;height:50%;text-align:center;"></div>
 </section></div>
 
-<div class="col-xs-12 col-sm-8 col-md-4" style="padding:10px">
-<section class="sect-rp" style="height:180px;background-color:#F08080">
+<div class="col-xs-12 col-sm-8 col-md-4" style="min-width:250px;max-width:350px">
+<section class="sect" style="height:180px;background-color:#F08080;margin-bottom:20px">
 <div class="dv-title">昨日注册
 <span class="glyphicon glyphicon-th-list tab-show" aria-hidden="true" style="float:right;cursor:pointer" type="reg"></span>
 </div>
 <div class="dv-reg-y font1 fontWhite" style="padding:5px;width:100%;height:50%;text-align:center;"></div>
 </section></div>
-<br>
 
-<div class="col-xs-12 col-sm-8 col-md-5" style="padding:10px">
-<section class="sect-reg sect-rp" style="height:300px;background-color:#fff;min-width:320px">
+<div class="col-xs-12 col-sm-8 col-md-5" style="min-width:350px;max-width:450px">
+<section class="sect sect-reg" style="height:300px;background-color:#fff;margin-bottom:20px">
 <div class="dv-title">注册用户
 <span class="glyphicon glyphicon-th-list tab-show" aria-hidden="true" style="float:right;cursor:pointer" type="reg"></span>
 </div>
@@ -608,53 +641,51 @@ $(document).ready(function(){
 </div>
 </section></div>
 
-<div class="col-xs-12 col-sm-12 col-md-7" style="padding:10px">
-<section class="sect-rp" style="height:300px;min-width:400px">
+<div class="col-xs-12 col-sm-12 col-md-8" style="min-width:420px;max-width:600px">
+<section class="sect" style="height:300px;">
 <div class="dv-title">近期注册</div>
-<div id="dv-reg2" class="dv-reg2" style="padding:10px;height:80%;text-align:right"></div>
+<div id="dv-reg2" class="dv-reg2" style="padding:10px;height:90%;text-align:right"></div>
 </section></div>
-</div>
+</div><!-- /#dash -->
+
 <!--	Area2	-->
 <div id='act' class="tab-pane fade ">
-<div class="col-xs-12 col-sm-8 col-md-4" style="padding:10px">
-<section class="sect-pv sect-rp" style="height:185px;background-color:#FFA07A">
+<div class="col-xs-12 col-sm-8 col-md-4" style="min-width:250px;max-width:350px">
+<section class="sect-pv sect" style="height:185px;background-color:#FFA07A;margin-bottom:20px">
 <div class="dv-title">版块PV<span class="glyphicon glyphicon-th-list tab-show" aria-hidden="true" style="float:right;cursor:pointer" type="pv"></span>
 </div>
 <div class="dv-pv1 font1 fontWhite" style="padding:5px;width:100%;height:50%;text-align:center;"></div>
 <div class="dv-pv2 font4 fontWhite" style="padding:5px;width:100%;height:30%;text-align:right;margin-top:5px"></div>
 </section></div>
 
-<div class="col-xs-12 col-sm-8 col-md-4" style="padding:10px">
-<section class="sect-uv sect-rp" style="height:185px;background-color:#3CB371">
+<div class="col-xs-12 col-sm-8 col-md-4" style="min-width:250px;max-width:350px">
+<section class="sect-uv sect" style="height:185px;background-color:#3CB371;margin-bottom:20px">
 <div class="dv-title">版块UV<span class="glyphicon glyphicon-th-list tab-show" aria-hidden="true" style="float:right;cursor:pointer" type="uv"></span>
 </div>
 <div class="dv-uv1 font1 fontWhite" style="padding:5px;width:100%;height:50%;text-align:center;"></div>
 <div class="dv-uv2 font4 fontWhite" style="padding:5px;width:100%;height:30%;text-align:right;margin-top:5px"></div>
 </section></div>
 
-<div class="col-xs-12 col-sm-8 col-md-4" style="padding:10px">
-<section class="sect-uv sect-rp" style="height:185px;background-color:#fff">
+<div class="col-xs-12 col-sm-8 col-md-4" style="min-width:250px;max-width:350px">
+<section class="sect" style="height:180px;background-color:#F08080;margin-bottom:30px">
+<div class="dv-title">启动数
+<span class="glyphicon glyphicon-th-list tab-show" aria-hidden="true" style="float:right;cursor:pointer" type="lau"></span>
+</div>
+<div class="dv-launch font1 fontWhite" style="padding:5px;width:100%;height:50%;text-align:center;"></div>
+</section></div>
+
+<div class="col-xs-12 col-sm-8 col-md-4" style="min-width:250px;max-width:350px">
+<section class="sect-uv sect" style="height:185px;background-color:#fff;margin-bottom:20px">
 <div class="dv-title">活动PV&UV
 </div>
 <table class="table table-hover font4" style="height:80%;cursor:pointer;">
-<tr class='tr-lv info' type='sp-pv'><td valign="middle">PV</td><td class='td-pv'></td></tr>
-<tr class='tr-lv warning' type='sp-uv'><td>UV</td><td class='td-uv'></td></tr>
+<tr class='tr-lv info' type='sp-pv'><td valign="middle" >PV</td><td class='td-pv'></td></tr>
+<tr class='tr-lv warning' type='sp-uv'><td >UV</td><td class='td-uv'></td></tr>
 </table>
 </section></div>
 
-<div class="col-xs-12 col-sm-8 col-md-4" style="padding:10px">
-<section class="sect-left sect-rp" style="height:185px;background-color:#fff">
-<div class="dv-title">留存率
-</div>
-<table class="table table-hover font5 fontCoffee" style="height:80%;cursor:pointer;">
-<tr class='tr-lv info' type='leftD'><td>日留存</td><td class='td-lv-d'></td></tr>
-<tr class='tr-lv warning' type='leftW'><td>周留存</td><td class='td-lv-w'></td></tr>
-<tr class='tr-lv active' type='leftM'><td>月留存</td><td class='td-lv-m'></td></tr>
-</table>
-</section></div>
-
-<div class="col-xs-12 col-sm-8 col-md-4" style="padding:10px">
-<section class="sect-area sect-rp" style="height:185px;background-color:#fff">
+<div class="col-xs-12 col-sm-8 col-md-4" style="min-width:250px;max-width:350px">
+<section class="sect-area sect" style="height:185px;background-color:#fff;margin-bottom:20px">
 <div class="dv-title">日活省分布<span class="glyphicon glyphicon-th-list tab-show" aria-hidden="true" style="float:right;cursor:pointer" type="loc"></span>
 </div>
 <div class="panel panel-default font4 fontCyan" style="margin-top:20px;">
@@ -664,31 +695,60 @@ $(document).ready(function(){
 </div></div>
 </section></div>
 
-<div class="col-xs-12 col-sm-8 col-md-4" style="padding:10px">
-<section class="sect-action sect-rp" style="height:265px;background-color:#fff">
+<div class="col-xs-12 col-sm-8 col-md-4" style="min-width:250px;max-width:350px">
+<section class="sect-action sect" style="height:265px;background-color:#fff;margin-bottom:20px">
 <div class="dv-title">用户行为
 </div>
 <table class="table table-hover font5" style="cursor:pointer;">
 <tr class='tr-lv info' type='point'><td>积分范围</td><td class='td-point'></td></tr>
-<tr class='tr-lv active' type='launch'><td>APP启动数</td><td class='td-launch'></td></tr>
+<!--tr class='tr-lv active' type='launch'><td>APP启动数</td><td class='td-launch'></td></tr-->
 <tr class='tr-lv warning' type='time'><td>APP时段</td><td class='td-time'></td></tr>
 <tr class='tr-lv success' type='interval'><td>APP用户时长</td><td class='td-interval'></td></tr>
+<tr class='tr-lv info' type='interval-c'><td>APP用户时长(渠道)</td><td class='td-interval-c'></td></tr>
 <tr class='tr-lv danger' type='wheel'><td>大转盘参与人数</td><td class='td-wheel'></td></tr>
 </table>
 </section></div>
-</div>
+</div><!-- /#act -->
 <!--	Area3	-->
+<div id='ret' class="tab-pane fade ">
+
+<div class="col-xs-12 col-sm-8 col-md-4" style="min-width:250px;max-width:350px">
+<section class="sect" style="height:185px;background-color:#00BFFF;margin-bottom:20px">
+<div class="dv-title">日留存率
+<span class="glyphicon glyphicon-th-list tab-show dv-lv" aria-hidden="true" style="float:right;cursor:pointer;" type="leftD"></span>
+</div>
+<div class="dv-left-d font2 fontWhite" style="padding:5px;width:100%;height:50%;text-align:center;"></div>
+</section></div>
+
+<div class="col-xs-12 col-sm-8 col-md-4" style="min-width:250px;max-width:350px">
+<section class="sect" style="height:185px;background-color:#F4A460;margin-bottom:20px">
+<div class="dv-title">周留存率
+<span class="glyphicon glyphicon-th-list tab-show dv-lv" aria-hidden="true" style="float:right;cursor:pointer;" type="leftW"></span>
+</div>
+<div class="dv-left-w font2 fontWhite" style="padding:5px;width:100%;height:50%;text-align:center;"></div>
+</section></div>
+
+<div class="col-xs-12 col-sm-8 col-md-4" style="min-width:250px;max-width:350px">
+<section class="sect" style="height:185px;background-color:#696969;margin-bottom:20px">
+<div class="dv-title">月留存率
+<span class="glyphicon glyphicon-th-list tab-show dv-lv" aria-hidden="true" style="float:right;cursor:pointer;" type="leftM"></span>
+</div>
+<div class="dv-left-m font2 fontWhite" style="padding:5px;width:100%;height:50%;text-align:center;"></div>
+</section></div>
+
+</div><!--	Area3 end -->
+<!--	Area4	-->
 <div id='conv' class="tab-pane fade">
-<section class="sect-funnel sect-rp col-xs-12 col-sm-8 col-md-6" style="padding:0px;margin-left:5%;height:560px;background-color:#fff;margin-top:-20px;min-width:500px;">
+<section class="sect-funnel sect col-xs-12 col-sm-8 col-md-5" style="padding:0px;margin-left:5%;height:560px;background-color:#fff;margin-top:-20px;min-width:500px;">
 <div class="dv-title">转化率</div>
 <div id="dvFunnel" class="" style="width:500px;height:300px;" ></div>
 <div class="conv-tab" style="padding:5px;height:40%;position:relative;margin-top:-60px;font-size:12px;"></div>
-</section>
-</div>
+</section></div><!-- /#conv -->
 
-</div><!--	tab content end	-->
-</section><!--	section body end	-->
-</div>
+</div><!-- /.tab-content -->
+</div><!-- /.row -->
+</div><!-- /#container-fluid -->
+
 
 <div class="dv-ext" style='z-index:20;left:0px;top:0px;position:absolute;background-color:#666;width:100%;height:100%;filter:alpha(opacity=90);opacity:0.9;display:none;'></div>
 <div class='dv-ext-in' style="z-index:25;left:0px;top:0px;position:absolute;background-color:#fff;width:99%;height:90%;top:5%; border-radius:8px;display:none;min-width:800px">
@@ -706,7 +766,6 @@ $(document).ready(function(){
 <span class="glyphicon glyphicon-remove tab-close" aria-hidden="true" style="color:#000;"></span></div>
 <div id="chart" style="margin:-40px 0px 0px 50px;width:70%;height:250px;display:none;"></div>
 </div>
-
 <input type=hidden class='hid-pr'/>
 </body>
 <script type="text/javascript">

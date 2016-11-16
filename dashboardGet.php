@@ -125,6 +125,11 @@ function fnDetail(){
 		}
 		$i+=1;
 	}
+	if ($typ=="interval-c"){
+		$th="<td>1-3秒</td><td>3-10秒</td><td>10-30秒</td><td>30-60秒</td><td>1-3分钟</td><td>3-10分钟</td><td>10-30分钟</td><td>30分钟以上</td>";
+		$arrDt=["1-3秒","3-10秒","10-30秒","30-60秒","1-3分钟","3-10分钟","10-30分钟","30分钟以上"];
+		$arrDs=["<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td>","<td>0</td>"];
+	}
 	$arrDc=$arrDs;
 	$j=0;
 	$i=0;
@@ -142,7 +147,7 @@ function fnDetail(){
 		while($row=mysqli_fetch_row($result)){
 			if ($ro!=$row[2] or $i==0){
 				if ($i<>0){
-					for ($i=0;$i<7;$i++){ $dc.=$arrDc[$i];}
+					for ($i=0;$i<count($arrDs);$i++){ $dc.=$arrDc[$i];}
 					$chartData.=substr($chartDataT,0,strlen($chartDataT)-1).";";
 					$chartDataT="";
 				}
@@ -157,7 +162,7 @@ function fnDetail(){
 					$chartData.=" ".$row[2].",";
 				}
 			}
-			while ($i<7 and $arrDt[$i]!=$row[0]){
+			while ($i<count($arrDs) and $arrDt[$i]!=$row[0]){
 				$i+=1;
 				$chartDataT.="0,";
 			}
@@ -168,7 +173,7 @@ function fnDetail(){
 			$chartDataT.=$row[1].",";
 			$i+=1;
 		}
-		for ($i=0;$i<7;$i++){ $dc.=$arrDc[$i];}
+		for ($i=0;$i<count($arrDs);$i++){ $dc.=$arrDc[$i];}
 		$chartData.=substr($chartDataT,0,strlen($chartDataT)-1).";";
 		for ($i=0;$i<7;$i++){ $chartDt.=$arrDt[$i].",";}
 	}else
