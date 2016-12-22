@@ -59,6 +59,7 @@ function fnDashBoard(){
 	$result=mysqli_query($GLOBALS["conn"],"set names utf8");
 	$result=mysqli_real_query($GLOBALS["conn"],"call $proc(@x)");
 	$result=mysqli_real_query($GLOBALS["conn"],"select @x");
+	if (!$result) {printf("Error: %s\n", mysqli_error($GLOBALS["conn"]));exit();}
 	while($GLOBALS["conn"]->more_results()){
 		$result=mysqli_store_result($GLOBALS["conn"]);
 		$GLOBALS["conn"]->next_result();

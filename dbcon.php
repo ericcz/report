@@ -1,7 +1,7 @@
 ﻿<?php
-	$hostname = "rds50pn92wn3z3b9z1lk.mysql.rds.aliyuncs.com";
+	$hostname = "rm-bp1c2y1656jgbn3lh.mysql.rds.aliyuncs.com";
 	$username = "report";
-	$password = "report61136500";
+	$password = "report_61136500";
 	$dbName = "crius";
 
 	define('CLIENT_MULTI_RESULTS',131072);
