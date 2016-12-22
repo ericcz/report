@@ -53,7 +53,7 @@ function fnFunnel(){
 }
 
 function fnDashBoard(){
-	$dc="ff";
+	$dc="";
 	$pid = $GLOBALS["pid"];
 	$proc='cspDashboard_get';
 	$result=mysqli_query($GLOBALS["conn"],"set names utf8");
