@@ -254,6 +254,12 @@ $.getLaunch = function(arrVal){
 	val+="<br><div class='font4 fontWhite' style='padding:5px;width:100%;text-align:right;margin-top:-30px'>"+dsc+$.isInfinity(Math.round((arrVal[arrVal.length-1]-arrVal[arrVal.length-2])/arrVal[arrVal.length-2]*10000)/100)+"%</div>"
 	return val;
 }
+$.getDebit = function(arrVal){
+	var val="";
+	dsc=$.getSymbol(arrVal[arrVal.length-1],arrVal[arrVal.length-2])
+	val="<span>"+arrVal[arrVal.length-1]+"</span>"
+	return val;
+}
 function getBack(vchReturn){
 try{
 	var vf=vchReturn.split("##")[1]
@@ -271,10 +277,16 @@ try{
 		rt=vchReturn.split("##")[3].split("$$")[2].split(",");
 		$(".dv-reg-y").html($.getRegist(rt))
 		
+		//	储值卡
+		rt=vchReturn.split("##")[13].split("$$");
+		$(".dv-debit").html($.getDebit(rt))
+		
 		//	注册用户
 		rt=vchReturn.split("##")[3].split("$$")[2].split(",");
 		$(".dv-register-l1").html("<br>"+rt[rt.length-1]);
 		$(".dv-register-l2").html("<br>"+vchReturn.split('##')[3].split('$$')[3]);
+		$(".dv-register-r1").html("<br>"+rt[rt.length-2])
+		
 		//	近期注册图表
 		var chartDt= new Array
 		var avg=0;
@@ -289,7 +301,8 @@ try{
 		chartData=chartData.join(",");
 		highChart_lineBasic(chartData,"","dv-reg2",chartDt);
 		
-		$(".dv-register-r1").html("<br>"+$.isInfinity(Math.round(avg/7)))
+		//	日均注册
+		//$(".dv-register-r1").html("<br>"+$.isInfinity(Math.round(avg/7)))
 		//	留存率
 		rt=vchReturn.split("##")[5].split("$$");
 		$(".dv-left-d").html(rt[1]+'%');
@@ -357,10 +370,10 @@ try{
 		content = "dvFunnel";
 		eCharts_funnel(cData,'',content);
 		$(".conv-tab").html(vchReturn.split("##")[4])
-	}else if(vf=='getDetail'||vf=='getDetailWheel'){
+	}else if(vf=='getDetail'||vf=='getDetailWheel'||vf=='getDebit'){
 		$(".tab").html(vchReturn.split("##")[2]);
 		var v=$(".hid-pr").val();
-		if(v.substr(0,4)!="left" && v!="point" && v!="time" && v!="interval" && v!="wheel" && v!="interval-c"){
+		if(v.substr(0,4)!="left" && v!="point" && v!="time" && v!="interval" && v!="wheel" && v!="interval-c" && v!="debit"){
 			var pr=0;
 			var amount="";
 			for (i=0;i<7;i++){
@@ -460,6 +473,11 @@ try{
 				$(".cale").css('display','none')
 				$(".tab").css('margin-top','60px')
 				break;
+			case 'debit':
+				$(".title").html("储值卡");
+				$(".cale").css('display','none')
+				$(".tab").css('margin-top','60px')
+				break;
 		}
 	}else
 		alert("System Error!")
@@ -540,6 +558,13 @@ $(document).ready(function(){
 	$(".nav-link").click(function(){
 		$(".btn-nav").click()
 	})
+	$('.tab-show-debit').click(function(){
+		$(".hid-pr").val($(this).attr("type"));
+		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDebit")+"&dt="+escape($('#iph-d-start').val())+"&typ="+escape($(".hid-pr").val());
+		createXMLHttpRequest(url,"fresh=" +Math.random());
+		scroll(0,0);
+		$(".navi").hide()
+	})
 })
 </script>
 </head>
@@ -617,12 +642,20 @@ $(document).ready(function(){
 <div class="dv-act font1 fontWhite" style="padding:5px;width:100%;height:50%;text-align:center;"></div>
 </section></div>
 
-<div class="col-xs-12 col-sm-8 col-md-4" style="min-width:280px;max-width:350px">
+<!--div class="col-xs-12 col-sm-8 col-md-4" style="min-width:280px;max-width:350px">
 <section class="sect" style="height:180px;background-color:#F08080;margin-bottom:20px">
 <div class="dv-title">昨日注册
 <span class="glyphicon glyphicon-th-list tab-show" aria-hidden="true" style="float:right;cursor:pointer" type="reg"></span>
 </div>
 <div class="dv-reg-y font1 fontWhite" style="padding:5px;width:100%;height:50%;text-align:center;"></div>
+</section></div-->
+
+<div class="col-xs-12 col-sm-8 col-md-4" style="min-width:280px;max-width:350px">
+<section class="sect" style="height:180px;background-color:#F08080;margin-bottom:20px">
+<div class="dv-title">储值卡销售
+<span class="glyphicon glyphicon-th-list tab-show-debit" aria-hidden="true" style="float:right;cursor:pointer" type="debit"></span>
+</div>
+<div class="dv-debit font1 fontWhite" style="padding:5px;width:100%;height:50%;text-align:center;"></div>
 </section></div>
 
 <div class="col-xs-12 col-sm-8 col-md-5" style="min-width:350px;max-width:450px">
@@ -634,7 +667,7 @@ $(document).ready(function(){
 <div>今日</div><div class="dv-register-l1" style="font-size:80px;text-align:center;"></div>
 </div>
 <div class="dv-register">
-<div>日均</div><div class="dv-register-r1" style="font-size:60px;text-align:center;"></div>
+<div>昨日</div><div class="dv-register-r1" style="font-size:60px;text-align:center;"></div>
 </div>
 <div class="dv-register" style="width:99.2%;">
 <div>总注册</div><div class="dv-register-l2" style="font-size:80px;text-align:center"></div>
