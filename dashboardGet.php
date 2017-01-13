@@ -141,7 +141,7 @@ function fnMember(){
 		$result=mysqli_store_result($GLOBALS["conn"]);
 		$GLOBALS["conn"]->next_result();
 	}
-	$dc="<table class='table table-striped table-hover table-bordered' style='text-align:center;width:90%'><tr><td class=title></td><td>加入日期</td><td>电话</td><td>姓名</td><td>酒店</td><td>间夜数</td><td>换游币</td></tr>";
+	$dc="<table class='table table-striped table-hover table-bordered' style='text-align:center;width:90%'><tr><td class=title></td><td>加入日期</td><td>电话</td><td>姓名</td><td>酒店</td><td>间夜数</td><td>剩余换游币</td><td>赠送换游币</td></tr>";
 	if( $result == false ){ 
 		$dc = "Error .\n";}
 	if ($result){ 
