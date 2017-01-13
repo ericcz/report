@@ -281,6 +281,10 @@ try{
 		rt=vchReturn.split("##")[13].split("$$");
 		$(".dv-debit").html($.getDebit(rt))
 		
+		//	企业会员
+		rt=vchReturn.split("##")[14].split("$$");
+		$(".dv-member").html($.getDebit(rt))
+		
 		//	注册用户
 		rt=vchReturn.split("##")[3].split("$$")[2].split(",");
 		$(".dv-register-l1").html("<br>"+rt[rt.length-1]);
@@ -370,10 +374,10 @@ try{
 		content = "dvFunnel";
 		eCharts_funnel(cData,'',content);
 		$(".conv-tab").html(vchReturn.split("##")[4])
-	}else if(vf=='getDetail'||vf=='getDetailWheel'||vf=='getDebit'){
+	}else if(vf=='getDetail'||vf=='getDetailWheel'||vf=='getDebit'||vf=='getMember'){
 		$(".tab").html(vchReturn.split("##")[2]);
 		var v=$(".hid-pr").val();
-		if(v.substr(0,4)!="left" && v!="point" && v!="time" && v!="interval" && v!="wheel" && v!="interval-c" && v!="debit"){
+		if(v.substr(0,4)!="left" && v!="point" && v!="time" && v!="interval" && v!="wheel" && v!="interval-c" && v!="debit" && v!="member"){
 			var pr=0;
 			var amount="";
 			for (i=0;i<7;i++){
@@ -478,6 +482,11 @@ try{
 				$(".cale").css('display','none')
 				$(".tab").css('margin-top','60px')
 				break;
+			case 'member':
+				$(".title").html("企业会员");
+				$(".cale").css('display','none')
+				$(".tab").css('margin-top','60px')
+				break;
 		}
 	}else
 		alert("System Error!")
@@ -528,11 +537,9 @@ $(document).ready(function(){
 	$(".btn-nav").click(function(){
 		if($(".btn-nav .glyphicon").hasClass("glyphicon-chevron-left")){
 			$(".sect-nav").css("margin-left","-200px");
-			//$(".sect-body").css("margin-left","0px").css("width","100%");
 			$(".btn-nav").css("margin-left","0").html('<span class="glyphicon glyphicon-chevron-right"></span>');
 		}else{
 			$(".sect-nav").css("margin-left","0");
-			//$(".sect-body").css("margin-left","200px").css("width","80%");
 			$(".btn-nav").css("margin-left","200px").html('<span class="glyphicon glyphicon-chevron-left"></span>');
 			$(".sect-nav").css('margin-top',document.body.scrollTop)
 
@@ -561,6 +568,13 @@ $(document).ready(function(){
 	$('.tab-show-debit').click(function(){
 		$(".hid-pr").val($(this).attr("type"));
 		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDebit")+"&dt="+escape($('#iph-d-start').val())+"&typ="+escape($(".hid-pr").val());
+		createXMLHttpRequest(url,"fresh=" +Math.random());
+		scroll(0,0);
+		$(".navi").hide()
+	})
+	$('.tab-show-member').click(function(){
+		$(".hid-pr").val($(this).attr("type"));
+		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getMember")+"&dt="+escape($('#iph-d-start').val())+"&typ="+escape($(".hid-pr").val());
 		createXMLHttpRequest(url,"fresh=" +Math.random());
 		scroll(0,0);
 		$(".navi").hide()
@@ -641,7 +655,7 @@ $(document).ready(function(){
 </div>
 <div class="dv-act font1 fontWhite" style="padding:5px;width:100%;height:50%;text-align:center;"></div>
 </section></div>
-
+<div class="col-xs-12"></div>
 <!--div class="col-xs-12 col-sm-8 col-md-4" style="min-width:280px;max-width:350px">
 <section class="sect" style="height:180px;background-color:#F08080;margin-bottom:20px">
 <div class="dv-title">昨日注册
@@ -649,7 +663,7 @@ $(document).ready(function(){
 </div>
 <div class="dv-reg-y font1 fontWhite" style="padding:5px;width:100%;height:50%;text-align:center;"></div>
 </section></div-->
-
+<br>
 <div class="col-xs-12 col-sm-8 col-md-4" style="min-width:280px;max-width:350px">
 <section class="sect" style="height:180px;background-color:#F08080;margin-bottom:20px">
 <div class="dv-title">储值卡销售
@@ -658,6 +672,14 @@ $(document).ready(function(){
 <div class="dv-debit font1 fontWhite" style="padding:5px;width:100%;height:50%;text-align:center;"></div>
 </section></div>
 
+<div class="col-xs-12 col-sm-8 col-md-4" style="min-width:280px;max-width:350px">
+<section class="sect" style="height:180px;background-color:#32CD32;margin-bottom:20px">
+<div class="dv-title">企业会员
+<span class="glyphicon glyphicon-th-list tab-show-member" aria-hidden="true" style="float:right;cursor:pointer" type="member"></span>
+</div>
+<div class="dv-member font1 fontWhite" style="padding:5px;width:100%;height:50%;text-align:center;"></div>
+</section></div>
+<div class="col-xs-12"></div>
 <div class="col-xs-12 col-sm-8 col-md-5" style="min-width:350px;max-width:450px">
 <section class="sect sect-reg" style="height:300px;background-color:#fff;margin-bottom:20px">
 <div class="dv-title">注册用户
