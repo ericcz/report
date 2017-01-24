@@ -6,15 +6,17 @@
 <link rel="stylesheet" href="include/css/bootstrap.css">
 <link rel="stylesheet" href="include/css/bootstrap-datetimepicker.css">
 <style>
-body {padding:0px;background-color:#ccc;}
+body {padding:0px;background-color:#ccc;width:100%}
 ul,li {list-style:none}
-.sect {border-radius:4px;background:white;box-shadow:0 0 8px #222; font:16px/1.5em 'Microsoft YaHei';}
+.sect {border-radius:4px;background:white;box-shadow:0 0 8px #222; font:16px/1.5em 'Microsoft YaHei';height:180px;margin-bottom:20px}
+.dv-block {min-width:280px;max-width:350px;}
 .dv-title {width:100%;height:35px;background-color:#eee;padding:8px 10px 0px 10px;}
 .dv-register {padding:10px;float:left;margin:1px;background-color:#e06;color:#fff;width:49.36%;height:130px;}
 .th {cursor:pointer;}
 .nav-link {color:#ddd;}
 a.nav-link:hover {color:#111;}
 .conv-show {font-size:12px;line-height:14px}
+.tab-show {float:right;cursor:pointer}
 
 .font1 {font:80px/1.5em 'Microsoft YaHei';}
 .font2 {font:60px/1.5em 'Microsoft YaHei';}
@@ -22,7 +24,7 @@ a.nav-link:hover {color:#111;}
 .font4 {font:30px/1.5em 'Microsoft YaHei';}
 .font5 {font:20px/1.5em 'Microsoft YaHei';}
 .font6 {font:12px/1.5em 'Microsoft YaHei';}
-.fontWhite {color:#fff;}
+.fontWhite {color:#fff;padding:5px;width:100%;height:50%;text-align:center;}
 .fontBlue {color:#00BFFF;}
 .fontCoffee {color:#D2691E;}
 .fontCyan {color:#008B8B;}
@@ -284,12 +286,15 @@ try{
 		//	企业会员
 		rt=vchReturn.split("##")[14].split("$$");
 		$(".dv-member").html($.getDebit(rt))
+		//	酒店统计
+		rt=vchReturn.split("##")[15].split("$$");
+		$(".dv-hotel").html($.getDebit(rt))
 		
 		//	注册用户
 		rt=vchReturn.split("##")[3].split("$$")[2].split(",");
 		$(".dv-register-l1").html("<br>"+rt[rt.length-1]);
 		$(".dv-register-l2").html("<br>"+vchReturn.split('##')[3].split('$$')[3]);
-		$(".dv-register-r1").html("<br>"+rt[rt.length-2])
+		//$(".dv-register-r1").html("<br>"+rt[rt.length-2])
 		
 		//	近期注册图表
 		var chartDt= new Array
@@ -306,7 +311,7 @@ try{
 		highChart_lineBasic(chartData,"","dv-reg2",chartDt);
 		
 		//	日均注册
-		//$(".dv-register-r1").html("<br>"+$.isInfinity(Math.round(avg/7)))
+		$(".dv-register-r1").html("<br>"+$.isInfinity(Math.round(avg/7)))
 		//	留存率
 		rt=vchReturn.split("##")[5].split("$$");
 		$(".dv-left-d").html(rt[1]+'%');
@@ -374,10 +379,10 @@ try{
 		content = "dvFunnel";
 		eCharts_funnel(cData,'',content);
 		$(".conv-tab").html(vchReturn.split("##")[4])
-	}else if(vf=='getDetail'||vf=='getDetailWheel'||vf=='getDebit'||vf=='getMember'){
+	}else if(vf=='getDetail'||vf=='getDetailWheel'||vf=='getDebit'||vf=='getMember'||vf=='getHotel'){
 		$(".tab").html(vchReturn.split("##")[2]);
 		var v=$(".hid-pr").val();
-		if(v.substr(0,4)!="left" && v!="point" && v!="time" && v!="interval" && v!="wheel" && v!="interval-c" && v!="debit" && v!="member"){
+		if(v.substr(0,4)!="left" && v!="point" && v!="time" && v!="interval" && v!="wheel" && v!="interval-c" && v!="debit" && v!="member" && v!="hotel"){
 			var pr=0;
 			var amount="";
 			for (i=0;i<7;i++){
@@ -414,7 +419,7 @@ try{
 			highChart_lineBasic(chartData.substring(0,chartData.length-1),"","chart",chartDt);
 			$("#chart").show()
 		}
-		if(v=="loc" || v=="time" || v=="debit" || v=="member"){
+		if(v=="loc" || v=="time" || v=="debit" || v=="member" || v=="hotel"){
 			$(".tab").css("overflow","scroll").css("overflow-x","hidden").css("height","450px")
 		}
 		$(".dv-ext").show();
@@ -487,6 +492,9 @@ try{
 				$(".cale").css('display','none')
 				$(".tab").css('margin-top','60px')
 				break;
+			case 'hotel':
+				$(".title").html("酒店库存");
+				break;
 		}
 	}else
 		alert("System Error!")
@@ -518,10 +526,14 @@ $(document).ready(function(){
 		$(".navi").hide()
 	})
 	$('.bt-exec').click(function(){
+		var ob="getDetail";
 		if($(".hid-pr").val()=="wheel"){
 			return false;
 		}
-		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDetail")+"&dt="+escape($('#iph-d-start').val())+"&typ="+escape($(".hid-pr").val());
+		if($(".hid-pr").val()=="hotel"){
+			ob="getHotel";
+		}
+		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape(ob)+"&dt="+escape($('#iph-d-start').val())+"&typ="+escape($(".hid-pr").val());
 		createXMLHttpRequest(url,"fresh=" +Math.random());
 	})
 	$('.tab-close').click(function(){
@@ -579,6 +591,13 @@ $(document).ready(function(){
 		scroll(0,0);
 		$(".navi").hide()
 	})
+	$('.tab-show-hotel').click(function(){
+		$(".hid-pr").val($(this).attr("type"));
+		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getHotel")+"&dt="+escape($('#iph-d-start').val())+"&typ="+escape($(".hid-pr").val());
+		createXMLHttpRequest(url,"fresh=" +Math.random());
+		scroll(0,0);
+		$(".navi").hide()
+	})
 })
 </script>
 </head>
@@ -598,10 +617,11 @@ $(document).ready(function(){
 </div>
 <div class="collapse navbar-collapse" id="navbar-collapse">
 	<ul class="nav navbar-nav">
-	<li class="active" style="margin-left:20px"><a href="#dash" data-toggle="tab"><span class="glyphicon glyphicon-dashboard"></span>&nbsp;&nbsp;数据统计</a></li>
-	<li style="margin-left:20px"><a href="#act" data-toggle="tab"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;&nbsp;用户行为统计</a></li>
-	<li style="margin-left:20px"><a href="#ret" data-toggle="tab"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;&nbsp;用户留存</a></li>
-	<li class="dropdown" style="margin-left:20px">
+	<li class="active"><a href="#dash" data-toggle="tab"><span class="glyphicon glyphicon-dashboard"></span>&nbsp;&nbsp;数据统计</a></li>
+	<li><a href="#hotel" data-toggle="tab"><span class="glyphicon glyphicon-tent"></span>&nbsp;&nbsp;酒店销售统计</a></li>
+	<li><a href="#act" data-toggle="tab"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;&nbsp;用户行为统计</a></li>
+	<li><a href="#ret" data-toggle="tab"><span class="glyphicon  glyphicon-send"></span>&nbsp;&nbsp;用户留存</a></li>
+	<li class="dropdown">
 	<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-filter"></span>&nbsp;&nbsp;转化率<span class="caret"></span></a>
 		<ul class="dropdown-menu" role="menu">
 		<li><a href="#conv" class="conv-show" data-toggle="tab" data-type="33">
@@ -637,100 +657,107 @@ $(document).ready(function(){
   </div><!-- /.container-fluid -->
 </nav>
 
-<div class="row" style="margin:20px 0px 0px 0px;padding:50px;"><div class="tab-content">
+<div class="row" style="padding-top:70px;margin:auto;width:90%;"><div class="tab-content">
 <!--	Area1	-->
 <div class="tab-pane fade in active" id="dash">
-<div class="col-xs-12 col-sm-8 col-md-4" style="min-width:280px;max-width:350px">
-<section class="sect sect-down" style="height:180px;background-color:#00BFFF;margin-bottom:20px">
+<div class="col-xs-12 col-sm-8 col-md-4 dv-block">
+<section class="sect sect-down" style="background-color:#00BFFF;">
 <div class="dv-title">昨日下载
-<span class="glyphicon glyphicon-th-list tab-show" aria-hidden="true" style="float:right;cursor:pointer" type="down"></span>
+<span class="glyphicon glyphicon-th-list tab-show" aria-hidden="true" type="down"></span>
 </div>
-<div class="dv-down font1 fontWhite" style="padding:5px;width:100%;height:50%;text-align:center;"></div>
+<div class="dv-down font1 fontWhite" style=""></div>
 </section></div>
 
-<div class="col-xs-12 col-sm-8 col-md-4" style="min-width:280px;max-width:350px">
-<section class="sect sect-active" style="height:180px;background-color:#ffcc00;margin-bottom:20px">
+<div class="col-xs-12 col-sm-8 col-md-4 dv-block">
+<section class="sect sect-active" style="background-color:#ffcc00;">
 <div class="dv-title">昨日活跃
-<span class="glyphicon glyphicon-th-list tab-show" aria-hidden="true" style="float:right;cursor:pointer;" type="lively"></span>
+<span class="glyphicon glyphicon-th-list tab-show" aria-hidden="true" type="lively"></span>
 </div>
-<div class="dv-act font1 fontWhite" style="padding:5px;width:100%;height:50%;text-align:center;"></div>
+<div class="dv-act font1 fontWhite"></div>
 </section></div>
-<div class="col-xs-12"></div>
-<!--div class="col-xs-12 col-sm-8 col-md-4" style="min-width:280px;max-width:350px">
-<section class="sect" style="height:180px;background-color:#F08080;margin-bottom:20px">
+<div class="col-xs-12 col-sm-8 col-md-4 dv-block">
+<section class="sect" style="background-color:#F08080;">
 <div class="dv-title">昨日注册
-<span class="glyphicon glyphicon-th-list tab-show" aria-hidden="true" style="float:right;cursor:pointer" type="reg"></span>
+<span class="glyphicon glyphicon-th-list tab-show" aria-hidden="true" type="reg"></span>
 </div>
-<div class="dv-reg-y font1 fontWhite" style="padding:5px;width:100%;height:50%;text-align:center;"></div>
-</section></div-->
-<br>
-<div class="col-xs-12 col-sm-8 col-md-4" style="min-width:280px;max-width:350px">
-<section class="sect" style="height:180px;background-color:#F08080;margin-bottom:20px">
-<div class="dv-title">储值卡销售
-<span class="glyphicon glyphicon-th-list tab-show-debit" aria-hidden="true" style="float:right;cursor:pointer" type="debit"></span>
-</div>
-<div class="dv-debit font1 fontWhite" style="padding:5px;width:100%;height:50%;text-align:center;"></div>
-</section></div>
-
-<div class="col-xs-12 col-sm-8 col-md-4" style="min-width:280px;max-width:350px">
-<section class="sect" style="height:180px;background-color:#32CD32;margin-bottom:20px">
-<div class="dv-title">企业会员
-<span class="glyphicon glyphicon-th-list tab-show-member" aria-hidden="true" style="float:right;cursor:pointer" type="member"></span>
-</div>
-<div class="dv-member font1 fontWhite" style="padding:5px;width:100%;height:50%;text-align:center;"></div>
+<div class="dv-reg-y font1 fontWhite"></div>
 </section></div>
 <div class="col-xs-12"></div>
+
 <div class="col-xs-12 col-sm-8 col-md-5" style="min-width:350px;max-width:450px">
-<section class="sect sect-reg" style="height:300px;background-color:#fff;margin-bottom:20px">
+<section class="sect sect-reg" style="height:300px;background-color:#fff;">
 <div class="dv-title">注册用户
-<span class="glyphicon glyphicon-th-list tab-show" aria-hidden="true" style="float:right;cursor:pointer" type="reg"></span>
+<span class="glyphicon glyphicon-th-list tab-show" aria-hidden="true" type="reg"></span>
 </div>
 <div class="dv-register">
 <div>今日</div><div class="dv-register-l1" style="font-size:80px;text-align:center;"></div>
 </div>
 <div class="dv-register">
-<div>昨日</div><div class="dv-register-r1" style="font-size:60px;text-align:center;"></div>
+<div>日均</div><div class="dv-register-r1" style="font-size:60px;text-align:center;"></div>
 </div>
 <div class="dv-register" style="width:99.2%;">
 <div>总注册</div><div class="dv-register-l2" style="font-size:80px;text-align:center"></div>
 </div>
 </section></div>
 
-<div class="col-xs-12 col-sm-12 col-md-8" style="min-width:420px;max-width:600px">
+<div class="col-xs-12 col-sm-12 col-md-7" style="min-width:420px;max-width:600px">
 <section class="sect" style="height:300px;">
 <div class="dv-title">近期注册</div>
 <div id="dv-reg2" class="dv-reg2" style="padding:10px;height:90%;text-align:right"></div>
 </section></div>
 </div><!-- /#dash -->
 
-<!--	Area2	-->
+<div id='hotel' class="tab-pane fade ">
+<div class="col-xs-12 col-sm-8 col-md-4 dv-block">
+<section class="sect" style="background-color:#F08080;">
+<div class="dv-title">储值卡销售
+<span class="glyphicon glyphicon-th-list tab-show-debit" aria-hidden="true" style="float:right;cursor:pointer" type="debit"></span>
+</div>
+<div class="dv-debit font1 fontWhite" ></div>
+</section></div>
+
+<div class="col-xs-12 col-sm-8 col-md-4 dv-block">
+<section class="sect" style="background-color:#32CD32;">
+<div class="dv-title">企业会员
+<span class="glyphicon glyphicon-th-list tab-show-member" aria-hidden="true" style="float:right;cursor:pointer" type="member"></span>
+</div>
+<div class="dv-member font1 fontWhite" ></div>
+</section></div>
+<div class="col-xs-12 col-sm-8 col-md-4 dv-block">
+<section class="sect" style="background-color:#ffcc00;">
+<div class="dv-title">酒店库存<span class="glyphicon glyphicon-th-list tab-show-hotel" aria-hidden="true" style="float:right;cursor:pointer" type="hotel"></span>
+</div>
+<div class="dv-hotel font1 fontWhite" ></div>
+</section></div>
+</div><!-- /#hotel -->
+
 <div id='act' class="tab-pane fade ">
-<div class="col-xs-12 col-sm-8 col-md-4" style="min-width:250px;max-width:350px">
-<section class="sect-pv sect" style="height:185px;background-color:#FFA07A;margin-bottom:20px">
-<div class="dv-title">版块PV<span class="glyphicon glyphicon-th-list tab-show" aria-hidden="true" style="float:right;cursor:pointer" type="pv"></span>
+<div class="col-xs-12 col-sm-8 col-md-4 dv-block">
+<section class="sect-pv sect" style="background-color:#FFA07A;">
+<div class="dv-title">版块PV<span class="glyphicon glyphicon-th-list tab-show" aria-hidden="true" type="pv"></span>
 </div>
 <div class="dv-pv1 font1 fontWhite" style="padding:5px;width:100%;height:50%;text-align:center;"></div>
 <div class="dv-pv2 font4 fontWhite" style="padding:5px;width:100%;height:30%;text-align:right;margin-top:5px"></div>
 </section></div>
 
-<div class="col-xs-12 col-sm-8 col-md-4" style="min-width:250px;max-width:350px">
-<section class="sect-uv sect" style="height:185px;background-color:#3CB371;margin-bottom:20px">
-<div class="dv-title">版块UV<span class="glyphicon glyphicon-th-list tab-show" aria-hidden="true" style="float:right;cursor:pointer" type="uv"></span>
+<div class="col-xs-12 col-sm-8 col-md-4 dv-block">
+<section class="sect-uv sect" style="background-color:#3CB371;">
+<div class="dv-title">版块UV<span class="glyphicon glyphicon-th-list tab-show" aria-hidden="true" type="uv"></span>
 </div>
-<div class="dv-uv1 font1 fontWhite" style="padding:5px;width:100%;height:50%;text-align:center;"></div>
-<div class="dv-uv2 font4 fontWhite" style="padding:5px;width:100%;height:30%;text-align:right;margin-top:5px"></div>
+<div class="dv-uv1 font1 fontWhite" ></div>
+<div class="dv-uv2 font4 fontWhite" style="height:30%;text-align:right;margin-top:5px"></div>
 </section></div>
 
-<div class="col-xs-12 col-sm-8 col-md-4" style="min-width:250px;max-width:350px">
-<section class="sect" style="height:180px;background-color:#F08080;margin-bottom:30px">
+<div class="col-xs-12 col-sm-8 col-md-4 dv-block">
+<section class="sect" style="background-color:#F08080;">
 <div class="dv-title">启动数
-<span class="glyphicon glyphicon-th-list tab-show" aria-hidden="true" style="float:right;cursor:pointer" type="lau"></span>
+<span class="glyphicon glyphicon-th-list tab-show" aria-hidden="true" type="lau"></span>
 </div>
-<div class="dv-launch font1 fontWhite" style="padding:5px;width:100%;height:50%;text-align:center;"></div>
+<div class="dv-launch font1 fontWhite" ></div>
 </section></div>
 
-<div class="col-xs-12 col-sm-8 col-md-4" style="min-width:250px;max-width:350px">
-<section class="sect-uv sect" style="height:185px;background-color:#fff;margin-bottom:20px">
+<div class="col-xs-12 col-sm-8 col-md-4 dv-block">
+<section class="sect-uv sect" style="height:185px;background-color:#fff;">
 <div class="dv-title">活动PV&UV
 </div>
 <table class="table table-hover font4" style="height:80%;cursor:pointer;">
@@ -739,9 +766,9 @@ $(document).ready(function(){
 </table>
 </section></div>
 
-<div class="col-xs-12 col-sm-8 col-md-4" style="min-width:250px;max-width:350px">
-<section class="sect-area sect" style="height:185px;background-color:#fff;margin-bottom:20px">
-<div class="dv-title">日活省分布<span class="glyphicon glyphicon-th-list tab-show" aria-hidden="true" style="float:right;cursor:pointer" type="loc"></span>
+<div class="col-xs-12 col-sm-8 col-md-4 dv-block">
+<section class="sect-area sect" style="background-color:#fff;">
+<div class="dv-title">日活省分布<span class="glyphicon glyphicon-th-list tab-show" aria-hidden="true"  type="loc"></span>
 </div>
 <div class="panel panel-default font4 fontCyan" style="margin-top:20px;">
 <div class="panel-body">
@@ -750,8 +777,8 @@ $(document).ready(function(){
 </div></div>
 </section></div>
 
-<div class="col-xs-12 col-sm-8 col-md-4" style="min-width:250px;max-width:350px">
-<section class="sect-action sect" style="height:265px;background-color:#fff;margin-bottom:20px">
+<div class="col-xs-12 col-sm-8 col-md-4 dv-block">
+<section class="sect-action sect" style="height:265px;background-color:#fff;">
 <div class="dv-title">用户行为
 </div>
 <table class="table table-hover font5" style="cursor:pointer;">
@@ -767,34 +794,34 @@ $(document).ready(function(){
 <!--	Area3	-->
 <div id='ret' class="tab-pane fade ">
 
-<div class="col-xs-12 col-sm-8 col-md-4" style="min-width:250px;max-width:350px">
-<section class="sect" style="height:185px;background-color:#00BFFF;margin-bottom:20px">
+<div class="col-xs-12 col-sm-8 col-md-4 dv-block">
+<section class="sect" style="background-color:#00BFFF">
 <div class="dv-title">日留存率
-<span class="glyphicon glyphicon-th-list tab-show tr-lv" aria-hidden="true" style="float:right;cursor:pointer;" type="leftD"></span>
+<span class="glyphicon glyphicon-th-list tab-show tr-lv" aria-hidden="true" type="leftD"></span>
 </div>
-<div class="dv-left-d font2 fontWhite" style="padding:5px;width:100%;height:50%;text-align:center;"></div>
+<div class="dv-left-d font2 fontWhite" ></div>
 </section></div>
 
-<div class="col-xs-12 col-sm-8 col-md-4" style="min-width:250px;max-width:350px">
-<section class="sect" style="height:185px;background-color:#F4A460;margin-bottom:20px">
+<div class="col-xs-12 col-sm-8 col-md-4 dv-block">
+<section class="sect" style="background-color:#F4A460;">
 <div class="dv-title">周留存率
-<span class="glyphicon glyphicon-th-list tab-show tr-lv" aria-hidden="true" style="float:right;cursor:pointer;" type="leftW"></span>
+<span class="glyphicon glyphicon-th-list tab-show tr-lv" aria-hidden="true" type="leftW"></span>
 </div>
-<div class="dv-left-w font2 fontWhite" style="padding:5px;width:100%;height:50%;text-align:center;"></div>
+<div class="dv-left-w font2 fontWhite" ></div>
 </section></div>
 
-<div class="col-xs-12 col-sm-8 col-md-4" style="min-width:250px;max-width:350px">
-<section class="sect" style="height:185px;background-color:#696969;margin-bottom:20px">
+<div class="col-xs-12 col-sm-8 col-md-4 dv-block">
+<section class="sect" style="background-color:#696969;">
 <div class="dv-title">月留存率
-<span class="glyphicon glyphicon-th-list tab-show tr-lv" aria-hidden="true" style="float:right;cursor:pointer;" type="leftM"></span>
+<span class="glyphicon glyphicon-th-list tab-show tr-lv" aria-hidden="true" type="leftM"></span>
 </div>
-<div class="dv-left-m font2 fontWhite" style="padding:5px;width:100%;height:50%;text-align:center;"></div>
+<div class="dv-left-m font2 fontWhite" ></div>
 </section></div>
 
 </div><!--	Area3 end -->
 <!--	Area4	-->
 <div id='conv' class="tab-pane fade">
-<section class="sect-funnel sect col-xs-12 col-sm-8 col-md-5" style="padding:0px;margin-left:5%;height:560px;background-color:#fff;margin-top:-20px;min-width:500px;">
+<section class="sect-funnel sect col-xs-12 col-sm-8 col-md-5 " style="padding:0px;margin-left:5%;height:560px;background-color:#fff;margin-top:-20px;min-width:500px;">
 <div class="dv-title">转化率</div>
 <div id="dvFunnel" class="" style="width:500px;height:300px;" ></div>
 <div class="conv-tab" style="padding:5px;height:40%;position:relative;margin-top:-60px;font-size:12px;"></div>

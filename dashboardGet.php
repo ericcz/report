@@ -20,6 +20,8 @@ case 'getDebit': $desc = fnDebit();
 break;
 case 'getMember': $desc = fnMember();
 break;
+case 'getHotel': $desc = fnHotel();
+break;
 default:echo "0";
 }
 
@@ -142,6 +144,32 @@ function fnMember(){
 		$GLOBALS["conn"]->next_result();
 	}
 	$dc="<table class='table table-striped table-hover table-bordered' style='text-align:center;width:90%'><tr><td class=title></td><td>加入日期</td><td>电话</td><td>姓名</td><td>酒店</td><td>间夜数</td><td>剩余换游币</td><td>赠送换游币</td></tr>";
+	if( $result == false ){ 
+		$dc = "Error .\n";}
+	if ($result){ 
+		while($row=mysqli_fetch_row($result)){
+			$dc.= "<tr><td>".$i."</td><td>".$row[0]."</td><td>".$row[1]."</td><td>".$row[2]."</td><td>".$row[3]."</td><td>".$row[4]."</td><td>".$row[5]."</td><td>".$row[6]."</td></tr>";
+			$i+=1;
+		}
+	}else
+		$dc = "0";
+	$dc.="</table>";
+	return $dc;
+}
+function fnHotel(){
+	$dc="";
+	$pid = $GLOBALS["pid"];
+	$typ = $_REQUEST['typ'];
+	$dt = $_REQUEST['dt'];
+	$i=1;
+	$proc='cspDashboard_detail';
+	$result=mysqli_query($GLOBALS["conn"],"set names utf8");
+	$result=mysqli_real_query($GLOBALS["conn"],"call $proc('$typ','$dt')");
+	while($GLOBALS["conn"]->more_results()){
+		$result=mysqli_store_result($GLOBALS["conn"]);
+		$GLOBALS["conn"]->next_result();
+	}
+	$dc="<table class='table table-striped table-hover table-bordered' style='text-align:center;width:100%'><tr><td class=title></td><td>日期</td><td>城市</td><td>酒店名称</td><td>房型</td><td>间夜数</td><td>可用数</td><td>金额</td></tr>";
 	if( $result == false ){ 
 		$dc = "Error .\n";}
 	if ($result){ 
