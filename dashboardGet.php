@@ -174,7 +174,7 @@ function fnHotel(){
 		$dc = "Error .\n";}
 	if ($result){ 
 		while($row=mysqli_fetch_row($result)){
-			$dc.= "<tr><td>".$i."</td><td>".$row[0]."</td><td>".$row[1]."</td><td>".$row[2]."</td><td>".$row[3]."</td><td>".$row[4]."</td><td>".$row[5]."</td><td>".$row[6]."</td></tr>";
+			$dc.= "<tr><td>".$i."</td><td>".$row[0]."</td><td>".$row[1]."</td><td>".$row[2]."</td><td>".$row[3]."</td><td>".$row[4]."</td><td>".$row[5]."</td></tr>";
 			$i+=1;
 		}
 	}else
