@@ -169,7 +169,7 @@ function fnHotel(){
 		$result=mysqli_store_result($GLOBALS["conn"]);
 		$GLOBALS["conn"]->next_result();
 	}
-	$dc="<table class='table table-striped table-hover table-bordered' style='text-align:center;width:100%'><tr><td class=title></td><td>日期</td><td>城市</td><td>酒店名称</td><td>间夜数</td><td>可用数</td><td>金额</td></tr>";
+	$dc="<table class='table table-striped table-hover table-bordered' style='text-align:center;width:100%'><tr><td class=title></td><td>日期</td><td>城市</td><td>酒店名称</td><td>间夜数</td><td>可用数</td><td>最低价</td></tr>";
 	if( $result == false ){ 
 		$dc = "Error .\n";}
 	if ($result){ 
