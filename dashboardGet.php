@@ -6,21 +6,17 @@ $obj = $_REQUEST['obj'];
 $desc = "";
 
 switch($obj){
+case 'getDashBoard': $desc = fnDashBoard();
+break;
 case 'getDetail': $desc = fnDetail();
 break;
-case 'getDetailWheel': $desc = fnDetailWheel();
-break;
-case 'getDashBoard': $desc = fnDashBoard();
+case 'getDetails': $desc = fnDetails();
 break;
 case 'getChart': $desc = fnChart();
 break;
 case 'getFunnel': $desc = fnFunnel();
 break;
-case 'getDebit': $desc = fnDebit();
-break;
-case 'getMember': $desc = fnMember();
-break;
-case 'getHotel': $desc = fnHotel();
+case 'getDetailWheel': $desc = fnDetailWheel();
 break;
 default:echo "0";
 }
@@ -80,6 +76,67 @@ function fnDashBoard(){
 		$dc = "0";
 	return $dc;
 }
+
+function fnTitle($t){
+	$title="";
+	$titleArr=explode(',',$t);
+	for ($i=0;$i<count($titleArr)-1;$i++){
+		$title.="<td>".$titleArr[$i]."</td>";
+	}
+	$title="<table class='table table-striped table-hover table-bordered' style='text-align:center;width:98%'><tr><td class=title></td>".$title."</tr>";
+	return $title;
+}
+
+function fnDetails(){
+	$dc="";$title="";
+	$serial=0;
+	$pid = $GLOBALS["pid"];
+	$typ = $_REQUEST['typ'];
+	$dt = $_REQUEST['dt'];
+	$proc ='cspDashboard_detail';
+	$result=mysqli_real_query($GLOBALS["conn"],"set names utf8");
+	$result=mysqli_real_query($GLOBALS["conn"],"call $proc('$typ','$dt')");
+	while($GLOBALS["conn"]->more_results()){
+		$result=mysqli_store_result($GLOBALS["conn"]);
+		$GLOBALS["conn"]->next_result();
+	}
+	switch($typ){
+	case 'debit': $title = '生效日期,有效期,姓名,酒店,售价,赠送金额,结余,用户来源,';
+	break;
+	case 'debit0': $title = '生效日期,有效期,姓名,酒店,售价,赠送金额,结余,用户来源,';
+	break;
+	case 'member': $title = '加入日期,电话,姓名,酒店,间夜数,剩余换游币,赠送换游币,';
+	break;
+	case 'hotel': $title = '日期,城市,酒店名称,间夜数,可用数,最低价,';
+	break;
+	case 'hotel-sale-d': $title = '日期,订单内容,订单类型,联系电话,姓名,订单使用日期,订单结束日期,换游币,订单状态,';
+	break;
+	default:exit;
+	}
+	$dc=fnTitle($title);
+	$title="";
+	if( $result == false ){ 
+		echo "Error .\n";}
+	if ($result){ 
+		while($row=mysqli_fetch_row($result)){
+			$serial+=1;
+			for ($i=0;$i<($result->field_count);$i++){
+				$title.="<td>".$row[$i]."</td>";
+			}
+			$dc.= "<tr><td>".$serial."</td>".$title."</tr>";
+			$title="";
+		}
+	}else
+		$dc = "0";
+	$dc.="</table>";
+	
+	if ($typ=="debit"){
+		$dc.="<input type=checkbox id=chkDebit value=0>&nbsp;显示全部";
+	}
+	
+	return $dc;
+}
+
 function fnDetailWheel(){
 	$dc="";
 	$pid = $GLOBALS["pid"];
@@ -98,84 +155,6 @@ function fnDetailWheel(){
 	if ($result){ 
 		while($row=mysqli_fetch_row($result)){
 			$dc.= "<tr><td>".$row[0]."</td><td>".$row[1]."</td></tr>";
-		}
-	}else
-		$dc = "0";
-	$dc.="</table>";
-	return $dc;
-}
-function fnDebit(){
-	$dc="";
-	$pid = $GLOBALS["pid"];
-	$typ = $_REQUEST['typ'];
-	$dt = $_REQUEST['dt'];
-	$i=1;
-	$proc='cspDashboard_detail';
-	$result=mysqli_query($GLOBALS["conn"],"set names utf8");
-	$result=mysqli_real_query($GLOBALS["conn"],"call $proc('$typ','$dt')");
-	while($GLOBALS["conn"]->more_results()){
-		$result=mysqli_store_result($GLOBALS["conn"]);
-		$GLOBALS["conn"]->next_result();
-	}
-	$dc="<table class='table table-striped table-hover table-bordered' style='text-align:center;width:90%'><tr><td class=title></td><td>生效日期</td><td>有效期</td><td>姓名</td><td>酒店</td><td>售价</td><td>赠送金额</td><td>结余</td><td>用户来源</td></tr>";
-	if( $result == false ){ 
-		$dc = "Error .\n";}
-	if ($result){ 
-		while($row=mysqli_fetch_row($result)){
-			$dc.= "<tr><td>".$i."</td><td>".$row[0]."</td><td>3年</td><td>".$row[1]."</td><td>".$row[2]."</td><td>".$row[3]."</td><td>".$row[4]."</td><td>".$row[5]."</td><td>".$row[6]."</td></tr>";
-			$i+=1;
-		}
-	}else
-		$dc = "0";
-	$dc.="</table>";
-	return $dc;
-}
-function fnMember(){
-	$dc="";
-	$pid = $GLOBALS["pid"];
-	$typ = $_REQUEST['typ'];
-	$dt = $_REQUEST['dt'];
-	$i=1;
-	$proc='cspDashboard_detail';
-	$result=mysqli_query($GLOBALS["conn"],"set names utf8");
-	$result=mysqli_real_query($GLOBALS["conn"],"call $proc('$typ','$dt')");
-	while($GLOBALS["conn"]->more_results()){
-		$result=mysqli_store_result($GLOBALS["conn"]);
-		$GLOBALS["conn"]->next_result();
-	}
-	$dc="<table class='table table-striped table-hover table-bordered' style='text-align:center;width:90%'><tr><td class=title></td><td>加入日期</td><td>电话</td><td>姓名</td><td>酒店</td><td>间夜数</td><td>剩余换游币</td><td>赠送换游币</td></tr>";
-	if( $result == false ){ 
-		$dc = "Error .\n";}
-	if ($result){ 
-		while($row=mysqli_fetch_row($result)){
-			$dc.= "<tr><td>".$i."</td><td>".$row[0]."</td><td>".$row[1]."</td><td>".$row[2]."</td><td>".$row[3]."</td><td>".$row[4]."</td><td>".$row[5]."</td><td>".$row[6]."</td></tr>";
-			$i+=1;
-		}
-	}else
-		$dc = "0";
-	$dc.="</table>";
-	return $dc;
-}
-function fnHotel(){
-	$dc="";
-	$pid = $GLOBALS["pid"];
-	$typ = $_REQUEST['typ'];
-	$dt = $_REQUEST['dt'];
-	$i=1;
-	$proc='cspDashboard_detail';
-	$result=mysqli_query($GLOBALS["conn"],"set names utf8");
-	$result=mysqli_real_query($GLOBALS["conn"],"call $proc('$typ','$dt')");
-	while($GLOBALS["conn"]->more_results()){
-		$result=mysqli_store_result($GLOBALS["conn"]);
-		$GLOBALS["conn"]->next_result();
-	}
-	$dc="<table class='table table-striped table-hover table-bordered' style='text-align:center;width:100%'><tr><td class=title></td><td>日期</td><td>城市</td><td>酒店名称</td><td>间夜数</td><td>可用数</td><td>最低价</td></tr>";
-	if( $result == false ){ 
-		$dc = "Error .\n";}
-	if ($result){ 
-		while($row=mysqli_fetch_row($result)){
-			$dc.= "<tr><td>".$i."</td><td>".$row[0]."</td><td>".$row[1]."</td><td>".$row[2]."</td><td>".$row[3]."</td><td>".$row[4]."</td><td>".$row[5]."</td></tr>";
-			$i+=1;
 		}
 	}else
 		$dc = "0";
@@ -295,3 +274,4 @@ function fnChart(){
 echo "1##".$obj."##".$desc;
 mysqli_close($conn);
 ?>
+

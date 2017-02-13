@@ -256,7 +256,7 @@ $.getLaunch = function(arrVal){
 	val+="<br><div class='font4 fontWhite' style='padding:5px;width:100%;text-align:right;margin-top:-30px'>"+dsc+$.isInfinity(Math.round((arrVal[arrVal.length-1]-arrVal[arrVal.length-2])/arrVal[arrVal.length-2]*10000)/100)+"%</div>"
 	return val;
 }
-$.getDebit = function(arrVal){
+$.getSectSpanHotel = function(arrVal){
 	var val="";
 	dsc=$.getSymbol(arrVal[arrVal.length-1],arrVal[arrVal.length-2])
 	val="<span>"+arrVal[arrVal.length-1]+"</span>"
@@ -281,14 +281,18 @@ try{
 		
 		//	储值卡
 		rt=vchReturn.split("##")[13].split("$$");
-		$(".dv-debit").html($.getDebit(rt))
+		$(".dv-debit").html($.getSectSpanHotel(rt))
 		
 		//	企业会员
 		rt=vchReturn.split("##")[14].split("$$");
-		$(".dv-member").html($.getDebit(rt))
+		$(".dv-member").html($.getSectSpanHotel(rt))
 		//	酒店统计
 		rt=vchReturn.split("##")[15].split("$$");
-		$(".dv-hotel").html($.getDebit(rt))
+		$(".dv-hotel").html($.getSectSpanHotel(rt))
+		//	酒店销售日报
+		rt=vchReturn.split("##")[16].split("$$");
+		$(".dv-hotel-sale-d").html($.getSectSpanHotel(rt))
+		
 		
 		//	注册用户
 		rt=vchReturn.split("##")[3].split("$$")[2].split(",");
@@ -379,10 +383,10 @@ try{
 		content = "dvFunnel";
 		eCharts_funnel(cData,'',content);
 		$(".conv-tab").html(vchReturn.split("##")[4])
-	}else if(vf=='getDetail'||vf=='getDetailWheel'||vf=='getDebit'||vf=='getMember'||vf=='getHotel'){
+	}else if(vf=='getDetail'||vf=='getDetailWheel'||vf=='getDetails'){
 		$(".tab").html(vchReturn.split("##")[2]);
 		var v=$(".hid-pr").val();
-		if(v.substr(0,4)!="left" && v!="point" && v!="time" && v!="interval" && v!="wheel" && v!="interval-c" && v!="debit" && v!="member" && v!="hotel"){
+		if(v.substr(0,4)!="left" && v!="point" && v!="time" && v!="interval" && v!="wheel" && v!="interval-c" && vf!="getDetails"){
 			var pr=0;
 			var amount="";
 			for (i=0;i<7;i++){
@@ -419,7 +423,7 @@ try{
 			highChart_lineBasic(chartData.substring(0,chartData.length-1),"","chart",chartDt);
 			$("#chart").show()
 		}
-		if(v=="loc" || v=="time" || v=="debit" || v=="member" || v=="hotel"){
+		if(v=="loc" || v=="time" || v=="debit" || v=="debit0" || v=="member" || v=="hotel" || v=="hotel-sale-d"){
 			$(".tab").css("overflow","scroll").css("overflow-x","hidden").css("height","450px")
 		}
 		$(".dv-ext").show();
@@ -485,7 +489,14 @@ try{
 			case 'debit':
 				$(".title").html("储值卡");
 				$(".cale").css('display','none')
-				$(".tab").css('margin-top','60px')
+				$(".tab").css('margin-top','60px');
+				$('#chkDebit').click(function(){
+					if($(this).is(":checked")){
+						$(".hid-pr").val('debit0');
+						url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDetails")+"&dt="+escape($('#iph-d-start').val())+"&typ=debit0";
+						createXMLHttpRequest(url,"fresh=" +Math.random());
+					}
+				})
 				break;
 			case 'member':
 				$(".title").html("企业会员");
@@ -530,8 +541,8 @@ $(document).ready(function(){
 		if($(".hid-pr").val()=="wheel"){
 			return false;
 		}
-		if($(".hid-pr").val()=="hotel"){
-			ob="getHotel";
+		if($(".hid-pr").val()=="hotel" || $(".hid-pr").val()=="hotel-sale-d"){
+			ob="getDetails";
 		}
 		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape(ob)+"&dt="+escape($('#iph-d-start').val())+"&typ="+escape($(".hid-pr").val());
 		createXMLHttpRequest(url,"fresh=" +Math.random());
@@ -577,27 +588,14 @@ $(document).ready(function(){
 	$(".nav-link").click(function(){
 		$(".btn-nav").click()
 	})
-	$('.tab-show-debit').click(function(){
+	$('.tab-detail').click(function(){
 		$(".hid-pr").val($(this).attr("type"));
-		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDebit")+"&dt="+escape($('#iph-d-start').val())+"&typ="+escape($(".hid-pr").val());
+		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDetails")+"&dt="+escape($('#iph-d-start').val())+"&typ="+escape($(".hid-pr").val());
 		createXMLHttpRequest(url,"fresh=" +Math.random());
 		scroll(0,0);
 		$(".navi").hide()
 	})
-	$('.tab-show-member').click(function(){
-		$(".hid-pr").val($(this).attr("type"));
-		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getMember")+"&dt="+escape($('#iph-d-start').val())+"&typ="+escape($(".hid-pr").val());
-		createXMLHttpRequest(url,"fresh=" +Math.random());
-		scroll(0,0);
-		$(".navi").hide()
-	})
-	$('.tab-show-hotel').click(function(){
-		$(".hid-pr").val($(this).attr("type"));
-		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getHotel")+"&dt="+escape($('#iph-d-start').val())+"&typ="+escape($(".hid-pr").val());
-		createXMLHttpRequest(url,"fresh=" +Math.random());
-		scroll(0,0);
-		$(".navi").hide()
-	})
+
 })
 </script>
 </head>
@@ -711,7 +709,7 @@ $(document).ready(function(){
 <div class="col-xs-12 col-sm-8 col-md-4 dv-block">
 <section class="sect" style="background-color:#F08080;">
 <div class="dv-title">储值卡销售
-<span class="glyphicon glyphicon-th-list tab-show-debit" aria-hidden="true" style="float:right;cursor:pointer" type="debit"></span>
+<span class="glyphicon glyphicon-th-list tab-detail" aria-hidden="true" style="float:right;cursor:pointer" type="debit"></span>
 </div>
 <div class="dv-debit font1 fontWhite" ></div>
 </section></div>
@@ -719,15 +717,23 @@ $(document).ready(function(){
 <div class="col-xs-12 col-sm-8 col-md-4 dv-block">
 <section class="sect" style="background-color:#32CD32;">
 <div class="dv-title">企业会员
-<span class="glyphicon glyphicon-th-list tab-show-member" aria-hidden="true" style="float:right;cursor:pointer" type="member"></span>
+<span class="glyphicon glyphicon-th-list tab-detail" aria-hidden="true" style="float:right;cursor:pointer" type="member"></span>
 </div>
 <div class="dv-member font1 fontWhite" ></div>
 </section></div>
 <div class="col-xs-12 col-sm-8 col-md-4 dv-block">
 <section class="sect" style="background-color:#ffcc00;">
-<div class="dv-title">可定酒店数<span class="glyphicon glyphicon-th-list tab-show-hotel" aria-hidden="true" style="float:right;cursor:pointer" type="hotel"></span>
+<div class="dv-title">可定酒店数
+<span class="glyphicon glyphicon-th-list tab-detail" aria-hidden="true" style="float:right;cursor:pointer" type="hotel"></span>
 </div>
 <div class="dv-hotel font1 fontWhite" ></div>
+</section></div>
+<br>
+<div class="col-xs-12 col-sm-8 col-md-4 dv-block">
+<section class="sect" style="background-color:#00CED1;">
+<div class="dv-title">酒店销售报表<span class="glyphicon glyphicon-th-list tab-detail" aria-hidden="true" style="float:right;cursor:pointer" type="hotel-sale-d"></span>
+</div>
+<div class="dv-hotel-sale-d font1 fontWhite" ></div>
 </section></div>
 </div><!-- /#hotel -->
 
