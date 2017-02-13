@@ -109,7 +109,7 @@ function fnDetails(){
 	break;
 	case 'hotel': $title = '日期,城市,酒店名称,间夜数,可用数,最低价,';
 	break;
-	case 'hotel-sale-d': $title = '日期,订单内容,订单类型,联系电话,姓名,订单使用日期,订单结束日期,换游币,订单状态,';
+	case 'hotel-sale-d': $title = '日期,酒店,订单内容,订单类型,联系电话,姓名,订单使用日期,订单结束日期,换游币,订单状态,';
 	break;
 	default:exit;
 	}
