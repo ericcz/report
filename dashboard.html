@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -256,10 +257,24 @@ $.getLaunch = function(arrVal){
 	val+="<br><div class='font4 fontWhite' style='padding:5px;width:100%;text-align:right;margin-top:-30px'>"+dsc+$.isInfinity(Math.round((arrVal[arrVal.length-1]-arrVal[arrVal.length-2])/arrVal[arrVal.length-2]*10000)/100)+"%</div>"
 	return val;
 }
-$.getSectSpanHotel = function(arrVal){
+$.getSectSpanPercent = function(arrVal){
+
+}
+$.getSectSpanSingle = function(arrVal){
 	var val="";
-	dsc=$.getSymbol(arrVal[arrVal.length-1],arrVal[arrVal.length-2])
 	val="<span>"+arrVal[arrVal.length-1]+"</span>"
+	return val;
+}
+$.getSectSpanDouble = function(arrVal,t1,t2){
+	var val="";
+	val="<span class='font2 fontWhite'>"+arrVal[arrVal.length-2]+"</span><br>"
+	val+="<span class='font4 fontWhite' style='margin-left:40%;'>"+t2+'&nbsp;:&nbsp;'+arrVal[arrVal.length-1]+"</span>"
+	return val;
+}
+$.getSectSpanDouble2 = function(arrVal,t1,t2){
+	var val="";
+	val="<span class='font3 fontWhite'>"+t1+'&nbsp;:&nbsp;'+arrVal[arrVal.length-2]+"</span><br>"
+	val+="<span class='font3 fontWhite' style='margin-left:40%;'>"+t2+'&nbsp;:&nbsp;'+arrVal[arrVal.length-1]+"</span>"
 	return val;
 }
 function getBack(vchReturn){
@@ -279,19 +294,23 @@ try{
 		rt=vchReturn.split("##")[3].split("$$")[2].split(",");
 		$(".dv-reg-y").html($.getRegist(rt))
 		
-		//	储值卡
+		//	储值卡销售
 		rt=vchReturn.split("##")[13].split("$$");
-		$(".dv-debit").html($.getSectSpanHotel(rt))
+		$(".dv-debit").html($.getSectSpanDouble(rt,'昨日','总销售'))
+
+		//	储值卡取消
+		rt=vchReturn.split("##")[14].split("$$");
+		$(".dv-debit0").html($.getSectSpanSingle(rt))
 		
 		//	企业会员
-		rt=vchReturn.split("##")[14].split("$$");
-		$(".dv-member").html($.getSectSpanHotel(rt))
-		//	酒店统计
 		rt=vchReturn.split("##")[15].split("$$");
-		$(".dv-hotel").html($.getSectSpanHotel(rt))
-		//	酒店销售日报
+		$(".dv-member").html($.getSectSpanSingle(rt))
+		//	酒店统计
 		rt=vchReturn.split("##")[16].split("$$");
-		$(".dv-hotel-sale-d").html($.getSectSpanHotel(rt))
+		$(".dv-hotel").html($.getSectSpanDouble2(rt,'途家','EBK'))
+		//	酒店销售日报
+		rt=vchReturn.split("##")[17].split("$$");
+		$(".dv-hotel-sale-d").html($.getSectSpanDouble(rt,'昨日','总销售'))
 		
 		
 		//	注册用户
@@ -423,7 +442,7 @@ try{
 			highChart_lineBasic(chartData.substring(0,chartData.length-1),"","chart",chartDt);
 			$("#chart").show()
 		}
-		if(v=="loc" || v=="time" || v=="debit" || v=="debit0" || v=="member" || v=="hotel" || v=="hotel-sale-d"){
+		if(v=="loc" || v=="time" || v=="debit" || v=="debit-m" || v=="debit-all" || v=="debit0" || v=="debit0-all" || v=="member" || v=="hotel" || v=="hotel-sale-d"){
 			$(".tab").css("overflow","scroll").css("overflow-x","hidden").css("height","80%")
 		}
 		$(".dv-ext").show();
@@ -487,16 +506,25 @@ try{
 				$(".tab").css('margin-top','60px')
 				break;
 			case 'debit':
-				$(".title").html("储值卡");
+				$(".title").html("储值卡销售");
+				break;
+			case 'debit-m':
+				$(".title").html("当月酒店累积售卡");
+				break;
+			case 'debit-all':
+				$(".title").html("酒店总售卡信息");
 				$(".cale").css('display','none')
 				$(".tab").css('margin-top','60px');
-				$('#chkDebit').click(function(){
-					if($(this).is(":checked")){
-						$(".hid-pr").val('debit0');
-						url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDetails")+"&dt="+escape($('#iph-d-start').val())+"&typ=debit0";
-						createXMLHttpRequest(url,"fresh=" +Math.random());
-					}
-				})
+				break;
+			case 'debit0':
+				$(".title").html("退卡明细表");
+				$(".cale").css('display','none')
+				$(".tab").css('margin-top','60px');
+				break;
+			case 'debit0-all':
+				$(".title").html("总退卡信息");
+				$(".cale").css('display','none')
+				$(".tab").css('margin-top','60px');
 				break;
 			case 'member':
 				$(".title").html("企业会员");
@@ -541,7 +569,7 @@ $(document).ready(function(){
 		if($(".hid-pr").val()=="wheel"){
 			return false;
 		}
-		if($(".hid-pr").val()=="hotel" || $(".hid-pr").val()=="hotel-sale-d"){
+		if($(".hid-pr").val().substr(0,5)=="hotel" || $(".hid-pr").val().substr(0,5)=="debit"){
 			ob="getDetails";
 		}
 		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape(ob)+"&dt="+escape($('#iph-d-start').val())+"&typ="+escape($(".hid-pr").val());
@@ -708,11 +736,24 @@ $(document).ready(function(){
 <div id='hotel' class="tab-pane fade in active">
 <div class="col-xs-12 col-sm-8 col-md-4 dv-block">
 <section class="sect" style="background-color:#F08080;">
-<div class="dv-title">储值卡销售
-<span class="glyphicon glyphicon-th-list tab-detail" aria-hidden="true" style="float:right;cursor:pointer" type="debit"></span>
-</div>
-<div class="dv-debit font1 fontWhite" ></div>
+<div class="dv-title">昨日储值卡销售<div style="float:right;">
+<span class="glyphicon glyphicon-calendar tab-detail" aria-hidden="true" style="cursor:pointer" type="debit-m"></span>
+<span class="glyphicon glyphicon-stats tab-detail" aria-hidden="true" style="margin-left:10px;cursor:pointer" type="debit-all"></span>
+<span class="glyphicon glyphicon-th-list tab-detail" aria-hidden="true" style="margin-left:10px;cursor:pointer" type="debit"></span>
+</div></div>
+<div class="dv-debit fontWhite" ></div>
 </section></div>
+
+<div class="col-xs-12 col-sm-8 col-md-4 dv-block">
+<section class="sect" style="background-color:#F08080;">
+<div class="dv-title">储值卡取消<div style="float:right;">
+<span class="glyphicon glyphicon-stats tab-detail" aria-hidden="true" style="cursor:pointer" type="debit0-all"></span>
+<span class="glyphicon glyphicon-th-list tab-detail" aria-hidden="true" style="margin-left:10px;cursor:pointer" type="debit0"></span>
+</div></div>
+<div class="dv-debit0 font1 fontWhite" ></div>
+
+</section></div>
+<div class="col-xs-12 col-md-12"></div>
 
 <div class="col-xs-12 col-sm-8 col-md-4 dv-block">
 <section class="sect" style="background-color:#32CD32;">
@@ -726,14 +767,14 @@ $(document).ready(function(){
 <div class="dv-title">可定酒店数
 <span class="glyphicon glyphicon-th-list tab-detail" aria-hidden="true" style="float:right;cursor:pointer" type="hotel"></span>
 </div>
-<div class="dv-hotel font1 fontWhite" ></div>
+<div class="dv-hotel"></div>
 </section></div>
-<br>
+
 <div class="col-xs-12 col-sm-8 col-md-4 dv-block">
 <section class="sect" style="background-color:#00CED1;">
-<div class="dv-title">酒店销售报表<span class="glyphicon glyphicon-th-list tab-detail" aria-hidden="true" style="float:right;cursor:pointer" type="hotel-sale-d"></span>
+<div class="dv-title">昨日酒店销售<span class="glyphicon glyphicon-th-list tab-detail" aria-hidden="true" style="float:right;cursor:pointer" type="hotel-sale-d"></span>
 </div>
-<div class="dv-hotel-sale-d font1 fontWhite" ></div>
+<div class="dv-hotel-sale-d fontWhite"></div>
 </section></div>
 </div><!-- /#hotel -->
 
@@ -762,7 +803,7 @@ $(document).ready(function(){
 <div class="dv-launch font1 fontWhite" ></div>
 </section></div>
 
-<div class="col-xs-12 col-sm-8 col-md-4 dv-block">
+<!--div class="col-xs-12 col-sm-8 col-md-4 dv-block">
 <section class="sect-uv sect" style="height:185px;background-color:#fff;">
 <div class="dv-title">活动PV&UV
 </div>
@@ -770,7 +811,7 @@ $(document).ready(function(){
 <tr class='tr-lv info' type='sp-pv'><td valign="middle" >PV</td><td class='td-pv'></td></tr>
 <tr class='tr-lv warning' type='sp-uv'><td >UV</td><td class='td-uv'></td></tr>
 </table>
-</section></div>
+</section></div-->
 
 <div class="col-xs-12 col-sm-8 col-md-4 dv-block">
 <section class="sect-area sect" style="background-color:#fff;">
