@@ -101,7 +101,7 @@ function fnDetails(){
 		$GLOBALS["conn"]->next_result();
 	}
 	switch($typ){
-	case 'debit': $title = '生效日期,有效期,姓名,酒店,售价,赠送金额,结余,是否激活公众号,是否激活app,';
+	case 'debit': $title = '生效日期,有效期,姓名,电话,酒店,售价,赠送金额,结余,是否激活公众号,是否激活app,';
 	break;
 	case 'debit-m': $title = '酒店,售卡数量,销售金额,赠送金额,已激活公众号,已激活app,';
 	break;
