@@ -274,8 +274,8 @@ $.getSectSpanDouble = function(arrVal,t1,t2){
 }
 $.getSectSpanTriple = function(arrVal,t1,t2,t3){
 	var val="";
-	val="<span class='font4 fontWhite'>"+t1+"<a href=# class='tab-detail2' type='debit'>"+arrVal[arrVal.length-2]+"</a></span><br>";
-	val+="<span class='font4 fontWhite' style='margin-left:20%;'>"+t2+"<a href=# class='tab-detail2' type='debit-m'>"+arrVal[arrVal.length-1]+"</a></span>";
+	val="<span class='font4 fontWhite'>"+t1+"<a href=# class='tab-detail2' type='debit'>"+arrVal[arrVal.length-3]+"</a></span><br>";
+	val+="<span class='font4 fontWhite' style='margin-left:20%;'>"+t2+"<a href=# class='tab-detail2' type='debit-m'>"+arrVal[arrVal.length-2]+"</a></span>";
 	val+="<span class='font4 fontWhite' style='margin-left:40%;'>"+t3+"<a href=# class='tab-detail2' type='debit-all'>"+arrVal[arrVal.length-1]+"</a></span>";
 	return val;
 }
