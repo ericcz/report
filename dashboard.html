@@ -18,6 +18,7 @@ ul,li {list-style:none}
 a.nav-link:hover {color:#111;}
 .conv-show {font-size:12px;line-height:14px}
 .tab-show {float:right;cursor:pointer}
+a,a:hover,a:visited {color:#fff;text-decoration:none;}
 
 .font1 {font:80px/1.5em 'Microsoft YaHei';}
 .font2 {font:60px/1.5em 'Microsoft YaHei';}
@@ -267,14 +268,15 @@ $.getSectSpanSingle = function(arrVal){
 }
 $.getSectSpanDouble = function(arrVal,t1,t2){
 	var val="";
-	val="<span class='font2 fontWhite'>"+arrVal[arrVal.length-2]+"</span><br>"
-	val+="<span class='font4 fontWhite' style='margin-left:40%;'>"+t2+'&nbsp;:&nbsp;'+arrVal[arrVal.length-1]+"</span>"
+	val="<span class='font2 fontWhite'>"+t1+arrVal[arrVal.length-2]+"</span><br>"
+	val+="<span class='font4 fontWhite' style='margin-left:40%;'>"+t2+arrVal[arrVal.length-1]+"</span>"
 	return val;
 }
-$.getSectSpanDouble2 = function(arrVal,t1,t2){
+$.getSectSpanTriple = function(arrVal,t1,t2,t3){
 	var val="";
-	val="<span class='font3 fontWhite'>"+t1+'&nbsp;:&nbsp;'+arrVal[arrVal.length-2]+"</span><br>"
-	val+="<span class='font3 fontWhite' style='margin-left:40%;'>"+t2+'&nbsp;:&nbsp;'+arrVal[arrVal.length-1]+"</span>"
+	val="<span class='font4 fontWhite'>"+t1+"<a href=# class='tab-detail2' type='debit'>"+arrVal[arrVal.length-2]+"</a></span><br>";
+	val+="<span class='font4 fontWhite' style='margin-left:20%;'>"+t2+"<a href=# class='tab-detail2' type='debit-m'>"+arrVal[arrVal.length-1]+"</a></span>";
+	val+="<span class='font4 fontWhite' style='margin-left:40%;'>"+t3+"<a href=# class='tab-detail2' type='debit-all'>"+arrVal[arrVal.length-1]+"</a></span>";
 	return val;
 }
 function getBack(vchReturn){
@@ -296,8 +298,18 @@ try{
 		
 		//	储值卡销售
 		rt=vchReturn.split("##")[13].split("$$");
-		$(".dv-debit").html($.getSectSpanDouble(rt,'昨日','总销售'))
+		$(".dv-debit").html($.getSectSpanTriple(rt,'昨日 : ','当月 : ','总销售 : '))
 
+				$('.tab-detail2').click(function(){
+
+		$(".hid-pr").val($(this).attr("type"));
+		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDetails")+"&dt="+escape($('#iph-d-start').val())+"&typ="+escape($(".hid-pr").val());
+		createXMLHttpRequest(url,"fresh=" +Math.random());
+				$(".navi").hide()
+		})
+		
+		
+		
 		//	储值卡取消
 		rt=vchReturn.split("##")[14].split("$$");
 		$(".dv-debit0").html($.getSectSpanSingle(rt))
@@ -307,10 +319,10 @@ try{
 		$(".dv-member").html($.getSectSpanSingle(rt))
 		//	酒店统计
 		rt=vchReturn.split("##")[16].split("$$");
-		$(".dv-hotel").html($.getSectSpanDouble2(rt,'途家','EBK'))
+		$(".dv-hotel").html($.getSectSpanDouble(rt,'EBK : ','途家 : '))
 		//	酒店销售日报
 		rt=vchReturn.split("##")[17].split("$$");
-		$(".dv-hotel-sale-d").html($.getSectSpanDouble(rt,'昨日','总销售'))
+		$(".dv-hotel-sale-d").html($.getSectSpanDouble(rt,'','总销售 : '))
 		
 		
 		//	注册用户
@@ -507,9 +519,11 @@ try{
 				break;
 			case 'debit':
 				$(".title").html("储值卡销售");
+				$(".cale2").css('display','block')
 				break;
 			case 'debit-m':
 				$(".title").html("当月酒店累积售卡");
+				$(".cale2").css('display','block')
 				break;
 			case 'debit-all':
 				$(".title").html("酒店总售卡信息");
@@ -518,8 +532,7 @@ try{
 				break;
 			case 'debit0':
 				$(".title").html("退卡明细表");
-				$(".cale").css('display','none')
-				$(".tab").css('margin-top','60px');
+				$(".cale2").css('display','block')
 				break;
 			case 'debit0-all':
 				$(".title").html("总退卡信息");
@@ -533,6 +546,10 @@ try{
 				break;
 			case 'hotel':
 				$(".title").html("酒店库存");
+				break;
+			case 'hotel-sale-d':
+				$(".title").html("订单销售");
+				$(".cale2").css('display','block');
 				break;
 		}
 	}else
@@ -572,7 +589,11 @@ $(document).ready(function(){
 		if($(".hid-pr").val().substr(0,5)=="hotel" || $(".hid-pr").val().substr(0,5)=="debit"){
 			ob="getDetails";
 		}
-		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape(ob)+"&dt="+escape($('#iph-d-start').val())+"&typ="+escape($(".hid-pr").val());
+		if ($('#iph-d-start').val()>$('#iph-d-end').val()){
+			alert("End date is wrong")
+			return;
+		}		
+		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape(ob)+"&dt="+escape($('#iph-d-start').val())+"&dt2="+escape($('#iph-d-end').val())+"&typ="+escape($(".hid-pr").val());
 		createXMLHttpRequest(url,"fresh=" +Math.random());
 	})
 	$('.tab-close').click(function(){
@@ -583,6 +604,7 @@ $(document).ready(function(){
 		$("#chart").hide();
 		$(".tab").css("overflow","auto").css("height","").css("margin-top","-20px");
 		$(".cale").css("display","block")
+		$(".cale2").css('display','none')
 		$(".navi").show()
 	})
 	$(".btn-nav").click(function(){
@@ -741,11 +763,11 @@ $(document).ready(function(){
 <span class="glyphicon glyphicon-stats tab-detail" aria-hidden="true" style="margin-left:10px;cursor:pointer" type="debit-all"></span>
 <span class="glyphicon glyphicon-th-list tab-detail" aria-hidden="true" style="margin-left:10px;cursor:pointer" type="debit"></span>
 </div></div>
-<div class="dv-debit fontWhite" ></div>
+<div class="dv-debit " ></div>
 </section></div>
 
 <div class="col-xs-12 col-sm-8 col-md-4 dv-block">
-<section class="sect" style="background-color:#F08080;">
+<section class="sect" style="background-color:#696969;">
 <div class="dv-title">储值卡取消<div style="float:right;">
 <span class="glyphicon glyphicon-stats tab-detail" aria-hidden="true" style="cursor:pointer" type="debit0-all"></span>
 <span class="glyphicon glyphicon-th-list tab-detail" aria-hidden="true" style="margin-left:10px;cursor:pointer" type="debit0"></span>
@@ -772,7 +794,7 @@ $(document).ready(function(){
 
 <div class="col-xs-12 col-sm-8 col-md-4 dv-block">
 <section class="sect" style="background-color:#00CED1;">
-<div class="dv-title">昨日酒店销售<span class="glyphicon glyphicon-th-list tab-detail" aria-hidden="true" style="float:right;cursor:pointer" type="hotel-sale-d"></span>
+<div class="dv-title">订单销售<span class="glyphicon glyphicon-th-list tab-detail" aria-hidden="true" style="float:right;cursor:pointer" type="hotel-sale-d"></span>
 </div>
 <div class="dv-hotel-sale-d fontWhite"></div>
 </section></div>
@@ -880,19 +902,27 @@ $(document).ready(function(){
 
 
 <div class="dv-ext" style='z-index:20;left:0px;top:0px;position:absolute;background-color:#666;width:100%;height:100%;filter:alpha(opacity=90);opacity:0.9;display:none;'></div>
-<div class='dv-ext-in' style="z-index:25;left:0px;top:0px;position:absolute;background-color:#fff;width:99%;height:90%;top:5%; border-radius:8px;display:none;min-width:800px">
-<div class="cale" style="padding:20px;width:20%">
-	<div class="input-group date form_date col-md-2" data-date="" data-date-format="yyyy-mm-dd" data-link-field="iph-d-start" data-link-format="yyyy-mm-dd" >
+<div class='dv-ext-in' style="z-index:25;left:0px;top:0px;position:absolute;background-color:#fff;width:100%;height:90%;top:5%; border-radius:8px;display:none;min-width:800px">
+<div class="cale" style="padding:20px;width:40%;">
+	<div class="input-group date form_date col-md-2" data-date="" data-date-format="yyyy-mm-dd" data-link-field="iph-d-start" data-link-format="yyyy-mm-dd" style="">
 	<input id="ip-d-start" class="form-control" size="12" type="text" value="" readonly style='width:120px' placeholder="PickDate">
 	<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 	</div>
-	<button type="submit" class="btn btn-info bt-exec btn-sm" id="bt-exec" style="margin-top:-54px;margin-left:165px" type=''>
-	<span>Execute</span>
-	</button><input type="hidden" id="iph-d-start" value="" />
+	<div class='cale2' style='display:none'>
+	<div style='float:left;margin-top:-34px;margin-left:165px;line-height:30px'>--</div>
+	<div class="input-group date form_date col-md-2" data-date="" data-date-format="yyyy-mm-dd" data-link-field="iph-d-end" data-link-format="yyyy-mm-dd" style="float:left;margin-top:-34px;margin-left:185px">
+	<input id="ip-d-end" class="form-control" size="12" type="text" value="" readonly style='width:120px' placeholder="PickDate">
+	<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+	</div>
+	</div>
+	<button type="submit" class="btn btn-info bt-exec btn-sm" id="bt-exec" style="margin-top:-54px;margin-left:360px" type=''>
+	<span>查询</span>
+	</button>
+	<input type="hidden" id="iph-d-start" value="" /><input type="hidden" id="iph-d-end" value="" />
 </div>
-<div class="tab" style="margin-top:-20px;padding:0px 20px 20px 20px;width:90%;height:auto"></div>
+<div class="tab" style="margin-top:-20px;padding:0px 20px 20px 20px;width:99%;height:auto"></div>
 <div style="z-index:12;left:96%;position:absolute;top:3%;cursor:pointer">
-<span class="glyphicon glyphicon-remove tab-close" aria-hidden="true" style="color:#000;"></span></div>
+<span class="glyphicon glyphicon-remove tab-close" aria-hidden="true" style="color:#000;font-size:40px"></span></div>
 <div id="chart" style="margin:-40px 0px 0px 50px;width:70%;height:250px;display:none;"></div>
 </div>
 <input type=hidden class='hid-pr'/>
@@ -905,6 +935,8 @@ $(document).ready(function(){
 	vdt=dt.getFullYear()+"-"+m.substr(m.length-2,2)+"-"+d.substr(d.length-2,2);
 	$('#ip-d-start').val(vdt)
 	$('#iph-d-start').val(vdt)
+	$('#ip-d-end').val(vdt)
+	$('#iph-d-end').val(vdt)
 
 	$('.form_date').datetimepicker({
         language: 'en',
@@ -915,7 +947,9 @@ $(document).ready(function(){
 		startView: 2,
 		minView: 2,
 		forceParse: 0
-    });
+    }).on('changeDate', function(ev){               
+
+	});
 	$('.form_date').datetimepicker('setEndDate',vdt);
 </script>
 </html>

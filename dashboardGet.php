@@ -93,9 +93,10 @@ function fnDetails(){
 	$pid = $GLOBALS["pid"];
 	$typ = $_REQUEST['typ'];
 	$dt = $_REQUEST['dt'];
+	$dt2 = $_REQUEST['dt2'];
 	$proc ='cspDashboard_detail';
 	$result=mysqli_real_query($GLOBALS["conn"],"set names utf8");
-	$result=mysqli_real_query($GLOBALS["conn"],"call $proc('$typ','$dt')");
+	$result=mysqli_real_query($GLOBALS["conn"],"call $proc('$typ','$dt','$dt2')");
 	while($GLOBALS["conn"]->more_results()){
 		$result=mysqli_store_result($GLOBALS["conn"]);
 		$GLOBALS["conn"]->next_result();
@@ -115,7 +116,7 @@ function fnDetails(){
 	break;
 	case 'hotel': $title = '日期,城市,酒店名称,间夜数,可用数,最低价,';
 	break;
-	case 'hotel-sale-d': $title = '日期,酒店,订单内容,订单类型,联系电话,姓名,入住日期,退房日期,换游币,间夜数,';
+	case 'hotel-sale-d': $title = '日期,酒店,订单内容,订单类型,联系电话,姓名,入住日期,退房日期,现金,换游币,间夜数,';
 	break;
 	default:exit;
 	}
@@ -145,7 +146,7 @@ function fnDetailWheel(){
 	$dt = $_REQUEST['dt'];
 	$proc ='cspDashboard_detail';
 	$result=mysqli_query($GLOBALS["conn"],"set names utf8");
-	$result=mysqli_real_query($GLOBALS["conn"],"call $proc('$typ','$dt')");
+	$result=mysqli_real_query($GLOBALS["conn"],"call $proc('$typ','$dt','')");
 	while($GLOBALS["conn"]->more_results()){
 		$result=mysqli_store_result($GLOBALS["conn"]);
 		$GLOBALS["conn"]->next_result();
@@ -201,7 +202,7 @@ function fnDetail(){
 	
 	$proc='cspDashboard_detail';
 	$result=mysqli_query($GLOBALS["conn"],"set names utf8");
-	$result=mysqli_real_query($GLOBALS["conn"],"call $proc('$typ','$dt')");
+	$result=mysqli_real_query($GLOBALS["conn"],"call $proc('$typ','$dt','')");
 	while($GLOBALS["conn"]->more_results()){
 		$result=mysqli_store_result($GLOBALS["conn"]);
 		$GLOBALS["conn"]->next_result();
