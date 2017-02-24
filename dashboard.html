@@ -18,7 +18,8 @@ ul,li {list-style:none}
 a.nav-link:hover {color:#111;}
 .conv-show {font-size:12px;line-height:14px}
 .tab-show {float:right;cursor:pointer}
-a,a:hover,a:visited {color:#fff;text-decoration:none;}
+a,a:hover,a:visited {color:#fff;text-decoration:underline;}
+dd {margin-top:-45px}
 
 .font1 {font:80px/1.5em 'Microsoft YaHei';}
 .font2 {font:60px/1.5em 'Microsoft YaHei';}
@@ -274,9 +275,9 @@ $.getSectSpanDouble = function(arrVal,t1,t2){
 }
 $.getSectSpanTriple = function(arrVal,t1,t2,t3){
 	var val="";
-	val="<span class='font4 fontWhite'>"+t1+"<a href=# class='tab-detail2' type='debit'>"+arrVal[arrVal.length-3]+"</a></span><br>";
-	val+="<span class='font4 fontWhite' style='margin-left:20%;'>"+t2+"<a href=# class='tab-detail2' type='debit-m'>"+arrVal[arrVal.length-2]+"</a></span>";
-	val+="<span class='font4 fontWhite' style='margin-left:40%;'>"+t3+"<a href=# class='tab-detail2' type='debit-all'>"+arrVal[arrVal.length-1]+"</a></span>";
+	val="<dl class='dl-horizontal'><span class='font4 fontWhite'><dt>"+t1+"</dt><dd><a href=# class='tab-detail2' type='debit'>"+arrVal[arrVal.length-3]+"</a></dd></span>";
+	val+="<span class='font4 fontWhite'><dt>"+t2+"</dt><dd><a href=# class='tab-detail2' type='debit-m'>"+arrVal[arrVal.length-2]+"</a></dd></span>";
+	val+="<span class='font4 fontWhite'><dt>"+t3+"</dt><dd><a href=# class='tab-detail2' type='debit-all'>"+arrVal[arrVal.length-1]+"</a></dd></span></dl>";
 	return val;
 }
 function getBack(vchReturn){
@@ -546,7 +547,6 @@ try{
 				break;
 			case 'hotel':
 				$(".title").html("酒店库存");
-				$(".cale2").css('display','block')
 				break;
 			case 'hotel-sale-d':
 				$(".title").html("订单销售");
@@ -787,7 +787,7 @@ $(document).ready(function(){
 </section></div>
 <div class="col-xs-12 col-sm-8 col-md-4 dv-block">
 <section class="sect" style="background-color:#ffcc00;">
-<div class="dv-title">可定酒店数
+<div class="dv-title">当日可定酒店数
 <span class="glyphicon glyphicon-th-list tab-detail" aria-hidden="true" style="float:right;cursor:pointer" type="hotel"></span>
 </div>
 <div class="dv-hotel"></div>
