@@ -304,7 +304,7 @@ try{
 				$('.tab-detail2').click(function(){
 
 		$(".hid-pr").val($(this).attr("type"));
-		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDetails")+"&dt="+escape($('#iph-d-start').val())+"&typ="+escape($(".hid-pr").val());
+		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDetail")+"&dt="+escape($('#iph-d-start').val())+"&typ="+escape($(".hid-pr").val());
 		createXMLHttpRequest(url,"fresh=" +Math.random());
 				$(".navi").hide()
 		})
@@ -415,10 +415,10 @@ try{
 		content = "dvFunnel";
 		eCharts_funnel(cData,'',content);
 		$(".conv-tab").html(vchReturn.split("##")[4])
-	}else if(vf=='getDetail'||vf=='getDetailWheel'||vf=='getDetails'){
+	}else if(vf=='getDetail'||vf=='getDetailWheel'||vf=='getDetail'){
 		$(".tab").html(vchReturn.split("##")[2]);
 		var v=$(".hid-pr").val();
-		if(v.substr(0,4)!="left" && v!="point" && v!="time" && v!="interval" && v!="wheel" && v!="interval-c" && vf!="getDetails"){
+		if(v.substr(0,4)!="left" && v!="point" && v!="time" && v!="interval" && v!="wheel" && v!="interval-c" && vf!="getDetail"){
 			var pr=0;
 			var amount="";
 			for (i=0;i<7;i++){
@@ -588,7 +588,7 @@ $(document).ready(function(){
 			return false;
 		}
 		if($(".hid-pr").val().substr(0,5)=="hotel" || $(".hid-pr").val().substr(0,5)=="debit"){
-			ob="getDetails";
+			ob="getDetail";
 		}
 		if ($('#iph-d-start').val()>$('#iph-d-end').val()){
 			alert("End date is wrong")
@@ -641,7 +641,7 @@ $(document).ready(function(){
 	})
 	$('.tab-detail').click(function(){
 		$(".hid-pr").val($(this).attr("type"));
-		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDetails")+"&dt="+escape($('#iph-d-start').val())+"&dt2="+escape($('#iph-d-end').val())+"&typ="+escape($(".hid-pr").val());
+		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDetail")+"&dt="+escape($('#iph-d-start').val())+"&dt2="+escape($('#iph-d-end').val())+"&typ="+escape($(".hid-pr").val());
 		createXMLHttpRequest(url,"fresh=" +Math.random());
 		scroll(0,0);
 		$(".navi").hide()
@@ -951,6 +951,6 @@ $(document).ready(function(){
     }).on('changeDate', function(ev){               
 
 	});
-	$('.form_date').datetimepicker('setEndDate',vdt);
+	//$('.form_date').datetimepicker('setEndDate',vdt);
 </script>
 </html>
