@@ -452,12 +452,15 @@ try{
 		switch(v){
 			case 'down':
 				$(".title").html("下载渠道");
+				$(".cale2").css('display','none')
 				break;
 			case 'reg':
 				$(".title").html("注册来源");
+				$(".cale2").css('display','none')
 				break;
 			case 'lively':
 				$(".title").html("活跃渠道");
+				$(".cale2").css('display','none')
 				break;
 			case 'pv':
 				$(".title").html("PV版块");
@@ -476,15 +479,19 @@ try{
 				break;
 			case 'time':
 				$(".title").html("APP使用时点");
+				$(".cale2").css('display','none')
 				break;
-			case 'launch':
+			case 'lau':
 				$(".title").html("APP启动");
+				$(".cale2").css('display','none')
 				break;
 			case 'interval':
 				$(".title").html("APP使用时长");
+				$(".cale2").css('display','none')
 				break;
 			case 'point':
 				$(".title").html("积分范围");
+				$(".cale2").css('display','none')
 				break;
 			case 'wheel':
 				$(".title").html("大转盘日期");
@@ -771,7 +778,7 @@ $(document).ready(function(){
 <section class="sect-uv sect" style="background-color:#3CB371;">
 <div class="dv-title">版块UV<span class="glyphicon glyphicon-th-list tab-show icon-corner" aria-hidden="true" type="uv"></span>
 </div>
-<div class="dv-uv fontBoard dv-board"></div>
+<div class="dv-uv fontBoard"></div>
 </section></div>
 
 <div class="col-xs-12 col-sm-8 col-md-4 dv-block">
@@ -779,7 +786,7 @@ $(document).ready(function(){
 <div class="dv-title">启动数
 <span class="glyphicon glyphicon-th-list tab-show icon-corner" aria-hidden="true" type="lau"></span>
 </div>
-<div class="dv-launch font1 fontBoard" ></div>
+<div class="dv-launch fontBoard" ></div>
 </section></div>
 
 <!--div class="col-xs-12 col-sm-8 col-md-4 dv-block">

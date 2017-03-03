@@ -62,8 +62,8 @@ function fnDetail(){
 		$title = '第一月,第二月,第三月,第四月,第五月,第六月,第七月,';
 		$dc=fnDetailListC($title);
 	break;
-	case 'interval': 
-		$title = '1-3秒,3-10秒,10-30秒,第四月,第五月,第六月,第七月,';
+	case 'interval-c': 
+		$title = '1-3秒,3-10秒,10-30秒,30-60秒,1-3分钟,3-10分钟,10-30分钟,30分钟以上,';
 		$dc=fnDetailListB($title);
 	break;
 	case 'debit': 
