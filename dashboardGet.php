@@ -164,6 +164,9 @@ function fnDetailListB($title){	//download;lively;register
 			$arrDs[]="<td></td>";}
 		else{$arrDs[]="<td class='col".($i)."'>0</td>";}
 	}
+	if ($typ=='interval-c'){
+		$arrDs[]="<td class='col7'>0</td>"
+	}
 	$i=0;
 	$j=0;
 	$arrDc=$arrDs;
