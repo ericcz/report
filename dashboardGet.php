@@ -67,15 +67,15 @@ function fnDetail(){
 		$dc=fnDetailListB($title);
 	break;
 	case 'debit': 
-		$title = '生效日期,有效期,姓名,电话,酒店,售价,赠送金额,结余,是否激活公众号,是否激活app,';
+		$title = '生效日期,有效期,姓名,电话,酒店,售价,赠送金额,结余,绑定会员卡,激活联盟会员,';
 		$dc=fnDetailListA($title);
 	break;
 	case 'debit-m': 
-		$title = '酒店,售卡数量,销售金额,赠送金额,已激活公众号,已激活app,';
+		$title = '酒店,售卡数量,销售金额,赠送金额,绑定会员卡,激活联盟会员,';
 		$dc=fnDetailListA($title);
 	break;
 	case 'debit-all': 
-		$title = '酒店,售卡数量,销售金额,赠送金额,结余,已激活公众号,已激活app,';
+		$title = '酒店,售卡数量,销售金额,赠送金额,结余,绑定会员卡,激活联盟会员,';
 		$dc=fnDetailListA($title);
 	break;
 	case 'debit0': 
