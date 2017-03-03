@@ -95,7 +95,7 @@ function fnDetail(){
 		$dc=fnDetailListA($title);
 	break;
 	case 'hotel-sale-d': 
-		$title = '日期,酒店,订单内容,订单类型,联系电话,姓名,入住日期,退房日期,现金,换游币,间夜数,';
+		$title = '日期,酒店,订单内容,订单类型,联系电话,联系人,入住人,入住日期,退房日期,现金,换游币,间夜数,';
 		$dc=fnDetailListA($title);
 	break;
 	default:
@@ -114,7 +114,7 @@ function fnTitle($t){
 	for ($i=0;$i<count($titleArr)-1;$i++){
 		$title.="<td>".$titleArr[$i]."</td>";
 	}
-	$title="<table class='table table-striped table-hover table-bordered' style='text-align:center;width:98%'><tr><td class=title></td>".$title."</tr>";
+	$title="<div class='title font20' style='width:100%;text-align:center;margin-top:-20px;'></div><table class='table table-striped table-hover table-bordered' style='text-align:center;width:98%'><tr><td>序号</td>".$title."</tr>";
 	return $title;
 }
 

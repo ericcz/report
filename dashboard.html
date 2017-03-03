@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -17,17 +16,19 @@ ul,li {list-style:none}
 .nav-link {color:#ddd;}
 a.nav-link:hover {color:#111;}
 .conv-show {font-size:12px;line-height:14px}
-.tab-show {float:right;cursor:pointer}
-a,a:hover,a:visited {color:#fff;text-decoration:underline;}
-dd {margin-top:-45px}
+.icon-corner {float:right;cursor:pointer}
+.a-debit {color:#fff;text-decoration:underline;}
 
-.font1 {font:80px/1.5em 'Microsoft YaHei';}
-.font2 {font:60px/1.5em 'Microsoft YaHei';}
-.font3 {font:40px/1.5em 'Microsoft YaHei';}
-.font4 {font:30px/1.5em 'Microsoft YaHei';}
-.font5 {font:20px/1.5em 'Microsoft YaHei';}
-.font6 {font:12px/1.5em 'Microsoft YaHei';}
-.fontWhite {color:#fff;padding:5px;width:100%;height:50%;text-align:center;}
+.fontBoard {color:#fff;text-align:center;'Microsoft YaHei';padding:10px;padding-top:40px}
+.font80 {font-size:80px}
+.font70 {font-size:70px}
+.font60 {font-size:60px}
+.font50 {font-size:50px}
+.font40 {font-size:40px}
+.font30 {font-size:30px}
+.font20 {font-size:20px}
+.font12 {font-size:12px}
+.fontWhite {color:#fff;text-align:center;'Microsoft YaHei'}
 .fontBlue {color:#00BFFF;}
 .fontCoffee {color:#D2691E;}
 .fontCyan {color:#008B8B;}
@@ -233,34 +234,16 @@ $.getSymbol = function(val1,val2){
 $.getDownload = function(arrVal,totalVal){
 	var val="";
 	dsc=$.getSymbol(arrVal[arrVal.length-1],arrVal[arrVal.length-2])
-	val=arrVal[arrVal.length-1];
-	val+="<span class=font5>&nbsp;&nbsp;"+dsc+$.isInfinity(Math.round((arrVal[arrVal.length-1]-arrVal[arrVal.length-2])/arrVal[arrVal.length-2]*10000)/100)+"%</span><br>"
-	val+="<div class='font5 fontWhite' style='padding:5px;width:100%;text-align:right;margin-top:-15px'>总下载数："+totalVal+"</div>";
-	return val;
+	$(".down-y").html("&nbsp;&nbsp;"+arrVal[arrVal.length-1]);
+	$(".down-rate").html("&nbsp;"+dsc+$.isInfinity(Math.round((arrVal[arrVal.length-1]-arrVal[arrVal.length-2])/arrVal[arrVal.length-2]*10000)/100)+"%");
+	$(".down-total").html("总下载数："+totalVal);
 }
 $.getActive = function(arrVal){
 	var val="";
 	dsc=$.getSymbol(arrVal[arrVal.length-1],arrVal[arrVal.length-2])
-	val="<span>"+arrVal[arrVal.length-1]+"</span>"
-	val+="<br><div class='font4 fontWhite' style='padding:5px;width:100%;text-align:right;margin-top:-30px'>"+dsc+$.isInfinity(Math.round((arrVal[arrVal.length-1]-arrVal[arrVal.length-2])/arrVal[arrVal.length-2]*10000)/100)+"%</div>"
+	val="<span class='font80'>"+arrVal[arrVal.length-1]+"</span><br>"
+	val+="<br><div class='font30' style='text-align:right;'>"+dsc+$.isInfinity(Math.round((arrVal[arrVal.length-1]-arrVal[arrVal.length-2])/arrVal[arrVal.length-2]*10000)/100)+"%</div>"
 	return val;
-}
-$.getRegist = function(arrVal){
-	var val="";
-	dsc=$.getSymbol(arrVal[arrVal.length-1],arrVal[arrVal.length-2])
-	val=$.isInfinity(arrVal[arrVal.length-2])
-	val+="<br><div class='font4 fontWhite' style='padding:5px;width:100%;text-align:right;margin-top:-30px'>"+dsc+$.isInfinity(Math.round((arrVal[arrVal.length-2]-arrVal[arrVal.length-3])/arrVal[arrVal.length-3]*10000)/100)+"%</div>"
-	return val;
-}
-$.getLaunch = function(arrVal){
-	var val="";
-	dsc=$.getSymbol(arrVal[arrVal.length-1],arrVal[arrVal.length-2])
-	val="<span>"+arrVal[arrVal.length-1]+"</span>"
-	val+="<br><div class='font4 fontWhite' style='padding:5px;width:100%;text-align:right;margin-top:-30px'>"+dsc+$.isInfinity(Math.round((arrVal[arrVal.length-1]-arrVal[arrVal.length-2])/arrVal[arrVal.length-2]*10000)/100)+"%</div>"
-	return val;
-}
-$.getSectSpanPercent = function(arrVal){
-
 }
 $.getSectSpanSingle = function(arrVal){
 	var val="";
@@ -269,15 +252,22 @@ $.getSectSpanSingle = function(arrVal){
 }
 $.getSectSpanDouble = function(arrVal,t1,t2){
 	var val="";
-	val="<span class='font2 fontWhite'>"+t1+arrVal[arrVal.length-2]+"</span><br>"
-	val+="<span class='font4 fontWhite' style='margin-left:40%;'>"+t2+arrVal[arrVal.length-1]+"</span>"
+	val="<span class='font60'>"+t1+arrVal[arrVal.length-2]+"</span><br><br>"
+	val+="<div class='font30' style='text-align:right'>"+t2+arrVal[arrVal.length-1]+"</div>"
 	return val;
 }
 $.getSectSpanTriple = function(arrVal,t1,t2,t3){
 	var val="";
-	val="<dl class='dl-horizontal'><span class='font4 fontWhite'><dt>"+t1+"</dt><dd><a href=# class='tab-detail2' type='debit'>"+arrVal[arrVal.length-3]+"</a></dd></span>";
-	val+="<span class='font4 fontWhite'><dt>"+t2+"</dt><dd><a href=# class='tab-detail2' type='debit-m'>"+arrVal[arrVal.length-2]+"</a></dd></span>";
-	val+="<span class='font4 fontWhite'><dt>"+t3+"</dt><dd><a href=# class='tab-detail2' type='debit-all'>"+arrVal[arrVal.length-1]+"</a></dd></span></dl>";
+	val="<span class='font30'>"+t1+arrVal[arrVal.length-3]+"</span><br><br>"
+	val+="<span class='font30'>"+t2+arrVal[arrVal.length-2]+"</span><br><br>"
+	val+="<div class='font30' style='text-align:right'>"+t3+arrVal[arrVal.length-1]+"</div>"
+	return val;
+}
+$.getSectSpanDebit = function(arrVal,t1,t2,t3){
+	var val="";
+	val="<dl class='dl-horizontal'><span class='font30 fontWhite'><dt>"+t1+"</dt><dd><a href=# class='a-debit' type='debit'>"+arrVal[arrVal.length-3]+"</a></dd></span>";
+	val+="<span class='font30 fontWhite'><dt>"+t2+"</dt><dd><a href=# class='a-debit' type='debit-m'>"+arrVal[arrVal.length-2]+"</a></dd></span>";
+	val+="<span class='font30 fontWhite'><dt>"+t3+"</dt><dd><a href=# class='a-debit' type='debit-all'>"+arrVal[arrVal.length-1]+"</a></dd></span></dl>";
 	return val;
 }
 function getBack(vchReturn){
@@ -287,51 +277,23 @@ try{
 		var rt,dsc
 		//	下载
 		rt=vchReturn.split("##")[2].split("$$")[2].split(",");
-		$(".dv-down").html($.getDownload(rt,vchReturn.split("##")[2].split("$$")[3]));
-
+		$.getDownload(rt,vchReturn.split("##")[2].split("$$")[3]);
 		//	活跃
 		rt=vchReturn.split("##")[4].split("$$")[2].split(",");
 		$(".dv-act").html($.getActive(rt));
-
 		//	昨日注册
 		rt=vchReturn.split("##")[3].split("$$")[2].split(",");
-		$(".dv-reg-y").html($.getRegist(rt))
-		
-		//	储值卡销售
-		rt=vchReturn.split("##")[13].split("$$");
-		$(".dv-debit").html($.getSectSpanTriple(rt,'昨日 : ','当月 : ','总销售 : '))
-
-				$('.tab-detail2').click(function(){
-
-		$(".hid-pr").val($(this).attr("type"));
-		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDetails")+"&dt="+escape($('#iph-d-start').val())+"&typ="+escape($(".hid-pr").val());
-		createXMLHttpRequest(url,"fresh=" +Math.random());
-				$(".navi").hide()
-		})
-		
-		
-		
-		//	储值卡取消
-		rt=vchReturn.split("##")[14].split("$$");
-		$(".dv-debit0").html($.getSectSpanSingle(rt))
-		
-		//	企业会员
-		rt=vchReturn.split("##")[15].split("$$");
-		$(".dv-member").html($.getSectSpanSingle(rt))
-		//	酒店统计
-		rt=vchReturn.split("##")[16].split("$$");
-		$(".dv-hotel").html($.getSectSpanDouble(rt,'EBK : ','途家 : '))
-		//	酒店销售日报
-		rt=vchReturn.split("##")[17].split("$$");
-		$(".dv-hotel-sale-d").html($.getSectSpanDouble(rt,'','总销售 : '))
-		
-		
+		$(".dv-reg-y").html($.getActive(rt))
+		//	launch
+		rt=vchReturn.split("##")[12].split("$$")[2].split(",");
+		$(".dv-launch").html($.getActive(rt));
 		//	注册用户
 		rt=vchReturn.split("##")[3].split("$$")[2].split(",");
 		$(".dv-register-l1").html("<br>"+rt[rt.length-1]);
 		$(".dv-register-l2").html("<br>"+vchReturn.split('##')[3].split('$$')[3]);
 		//$(".dv-register-r1").html("<br>"+rt[rt.length-2])
-		
+		//	日均注册
+		$(".dv-register-r1").html("<br>"+$.isInfinity(Math.round(avg/7)))
 		//	近期注册图表
 		var chartDt= new Array
 		var avg=0;
@@ -345,9 +307,6 @@ try{
 		chartData.pop();
 		chartData=chartData.join(",");
 		highChart_lineBasic(chartData,"","dv-reg2",chartDt);
-		
-		//	日均注册
-		$(".dv-register-r1").html("<br>"+$.isInfinity(Math.round(avg/7)))
 		//	留存率
 		rt=vchReturn.split("##")[5].split("$$");
 		$(".dv-left-d").html(rt[1]+'%');
@@ -355,29 +314,43 @@ try{
 		$(".dv-left-w").html(rt[1]+'%');
 		rt=vchReturn.split("##")[7].split("$$");
 		$(".dv-left-m").html(rt[1]+'%');
-
 		//	pv
 		rt=vchReturn.split("##")[8].split("$$")[2].split(",");
-		dsc=$.getSymbol(rt[rt.length-1],rt[rt.length-2])
-		$(".dv-pv1").html(rt[1]);
-		$(".dv-pv2").html(dsc+$.isInfinity(Math.round((rt[rt.length-1]-rt[rt.length-2])/rt[rt.length-2]*10000)/100)+"%");
-		
+		$(".dv-pv").html($.getActive(rt))
 		//	uv
 		rt=vchReturn.split("##")[9].split("$$")[2].split(",");
-		dsc=$.getSymbol(rt[rt.length-1],rt[rt.length-2])
-		$(".dv-uv1").html(rt[1]);
-		$(".dv-uv2").html(dsc+$.isInfinity(Math.round((rt[rt.length-1]-rt[rt.length-2])/rt[rt.length-2]*10000)/100)+"%");
-		
+		$(".dv-uv").html($.getActive(rt))
 		//	Talkingdata pv uv
 		rt=vchReturn.split("##")[11].split("$$");
 		$(".td-pv").html(rt[1]);
 		$(".td-uv").html(rt[2]);
-
-		//	launch
-		rt=vchReturn.split("##")[12].split("$$")[2].split(",");
-		$(".dv-launch").html($.getLaunch(rt));
-
 		
+		//	储值卡销售
+		rt=vchReturn.split("##")[13].split("$$");
+		$(".dv-debit").html($.getSectSpanDebit(rt,'昨日 : ','当月 : ','总销售 : '))
+
+				$('.a-debit').click(function(){
+					$(".hid-pr").val($(this).attr("type"));
+			url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDetail")+"&dtBegin="+escape($('#iph-d-start').val())+"&dtEnd="+escape($('#iph-d-end').val())+"&typ="+escape($(".hid-pr").val());
+			createXMLHttpRequest(url,"fresh=" +Math.random());
+				$(".navi").hide()
+			})
+
+		//	储值卡取消
+		rt=vchReturn.split("##")[14].split("$$");
+		$(".dv-debit0").html($.getSectSpanSingle(rt))
+		
+		//	企业会员
+		rt=vchReturn.split("##")[15].split("$$");
+		$(".dv-member").html($.getSectSpanSingle(rt))
+		//	酒店统计
+		rt=vchReturn.split("##")[16].split("$$");
+		$(".dv-hotel").html($.getSectSpanTriple(rt,'EBK酒店: ','EBK民宿: ','途家 : '))
+		//	酒店销售日报
+		rt=vchReturn.split("##")[17].split("$$");
+		$(".dv-hotel-sale-d").html($.getSectSpanDouble(rt,'','总销售 : '))
+		
+
 		//	日活区域分布
 		rt=vchReturn.split("##")[10].split("$$");
 		$(".ul-loc").html(rt[1]);
@@ -415,10 +388,10 @@ try{
 		content = "dvFunnel";
 		eCharts_funnel(cData,'',content);
 		$(".conv-tab").html(vchReturn.split("##")[4])
-	}else if(vf=='getDetail'||vf=='getDetailWheel'||vf=='getDetails'){
+	}else if(vf=='getDetail'||vf=='getDetailWheel'){
 		$(".tab").html(vchReturn.split("##")[2]);
 		var v=$(".hid-pr").val();
-		if(v.substr(0,4)!="left" && v!="point" && v!="time" && v!="interval" && v!="wheel" && v!="interval-c" && vf!="getDetails"){
+		if(v=="down" || v=="lively" || v=="reg" || v=="lau"){
 			var pr=0;
 			var amount="";
 			for (i=0;i<7;i++){
@@ -516,87 +489,72 @@ try{
 			case 'wheel':
 				$(".title").html("大转盘日期");
 				$(".cale").css('display','none')
-				$(".tab").css('margin-top','60px')
 				break;
 			case 'debit':
 				$(".title").html("储值卡销售");
-				$(".cale2").css('display','block')
 				break;
 			case 'debit-m':
 				$(".title").html("当月酒店累积售卡");
-				$(".cale2").css('display','block')
+				$(".cale2").css('display','none')
+				$('.form_date').datetimepicker({startView: 3})
 				break;
 			case 'debit-all':
 				$(".title").html("酒店总售卡信息");
 				$(".cale").css('display','none')
-				$(".tab").css('margin-top','60px');
 				break;
 			case 'debit0':
 				$(".title").html("退卡明细表");
-				$(".cale2").css('display','block')
 				break;
 			case 'debit0-all':
 				$(".title").html("总退卡信息");
 				$(".cale").css('display','none')
-				$(".tab").css('margin-top','60px');
 				break;
 			case 'member':
 				$(".title").html("企业会员");
 				$(".cale").css('display','none')
-				$(".tab").css('margin-top','60px')
 				break;
 			case 'hotel':
 				$(".title").html("酒店库存");
+				$(".cale2").css('display','none')
 				break;
 			case 'hotel-sale-d':
 				$(".title").html("订单销售");
-				$(".cale2").css('display','block');
+				$(".tab").css("font-size","10px")
 				break;
 		}
 	}else
 		alert("System Error!")
 		}catch(e){ alert(e);}
 }
+$.initDate = function(){
+	var dt = new Date();
+	var dt= new Date(dt.getTime());//set today
+	var m="0"+(dt.getMonth()+1);
+	var d="0"+(dt.getDate());
+	vdt=dt.getFullYear()+"-"+m.substr(m.length-2,2)+"-"+d.substr(d.length-2,2);
+	$('#ip-d-start').val(vdt)
+	$('#iph-d-start').val(vdt)
+	$('#ip-d-end').val(vdt)
+	$('#iph-d-end').val(vdt)
+	
+	$('.form_date').datetimepicker({
+	language: 'en',
+	weekStart: 1,
+	todayBtn:  1,
+	autoclose: 1,
+	todayHighlight: 1,
+	startView: 2,
+	minView: 2,
+	forceParse: 0
+	}).on('changeDate', function(ev){   });
+	$('.form_date').datetimepicker('setEndDate',vdt);
+}
 $(document).ready(function(){
 	setTimeout(function(){
-	url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDashBoard");
-	createXMLHttpRequest(url,"fresh=" +Math.random());
+		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDashBoard");
+		createXMLHttpRequest(url,"fresh=" +Math.random());
 	},300);
-	
-	$(".tr-lv").click(function(){
-		$(".hid-pr").val($(this).attr("type"));
-		var v
-		if ($(this).attr("type")=="wheel"){
-			v="getDetailWheel";
-		}else
-			v="getDetail";
-		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape(v)+"&dt="+escape($('#iph-d-start').val())+"&typ="+escape($(this).attr("type"));
-		createXMLHttpRequest(url,"fresh=" +Math.random());
-		scroll(0,0);
-		$(".navi").hide()
-	})
-	$('.tab-show').click(function(){
-		$(".hid-pr").val($(this).attr("type"));
-		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDetail")+"&dt="+escape($('#iph-d-start').val())+"&typ="+escape($(".hid-pr").val());
-		createXMLHttpRequest(url,"fresh=" +Math.random());
-		scroll(0,0);
-		$(".navi").hide()
-	})
-	$('.bt-exec').click(function(){
-		var ob="getDetail";
-		if($(".hid-pr").val()=="wheel"){
-			return false;
-		}
-		if($(".hid-pr").val().substr(0,5)=="hotel" || $(".hid-pr").val().substr(0,5)=="debit"){
-			ob="getDetails";
-		}
-		if ($('#iph-d-start').val()>$('#iph-d-end').val()){
-			alert("End date is wrong")
-			return;
-		}		
-		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape(ob)+"&dt="+escape($('#iph-d-start').val())+"&dt2="+escape($('#iph-d-end').val())+"&typ="+escape($(".hid-pr").val());
-		createXMLHttpRequest(url,"fresh=" +Math.random());
-	})
+
 	$('.tab-close').click(function(){
 		$(".dv-ext").hide();
 		$(".dv-ext-in").hide();
@@ -605,8 +563,10 @@ $(document).ready(function(){
 		$("#chart").hide();
 		$(".tab").css("overflow","auto").css("height","").css("margin-top","-20px");
 		$(".cale").css("display","block")
-		$(".cale2").css('display','none')
+		$(".cale2").css('display','block')
 		$(".navi").show()
+		$(".tab").css("font-size","14px")
+		$.initDate();
 	})
 	$(".btn-nav").click(function(){
 		if($(".btn-nav .glyphicon").hasClass("glyphicon-chevron-left")){
@@ -619,40 +579,42 @@ $(document).ready(function(){
 
 		}
 	})
-	$(".conv").click(function(){
-		$("#collapseOne").toggle();
-		if ($(".conv-icon").hasClass("glyphicon-chevron-left")){
-			$(".conv-icon").removeClass("glyphicon-chevron-left").addClass("glyphicon-chevron-down")
-		}else
-			$(".conv-icon").removeClass("glyphicon-chevron-down").addClass("glyphicon-chevron-left")
-	})
 	$(".conv-show").click(function(){
-		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getFunnel")+"&dt="+escape($('#iph-d-start').val())+"&sid="+escape($(this).attr('data-type'));
+		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getFunnel")+"&dtBegin="+escape($('#iph-d-start').val())+"&dtEnd="+escape($('#iph-d-end').val())+"&sid="+escape($(this).attr('data-type'));
 		createXMLHttpRequest(url,"fresh=" +Math.random());
 	})
-	window.onscroll = function(){
-		//$(".btn-nav").css('margin-top',document.body.scrollTop)
-		$(".sect-nav").css("margin-left","-200px");
-		$(".sect-body").css("margin-left","0").css("width","100%");
-		$(".btn-nav").css("margin-left","0").html('<span class="glyphicon glyphicon-chevron-right"></span>');
-	}
+
 	$(".nav-link").click(function(){
 		$(".btn-nav").click()
 	})
-	$('.tab-detail').click(function(){
+
+	$('.tab-show').click(function(){
 		$(".hid-pr").val($(this).attr("type"));
-		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDetails")+"&dt="+escape($('#iph-d-start').val())+"&dt2="+escape($('#iph-d-end').val())+"&typ="+escape($(".hid-pr").val());
+		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDetail")+"&dtBegin="+escape($('#iph-d-start').val())+"&dtEnd="+escape($('#iph-d-end').val())+"&typ="+escape($(".hid-pr").val());
 		createXMLHttpRequest(url,"fresh=" +Math.random());
 		scroll(0,0);
 		$(".navi").hide()
 	})
-
+	$('.bt-exec').click(function(){
+		var ob="getDetail";
+		if($(".hid-pr").val()=="wheel"){
+			return false;
+		}
+		if ($('#iph-d-start').val()>$('#iph-d-end').val()){
+			alert("End date is wrong")
+			return false;
+		}		
+		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj=getDetail&dtBegin="+escape($('#iph-d-start').val())+"&dtEnd="+escape($('#iph-d-end').val())+"&typ="+escape($(".hid-pr").val());
+		createXMLHttpRequest(url,"fresh=" +Math.random());
+		//alert(url)
+		
+	})
+	$.initDate()
 })
 </script>
 </head>
 <body>
 <div id="container-fluid">
-
 <nav class="navbar navbar-default navbar-fixed-top navbar-inverse navi" role="navigation">
 <div class="container-fluid">
 <div class="navbar-header">
@@ -695,48 +657,44 @@ $(document).ready(function(){
 		</ul>
         </li>
       </ul>
-      <!--form class="navbar-form navbar-right" role="search" >
-        <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search">
-        </div>
-        <button type="submit" class="btn btn-default">Submit</button>
-      </form-->
-    
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
-
 <div class="row" style="padding-top:70px;margin:auto;width:90%;"><div class="tab-content">
 <!--	Area1	-->
 <div class="tab-pane fade " id="dash">
 <div class="col-xs-12 col-sm-8 col-md-4 dv-block">
 <section class="sect sect-down" style="background-color:#00BFFF;">
 <div class="dv-title">昨日下载
-<span class="glyphicon glyphicon-th-list tab-show" aria-hidden="true" type="down"></span>
+<span class="glyphicon glyphicon-th-list tab-show icon-corner" aria-hidden="true" type="down"></span>
 </div>
-<div class="dv-down font1 fontWhite" style=""></div>
+<div class="dv-down fontBoard">
+<span class='font80 down-y'></span><span class='font20 down-rate'></span><br>
+<div class='font20 down-total' style='width:100%;text-align:right;padding-top:20px'></div>
+</div>
 </section></div>
 
 <div class="col-xs-12 col-sm-8 col-md-4 dv-block">
 <section class="sect sect-active" style="background-color:#ffcc00;">
 <div class="dv-title">昨日活跃
-<span class="glyphicon glyphicon-th-list tab-show" aria-hidden="true" type="lively"></span>
+<span class="glyphicon glyphicon-th-list tab-show icon-corner" aria-hidden="true" type="lively"></span>
 </div>
-<div class="dv-act font1 fontWhite"></div>
+<div class="dv-act fontBoard "></div>
 </section></div>
+
 <div class="col-xs-12 col-sm-8 col-md-4 dv-block">
 <section class="sect" style="background-color:#F08080;">
 <div class="dv-title">昨日注册
-<span class="glyphicon glyphicon-th-list tab-show" aria-hidden="true" type="reg"></span>
+<span class="glyphicon glyphicon-th-list tab-show icon-corner" aria-hidden="true" type="reg"></span>
 </div>
-<div class="dv-reg-y font1 fontWhite"></div>
+<div class="dv-reg-y fontBoard"></div>
 </section></div>
 <div class="col-xs-12"></div>
 
 <div class="col-xs-12 col-sm-8 col-md-5" style="min-width:350px;max-width:450px">
 <section class="sect sect-reg" style="height:300px;background-color:#fff;">
 <div class="dv-title">注册用户
-<span class="glyphicon glyphicon-th-list tab-show" aria-hidden="true" type="reg"></span>
+<span class="glyphicon glyphicon-th-list tab-show icon-corner" aria-hidden="true" type="reg"></span>
 </div>
 <div class="dv-register">
 <div>今日</div><div class="dv-register-l1" style="font-size:80px;text-align:center;"></div>
@@ -760,9 +718,9 @@ $(document).ready(function(){
 <div class="col-xs-12 col-sm-8 col-md-4 dv-block">
 <section class="sect" style="background-color:#F08080;">
 <div class="dv-title">昨日储值卡销售<div style="float:right;">
-<span class="glyphicon glyphicon-calendar tab-detail" aria-hidden="true" style="cursor:pointer" type="debit-m"></span>
-<span class="glyphicon glyphicon-stats tab-detail" aria-hidden="true" style="margin-left:10px;cursor:pointer" type="debit-all"></span>
-<span class="glyphicon glyphicon-th-list tab-detail" aria-hidden="true" style="margin-left:10px;cursor:pointer" type="debit"></span>
+<span class="glyphicon glyphicon-th-list tab-show icon-corner" aria-hidden="true" style="margin-left:10px;cursor:pointer" type="debit"></span>
+<span class="glyphicon glyphicon-stats tab-show icon-corner" aria-hidden="true" style="margin-left:10px;cursor:pointer;" type="debit-all"></span>
+<span class="glyphicon glyphicon-calendar tab-show icon-corner" aria-hidden="true" style="cursor:pointer" type="debit-m"></span>
 </div></div>
 <div class="dv-debit " ></div>
 </section></div>
@@ -770,60 +728,58 @@ $(document).ready(function(){
 <div class="col-xs-12 col-sm-8 col-md-4 dv-block">
 <section class="sect" style="background-color:#696969;">
 <div class="dv-title">储值卡取消<div style="float:right;">
-<span class="glyphicon glyphicon-stats tab-detail" aria-hidden="true" style="cursor:pointer" type="debit0-all"></span>
-<span class="glyphicon glyphicon-th-list tab-detail" aria-hidden="true" style="margin-left:10px;cursor:pointer" type="debit0"></span>
+<span class="glyphicon glyphicon-th-list tab-show icon-corner" aria-hidden="true" style="margin-left:10px;cursor:pointer" type="debit0"></span>
+<span class="glyphicon glyphicon-stats tab-show icon-corner" aria-hidden="true" style="cursor:pointer" type="debit0-all"></span>
 </div></div>
-<div class="dv-debit0 font1 fontWhite" ></div>
-
+<div class="dv-debit0 font80 fontBoard" ></div>
 </section></div>
+
 <div class="col-xs-12 col-md-12"></div>
 
 <div class="col-xs-12 col-sm-8 col-md-4 dv-block">
 <section class="sect" style="background-color:#32CD32;">
 <div class="dv-title">企业会员
-<span class="glyphicon glyphicon-th-list tab-detail" aria-hidden="true" style="float:right;cursor:pointer" type="member"></span>
+<span class="glyphicon glyphicon-th-list tab-show icon-corner" aria-hidden="true" style="float:right;cursor:pointer" type="member"></span>
 </div>
-<div class="dv-member font1 fontWhite" ></div>
+<div class="dv-member font80 fontBoard" ></div>
 </section></div>
 <div class="col-xs-12 col-sm-8 col-md-4 dv-block">
 <section class="sect" style="background-color:#ffcc00;">
 <div class="dv-title">当日可定酒店数
-<span class="glyphicon glyphicon-th-list tab-detail" aria-hidden="true" style="float:right;cursor:pointer" type="hotel"></span>
+<span class="glyphicon glyphicon-th-list tab-show icon-corner" aria-hidden="true" style="float:right;cursor:pointer" type="hotel"></span>
 </div>
-<div class="dv-hotel"></div>
+<div class="dv-hotel fontBoard" style='padding:10px;line-height:20px;text-align:left'></div>
 </section></div>
 
 <div class="col-xs-12 col-sm-8 col-md-4 dv-block">
 <section class="sect" style="background-color:#00CED1;">
-<div class="dv-title">订单销售<span class="glyphicon glyphicon-th-list tab-detail" aria-hidden="true" style="float:right;cursor:pointer" type="hotel-sale-d"></span>
+<div class="dv-title">订单销售<span class="glyphicon glyphicon-th-list tab-show icon-corner" aria-hidden="true" style="float:right;cursor:pointer" type="hotel-sale-d"></span>
 </div>
-<div class="dv-hotel-sale-d fontWhite"></div>
+<div class="dv-hotel-sale-d fontBoard"></div>
 </section></div>
 </div><!-- /#hotel -->
 
 <div id='act' class="tab-pane fade ">
 <div class="col-xs-12 col-sm-8 col-md-4 dv-block">
 <section class="sect-pv sect" style="background-color:#FFA07A;">
-<div class="dv-title">版块PV<span class="glyphicon glyphicon-th-list tab-show" aria-hidden="true" type="pv"></span>
+<div class="dv-title">版块PV<span class="glyphicon glyphicon-th-list tab-show icon-corner" aria-hidden="true" type="pv"></span>
 </div>
-<div class="dv-pv1 font1 fontWhite" style="padding:5px;width:100%;height:50%;text-align:center;"></div>
-<div class="dv-pv2 font4 fontWhite" style="padding:5px;width:100%;height:30%;text-align:right;margin-top:5px"></div>
+<div class="dv-pv fontBoard dv-board"></div>
 </section></div>
 
 <div class="col-xs-12 col-sm-8 col-md-4 dv-block">
 <section class="sect-uv sect" style="background-color:#3CB371;">
-<div class="dv-title">版块UV<span class="glyphicon glyphicon-th-list tab-show" aria-hidden="true" type="uv"></span>
+<div class="dv-title">版块UV<span class="glyphicon glyphicon-th-list tab-show icon-corner" aria-hidden="true" type="uv"></span>
 </div>
-<div class="dv-uv1 font1 fontWhite" ></div>
-<div class="dv-uv2 font4 fontWhite" style="height:30%;text-align:right;margin-top:5px"></div>
+<div class="dv-uv fontBoard dv-board"></div>
 </section></div>
 
 <div class="col-xs-12 col-sm-8 col-md-4 dv-block">
 <section class="sect" style="background-color:#F08080;">
 <div class="dv-title">启动数
-<span class="glyphicon glyphicon-th-list tab-show" aria-hidden="true" type="lau"></span>
+<span class="glyphicon glyphicon-th-list tab-show icon-corner" aria-hidden="true" type="lau"></span>
 </div>
-<div class="dv-launch font1 fontWhite" ></div>
+<div class="dv-launch font1 fontBoard" ></div>
 </section></div>
 
 <!--div class="col-xs-12 col-sm-8 col-md-4 dv-block">
@@ -838,26 +794,25 @@ $(document).ready(function(){
 
 <div class="col-xs-12 col-sm-8 col-md-4 dv-block">
 <section class="sect-area sect" style="background-color:#fff;">
-<div class="dv-title">日活省分布<span class="glyphicon glyphicon-th-list tab-show" aria-hidden="true"  type="loc"></span>
+<div class="dv-title">日活省分布<span class="glyphicon glyphicon-th-list tab-show icon-corner" aria-hidden="true"  type="loc"></span>
 </div>
-<div class="panel panel-default font4 fontCyan" style="margin-top:20px;">
+<div class="panel panel-default font20 fontCyan" style="margin-top:20px;">
 <div class="panel-body">
-<ul class="ul-loc">
-</ul>
+<ul class="ul-loc"></ul>
 </div></div>
 </section></div>
 
 <div class="col-xs-12 col-sm-8 col-md-4 dv-block">
-<section class="sect-action sect" style="height:265px;background-color:#fff;">
+<section class="sect-action sect" style="height:220px;background-color:#fff;">
 <div class="dv-title">用户行为
 </div>
-<table class="table table-hover font5" style="cursor:pointer;">
-<tr class='tr-lv info' type='point'><td>积分范围</td><td class='td-point'></td></tr>
+<table class="table table-hover font20" style="cursor:pointer;">
+<tr class='tab-show info' type='point'><td>积分范围</td></tr>
 <!--tr class='tr-lv active' type='launch'><td>APP启动数</td><td class='td-launch'></td></tr-->
-<tr class='tr-lv warning' type='time'><td>APP时段</td><td class='td-time'></td></tr>
-<tr class='tr-lv success' type='interval'><td>APP用户时长</td><td class='td-interval'></td></tr>
-<tr class='tr-lv info' type='interval-c'><td>APP用户时长(渠道)</td><td class='td-interval-c'></td></tr>
-<tr class='tr-lv danger' type='wheel'><td>大转盘参与人数</td><td class='td-wheel'></td></tr>
+<tr class='tab-show warning' type='time'><td>APP时段</td></tr>
+<tr class='tab-show success' type='interval'><td>APP用户时长</td></tr>
+<tr class='tab-show info' type='interval-c'><td>APP用户时长(渠道)</td></tr>
+<!--tr class='tab-show danger' type='wheel'><td>大转盘参与人数</td></tr-->
 </table>
 </section></div>
 </div><!-- /#act -->
@@ -867,25 +822,25 @@ $(document).ready(function(){
 <div class="col-xs-12 col-sm-8 col-md-4 dv-block">
 <section class="sect" style="background-color:#00BFFF">
 <div class="dv-title">日留存率
-<span class="glyphicon glyphicon-th-list tab-show tr-lv" aria-hidden="true" type="leftD"></span>
+<span class="glyphicon glyphicon-th-list tab-show icon-corner" aria-hidden="true" type="leftD"></span>
 </div>
-<div class="dv-left-d font2 fontWhite" ></div>
+<div class="dv-left-d font50 fontBoard" ></div>
 </section></div>
 
 <div class="col-xs-12 col-sm-8 col-md-4 dv-block">
 <section class="sect" style="background-color:#F4A460;">
 <div class="dv-title">周留存率
-<span class="glyphicon glyphicon-th-list tab-show tr-lv" aria-hidden="true" type="leftW"></span>
+<span class="glyphicon glyphicon-th-list tab-show icon-corner" aria-hidden="true" type="leftW"></span>
 </div>
-<div class="dv-left-w font2 fontWhite" ></div>
+<div class="dv-left-w font50 fontBoard" ></div>
 </section></div>
 
 <div class="col-xs-12 col-sm-8 col-md-4 dv-block">
 <section class="sect" style="background-color:#696969;">
 <div class="dv-title">月留存率
-<span class="glyphicon glyphicon-th-list tab-show tr-lv" aria-hidden="true" type="leftM"></span>
+<span class="glyphicon glyphicon-th-list tab-show icon-corner" aria-hidden="true" type="leftM"></span>
 </div>
-<div class="dv-left-m font2 fontWhite" ></div>
+<div class="dv-left-m font50 fontBoard" ></div>
 </section></div>
 
 </div><!--	Area3 end -->
@@ -903,54 +858,23 @@ $(document).ready(function(){
 
 
 <div class="dv-ext" style='z-index:20;left:0px;top:0px;position:absolute;background-color:#666;width:100%;height:100%;filter:alpha(opacity=90);opacity:0.9;display:none;'></div>
-<div class='dv-ext-in' style="z-index:25;left:0px;top:0px;position:absolute;background-color:#fff;width:100%;height:90%;top:5%; border-radius:8px;display:none;min-width:800px">
-<div class="cale" style="padding:20px;width:40%;">
-	<div class="input-group date form_date col-md-2" data-date="" data-date-format="yyyy-mm-dd" data-link-field="iph-d-start" data-link-format="yyyy-mm-dd" style="">
-	<input id="ip-d-start" class="form-control" size="12" type="text" value="" readonly style='width:120px' placeholder="PickDate">
-	<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-	</div>
-	<div class='cale2' style='display:none'>
-	<div style='float:left;margin-top:-34px;margin-left:165px;line-height:30px'>--</div>
-	<div class="input-group date form_date col-md-2" data-date="" data-date-format="yyyy-mm-dd" data-link-field="iph-d-end" data-link-format="yyyy-mm-dd" style="float:left;margin-top:-34px;margin-left:185px">
-	<input id="ip-d-end" class="form-control" size="12" type="text" value="" readonly style='width:120px' placeholder="PickDate">
-	<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-	</div>
-	</div>
-	<button type="submit" class="btn btn-info bt-exec btn-sm" id="bt-exec" style="margin-top:-54px;margin-left:360px" type=''>
+<div class='dv-ext-in' style="z-index:25;left:0px;position:absolute;background-color:#fff;width:100%;height:90%;top:5%; border-radius:8px;display:none;">
+<div style="padding:20px">
+<div class="cale" >
+	<input type='text' class="form-control form_date" id='ip-d-start' data-date-format="yyyy-mm-dd" data-link-field="iph-d-start" data-link-format="yyyy-mm-dd" size="12" readonly style='width:120px;float:left' placeholder="StartDate" />
+	<div class="cale2" style="display:block">
+	<div style='float:left;line-height:32px;'>&nbsp;&nbsp;---&nbsp;&nbsp;</div>
+	<input type='text' class="form-control form_date" id='ip-d-end' data-date-format="yyyy-mm-dd" data-link-field="iph-d-end" data-link-format="yyyy-mm-dd" size="12" readonly style='width:120px;float:left;' placeholder="EndDate" /></div>
+	<button type="submit" class="btn btn-info bt-exec btn-sm" id="bt-exec" style="float:left;margin:2px 20px">
 	<span>查询</span>
 	</button>
 	<input type="hidden" id="iph-d-start" value="" /><input type="hidden" id="iph-d-end" value="" />
 </div>
-<div class="tab" style="margin-top:-20px;padding:0px 20px 20px 20px;width:99%;height:auto"></div>
-<div style="z-index:12;left:96%;position:absolute;top:3%;cursor:pointer">
-<span class="glyphicon glyphicon-remove tab-close" aria-hidden="true" style="color:#000;font-size:40px"></span></div>
-<div id="chart" style="margin:-40px 0px 0px 50px;width:70%;height:250px;display:none;"></div>
+<span class="glyphicon glyphicon-remove tab-close" aria-hidden="true" style="color:#000;font-size:40px;float:right;cursor:pointer"></span>
+</div>
+<div class="tab" style="padding:20px;width:99%;height:auto;margin-top:20px"></div>
+<div id="chart" style="margin:-40px 0px 0px 50px;width:80%;height:250px;display:none;"></div>
 </div>
 <input type=hidden class='hid-pr'/>
 </body>
-<script type="text/javascript">
-	var dt = new Date();
-	var dt= new Date(dt.getTime()-(1000*60*60*24));//set yesterday
-	var m="0"+(dt.getMonth()+1);
-	var d="0"+(dt.getDate());
-	vdt=dt.getFullYear()+"-"+m.substr(m.length-2,2)+"-"+d.substr(d.length-2,2);
-	$('#ip-d-start').val(vdt)
-	$('#iph-d-start').val(vdt)
-	$('#ip-d-end').val(vdt)
-	$('#iph-d-end').val(vdt)
-
-	$('.form_date').datetimepicker({
-        language: 'en',
-        weekStart: 1,
-        todayBtn:  1,
-		autoclose: 1,
-		todayHighlight: 1,
-		startView: 2,
-		minView: 2,
-		forceParse: 0
-    }).on('changeDate', function(ev){               
-
-	});
-	//$('.form_date').datetimepicker('setEndDate',vdt);
-</script>
 </html>
