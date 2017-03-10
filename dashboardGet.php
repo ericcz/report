@@ -167,6 +167,9 @@ function fnPaging($tabTitle,$jsonOri,$rowF,$pageRow){
 		$rowE=$json_count%$pageRow+$rowF-1;
 	}else
 		$rowE=$rowF+$pageRow-1;
+		
+		echo $rowF;
+		echo $rowE;
 	for($i=$rowF;$i<=$rowE;$i++){
 		for ($j=0;$j<$GLOBALS["cols"];$j++){
 			$cell.="<td>".$json[$i-1]['col'.$j]."</td>";
@@ -179,7 +182,6 @@ function fnPaging($tabTitle,$jsonOri,$rowF,$pageRow){
 }
 function fnDetailListA($title){
 	$dc="";
-	$serial=0;
 	$pid = $GLOBALS["pid"];
 	$typ = $_REQUEST['typ'];
 	$dtBegin = $_REQUEST['dtBegin'];
@@ -197,7 +199,6 @@ function fnDetailListA($title){
 		echo "Error .\n";}
 	if ($result){ 
 		while($row=mysqli_fetch_row($result)){
-			$serial+=1;
 			for ($i=0;$i<($result->field_count);$i++){
 				$title.='"col'.$i.'":"'.$row[$i].'",';
 			}
