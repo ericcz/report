@@ -331,7 +331,7 @@ try{
 
 				$('.a-debit').click(function(){
 					$(".hid-pr").val($(this).attr("type"));
-			url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDetail")+"&dtBegin="+escape($('#iph-d-start').val())+"&dtEnd="+escape($('#iph-d-end').val())+"&typ="+escape($(".hid-pr").val());
+			url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDetail")+"&dtBegin="+escape($('#iph-d-start').val())+"&dtEnd="+escape($('#iph-d-end').val())+"&typ="+escape($(".hid-pr").val())+"&pg=1";
 			createXMLHttpRequest(url,"fresh=" +Math.random());
 				$(".navi").hide()
 			})
@@ -781,7 +781,7 @@ $(document).ready(function(){
 
 <div class="col-xs-12 col-sm-8 col-md-4 dv-block">
 <section class="sect" style="background-color:#4169E1;">
-<div class="dv-title">点卡销售<div style="float:right;">
+<div class="dv-title">点卡种类<div style="float:right;">
 <span class="glyphicon glyphicon-th-list tab-show icon-corner" aria-hidden="true" style="cursor:pointer" type="card-sale"></span>
 </div></div>
 <div class="dv-card-sale font80 fontBoard" ></div>
@@ -860,7 +860,7 @@ $(document).ready(function(){
 <div class="dv-title">用户行为
 </div>
 <table class="table table-hover font20" style="cursor:pointer;">
-<tr class='tab-show info' type='point'><td>积分范围</td></tr>
+<tr class='tab-show info' type='point'><td>换游币范围</td></tr>
 <!--tr class='tr-lv active' type='launch'><td>APP启动数</td><td class='td-launch'></td></tr-->
 <tr class='tab-show warning' type='time'><td>APP时段</td></tr>
 <tr class='tab-show success' type='interval'><td>APP用户时长</td></tr>
