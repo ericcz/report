@@ -1,11 +1,11 @@
 <?php
 include_once "dbcon.php";
 
+$pgnum=10;
+$pgs=0;
+$cols=0;
 $pid = $_REQUEST['pid'];
 $obj = $_REQUEST['obj'];
-$dtBegin = $_REQUEST['dtBegin'];
-$dtEnd = $_REQUEST['dtEnd'];
-$typ = $_REQUEST['typ'];
 $desc = "";
 
 switch($obj){
@@ -42,89 +42,149 @@ function fnDashBoard(){
 		$dc = "0";
 	return $dc;
 }
-
 function fnDetail(){
 	$dc="";$title="";
+	$pgnum=$GLOBALS["pgnum"];
 	$pid = $GLOBALS["pid"];
-	$typ = $GLOBALS['typ'];
-	$dt = $GLOBALS['dtBegin'];
+	$typ = $_REQUEST['typ'];
+	$dtBegin = $_REQUEST['dtBegin'];
+	$dtEnd = $_REQUEST['dtEnd'];
+	$pg = $_REQUEST['pg'];
+	$rcf=$pg*$pgnum-$pgnum+1;
 	
 	switch($typ){
 	case 'leftD': 
-		$title = '第一天,第二天,第三天,第四天,第五天,第六天,第七天,';
+		$title = '第一天,第二天,第三天,第四天,第五天,第六天,第七天';
 		$dc=fnDetailListC($title);
 	break;
 	case 'leftW': 
-		$title = '第一周,第二周,第三周,第四周,第五周,第六周,第七周,';
+		$title = '第一周,第二周,第三周,第四周,第五周,第六周,第七周';
 		$dc=fnDetailListC($title);
 	break;
 	case 'leftM': 
-		$title = '第一月,第二月,第三月,第四月,第五月,第六月,第七月,';
+		$title = '第一月,第二月,第三月,第四月,第五月,第六月,第七月';
 		$dc=fnDetailListC($title);
 	break;
 	case 'interval-c': 
-		$title = '1-3秒,3-10秒,10-30秒,30-60秒,1-3分钟,3-10分钟,10-30分钟,30分钟以上,';
+		$title = '1-3秒,3-10秒,10-30秒,30-60秒,1-3分钟,3-10分钟,10-30分钟,30分钟以上';
 		$dc=fnDetailListB($title);
 	break;
 	case 'debit': 
-		$title = '生效日期,有效期,姓名,电话,酒店,售价,赠送金额,结余,绑定会员卡,激活联盟会员,';
-		$dc=fnDetailListA($title);
+		$title = '生效日期,有效期,姓名,电话,酒店,售价,赠送金额,结余,绑定会员卡,激活联盟会员';
+		$json=fnDetailListA($title);
+		$dc=fnPaging(fnTitle($title),$json,$rcf,$pgnum);
+		$dc.="##".fnGetPages($GLOBALS["pgs"],$pgnum);
 	break;
 	case 'debit-m': 
-		$title = '酒店,售卡数量,销售金额,赠送金额,绑定会员卡,激活联盟会员,';
-		$dc=fnDetailListA($title);
+		$title = '酒店,售卡数量,销售金额,赠送金额,绑定会员卡,激活联盟会员';
+		$json=fnDetailListA($title);
+		$dc=fnPaging(fnTitle($title),$json,$rcf,$pgnum);
+		$dc.="##".fnGetPages($GLOBALS["pgs"],$pgnum);
 	break;
 	case 'debit-all': 
-		$title = '酒店,售卡数量,销售金额,赠送金额,结余,绑定会员卡,激活联盟会员,';
-		$dc=fnDetailListA($title);
+		$title = '酒店,售卡数量,销售金额,赠送金额,结余,绑定会员卡,激活联盟会员';
+		$json=fnDetailListA($title);
+		$dc=fnPaging(fnTitle($title),$json,$rcf,$pgnum);
+		$dc.="##".fnGetPages($GLOBALS["pgs"],$pgnum);
 	break;
 	case 'debit0': 
-		$title = '生效日期,有效期,姓名,酒店,售价,赠送金额,结余,';
-		$dc=fnDetailListA($title);
+		$title = '生效日期,有效期,姓名,酒店,售价,赠送金额,结余';
+		$json=fnDetailListA($title);
+		$dc=fnPaging(fnTitle($title),$json,$rcf,$pgnum);
+		$dc.="##".fnGetPages($GLOBALS["pgs"],$pgnum);
 	break;
 	case 'debit0-all': 
-		$title = '酒店,退卡数量,退卡金额,退卡赠送金额,退卡结余,';
-		$dc=fnDetailListA($title);
+		$title = '酒店,退卡数量,退卡金额,退卡赠送金额,退卡结余';
+		$json=fnDetailListA($title);
+		$dc=fnPaging(fnTitle($title),$json,$rcf,$pgnum);
+		$dc.="##".fnGetPages($GLOBALS["pgs"],$pgnum);
 	break;
 	case 'member': 
-		$title = '加入日期,电话,姓名,酒店,间夜数,剩余换游币,赠送换游币,';
-		$dc=fnDetailListA($title);
+		$title = '加入日期,电话,姓名,酒店,间夜数,剩余换游币,赠送换游币';
+		$json=fnDetailListA($title);
+		$dc=fnPaging(fnTitle($title),$json,$rcf,$pgnum);
+		$dc.="##".fnGetPages($GLOBALS["pgs"],$pgnum);
 	break;
 	case 'hotel': 
-		$title = '日期,城市,酒店名称,间夜数,可用数,最低价,';
-		$dc=fnDetailListA($title);
+		$title = '日期,城市,酒店名称,间夜数,可用数,最低价';
+		$json=fnDetailListA($title);
+		$dc=fnPaging(fnTitle($title),$json,$rcf,$pgnum);
+		$dc.="##".fnGetPages($GLOBALS["pgs"],$pgnum);
 	break;
 	case 'hotel-sale-d': 
-		$title = '日期,酒店,订单内容,订单类型,联系电话,联系人,入住人,入住日期,退房日期,现金,换游币,间夜数,';
-		$dc=fnDetailListA($title);
+		$title = '日期,酒店,订单内容,订单类型,联系电话,联系人,入住人,入住日期,退房日期,现金,换游币,间夜数';
+		$json=fnDetailListA($title);
+		$dc=fnPaging(fnTitle($title),$json,$rcf,$pgnum);
+		$dc.="##".fnGetPages($GLOBALS["pgs"],$pgnum);
+	break;
+	case 'card-sale': 
+		$title = '酒店名,储值卡类型,销售数';
+		$json=fnDetailListA($title);
+		$dc=fnPaging(fnTitle($title),$json,$rcf,$pgnum);
+		$dc.="##".fnGetPages($GLOBALS["pgs"],$pgnum);
 	break;
 	default:
-		for ($i=-6;$i<1;$i++){
-			$d=date('m-d',strtotime("$i day",strtotime($dt)));
+		$p=round((strtotime($dtEnd)-strtotime($dtBegin))/3600/24)+1;
+		$i=($pg-1)*7;
+		$dt=date('Y-m-d',strtotime("$i day",strtotime($dtBegin)));
+		$l=(($i+7)>$p?$p-$i:7);
+		for ($i=0;$i<7;$i++){
+			if ($i<=$l){
+				$d=date('m-d',strtotime("$i day",strtotime($dt)));
+			}else
+				$d="";
 			$title .=$d.",";
 		}
-		$dc=fnDetailListB($title);
+		$title=substr($title,0,strlen($title)-1);
+		$dc=fnDetailListB($title,$dt)."##".fnGetPages($p,7);
 	}
 	return $dc;
 }
-
+function fnGetPages($p,$pgnum){
+	$i=0;
+	if($p%$pgnum>0){
+		$i=floor($p/$pgnum)+1;
+	}else
+		$i=floor($p/$pgnum);
+	return $i;
+}
 function fnTitle($t){
 	$title="";
 	$titleArr=explode(',',$t);
-	for ($i=0;$i<count($titleArr)-1;$i++){
+	for ($i=0;$i<count($titleArr);$i++){
 		$title.="<td>".$titleArr[$i]."</td>";
 	}
-	$title="<div class='title font20' style='width:100%;text-align:center;margin-top:-20px;'></div><table class='table table-striped table-hover table-bordered' style='text-align:center;width:98%'><tr><td>序号</td>".$title."</tr>";
+	$title="<table class='table table-striped table-hover table-bordered' style='text-align:center;width:98%'><tr><td>序号</td>".$title."</tr>";
 	return $title;
 }
-
+function fnPaging($tabTitle,$jsonOri,$rowF,$pageRow){
+	$rowE=0;
+	$dic="";
+	$cell="";
+	$json=json_decode($jsonOri,true);
+	$json_count=count($json);
+	if (($json_count-$rowF)<$pageRow){
+		$rowE=$json_count%$pageRow+$rowF-1;
+	}else
+		$rowE=$rowF+$pageRow-1;
+	for($i=$rowF;$i<=$rowE;$i++){
+		for ($j=0;$j<$GLOBALS["cols"];$j++){
+			$cell.="<td>".$json[$i-1]['col'.$j]."</td>";
+		}
+		$dic.="<tr><td>".$i."</td>".$cell."</tr>";
+		$cell="";
+	}
+	$dic=$tabTitle.$dic."</table>";
+	return $dic;
+}
 function fnDetailListA($title){
 	$dc="";
 	$serial=0;
 	$pid = $GLOBALS["pid"];
 	$typ = $_REQUEST['typ'];
-	$dtBegin = $GLOBALS['dtBegin'];
-	$dtEnd = $GLOBALS['dtEnd'];
+	$dtBegin = $_REQUEST['dtBegin'];
+	$dtEnd = $_REQUEST['dtEnd'];
+
 	$proc ='cspDashboard_detail';
 	$result=mysqli_real_query($GLOBALS["conn"],"set names utf8");
 	$result=mysqli_real_query($GLOBALS["conn"],"call $proc('$typ','$dtBegin','$dtEnd')");
@@ -132,7 +192,6 @@ function fnDetailListA($title){
 		$result=mysqli_store_result($GLOBALS["conn"]);
 		$GLOBALS["conn"]->next_result();
 	}
-	$dc=fnTitle($title);
 	$title="";
 	if( $result == false ){ 
 		echo "Error .\n";}
@@ -140,23 +199,23 @@ function fnDetailListA($title){
 		while($row=mysqli_fetch_row($result)){
 			$serial+=1;
 			for ($i=0;$i<($result->field_count);$i++){
-				$title.="<td>".$row[$i]."</td>";
+				$title.='"col'.$i.'":"'.$row[$i].'",';
 			}
-			$dc.= "<tr><td>".$serial."</td>".$title."</tr>";
+			$dc.= "{".substr($title,0,strlen($title)-1)."},";
 			$title="";
 		}
+		$dc="[".substr($dc,0,strlen($dc)-1)."]";
 	}else
 		$dc = "0";
-	$dc.="</table>";
+	$GLOBALS["pgs"]=$result->num_rows;
+	$GLOBALS["cols"]=$i;
 	return $dc;
 }
 
-function fnDetailListB($title){	//download;lively;register
+function fnDetailListB($title,$dtBegin){	//download;lively;register
 	$dc="";$arrDs=[];$chartDt="";$chartData="";$chartDataT="";$t="";$ro="";
 	$pid = $GLOBALS["pid"];
-	$typ = $GLOBALS['typ'];
-	$dt = $GLOBALS['dtBegin'];
-	
+	$typ = $_REQUEST['typ'];
 	$arrDt=explode(',',$title);
 	$dc=fnTitle($title);
 	for ($i=0;$i<7;$i++){
@@ -170,9 +229,10 @@ function fnDetailListB($title){	//download;lively;register
 	$i=0;
 	$j=0;
 	$arrDc=$arrDs;
-	$proc='cspDashboard_detail';
-	$result=mysqli_query($GLOBALS["conn"],"set names utf8");
-	$result=mysqli_real_query($GLOBALS["conn"],"call $proc('$typ','$dt','')");
+	
+	$proc ='cspDashboard_detail';
+	$result=mysqli_real_query($GLOBALS["conn"],"set names utf8");
+	$result=mysqli_real_query($GLOBALS["conn"],"call $proc('$typ','$dtBegin','')");
 	while($GLOBALS["conn"]->more_results()){
 		$result=mysqli_store_result($GLOBALS["conn"]);
 		$GLOBALS["conn"]->next_result();
@@ -211,7 +271,7 @@ function fnDetailListB($title){	//download;lively;register
 		}
 		for ($i=0;$i<count($arrDs);$i++){ $dc.=$arrDc[$i];}
 		$chartData.=substr($chartDataT,0,strlen($chartDataT)-1).";";
-		for ($i=0;$i<7;$i++){ $chartDt.=$arrDt[$i].",";}
+		for ($i=0;$i<count($arrDt);$i++){ $chartDt.=$arrDt[$i].",";}
 	}else
 		$dc = "0";
 		
@@ -224,9 +284,9 @@ function fnDetailListB($title){	//download;lively;register
 function fnDetailListC($title){	//Left Day Week Month
 	$dc="";$arrDs=[];$chartDt="";$chartData="";$chartDataT="";$t="";$ro="";
 	$pid = $GLOBALS["pid"];
-	$typ = $GLOBALS['typ'];
-	$dt = $GLOBALS['dtBegin'];
-	
+	$typ = $_REQUEST['typ'];
+	$dt = $_REQUEST['dtBegin'];
+
 	$dc=fnTitle($title);
 	for ($i=0;$i<7;$i++){
 		$arrDt[]=$i+1;
@@ -234,9 +294,10 @@ function fnDetailListC($title){	//Left Day Week Month
 	}
 	$i=0;
 	$arrDc=$arrDs;
-	$proc='cspDashboard_detail';
-	$result=mysqli_query($GLOBALS["conn"],"set names utf8");
-	$result=mysqli_real_query($GLOBALS["conn"],"call $proc('$typ','$dt','')");
+	$pg = $_REQUEST['pg'];
+	$proc ='cspDashboard_detail';
+	$result=mysqli_real_query($GLOBALS["conn"],"set names utf8");
+	$result=mysqli_real_query($GLOBALS["conn"],"call $proc('$typ','$dtBegin','$dtEnd','$pg')");
 	while($GLOBALS["conn"]->more_results()){
 		$result=mysqli_store_result($GLOBALS["conn"]);
 		$GLOBALS["conn"]->next_result();
@@ -282,7 +343,7 @@ function fnDetailListC($title){	//Left Day Week Month
 function fnChart(){
 	$dc="";
 	$pid = $GLOBALS["pid"];
-	$dt = $GLOBALS['dtBegin'];
+	$dt = $_REQUEST['dtBegin'];
 	$proc='csphighchart_get';
 	$result=mysqli_real_query($GLOBALS["conn"],"call $proc('$dt',@x)");
 	$result=mysqli_real_query($GLOBALS["conn"],"select @x");
@@ -303,7 +364,7 @@ function fnChart(){
 function fnFunnel(){
 	$dc="";$step="";$op="";$val="";$tab="";$tmp="";$tmp2="";
 	$sid=$_REQUEST["sid"];
-	$dt = $GLOBALS['dtBegin'];
+	$dt = $_REQUEST['dtBegin'];
 	$proc='cspDashboard_funnel';
 	$result=mysqli_query($GLOBALS["conn"],"set names utf8");
 	$result=mysqli_real_query($GLOBALS["conn"],"call $proc('$sid','$dt')");

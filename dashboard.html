@@ -349,7 +349,9 @@ try{
 		//	酒店销售日报
 		rt=vchReturn.split("##")[17].split("$$");
 		$(".dv-hotel-sale-d").html($.getSectSpanDouble(rt,'','总销售 : '))
-		
+		//	卡销售总数
+		rt=vchReturn.split("##")[18].split("$$");
+		$(".dv-card-sale").html($.getSectSpanSingle(rt))
 
 		//	日活区域分布
 		rt=vchReturn.split("##")[10].split("$$");
@@ -390,6 +392,7 @@ try{
 		$(".conv-tab").html(vchReturn.split("##")[4])
 	}else if(vf=='getDetail'||vf=='getDetailWheel'){
 		$(".tab").html(vchReturn.split("##")[2]);
+		$("#iph-pages").val(vchReturn.split("##")[3])
 		var v=$(".hid-pr").val();
 		if(v=="down" || v=="lively" || v=="reg" || v=="lau"){
 			var pr=0;
@@ -423,12 +426,12 @@ try{
 		}
 		if (v=="pv"||v=="uv"){
 			var chartDt= new Array
-			chartDt=vchReturn.split("##")[3].split(",");
-			var chartData=vchReturn.split("##")[4];
+			chartDt=vchReturn.split("##")[4].split(",");
+			var chartData=vchReturn.split("##")[5];
 			highChart_lineBasic(chartData.substring(0,chartData.length-1),"","chart",chartDt);
 			$("#chart").show()
 		}
-		if(v=="loc" || v=="time" || v=="debit" || v=="debit-m" || v=="debit-all" || v=="debit0" || v=="debit0-all" || v=="member" || v=="hotel" || v=="hotel-sale-d"){
+		if(v=="loc" || v=="time" ){
 			$(".tab").css("overflow","scroll").css("overflow-x","hidden").css("height","80%")
 		}
 		$(".dv-ext").show();
@@ -452,21 +455,20 @@ try{
 		switch(v){
 			case 'down':
 				$(".title").html("下载渠道");
-				$(".cale2").css('display','none')
 				break;
 			case 'reg':
 				$(".title").html("注册来源");
-				$(".cale2").css('display','none')
 				break;
 			case 'lively':
 				$(".title").html("活跃渠道");
-				$(".cale2").css('display','none')
 				break;
 			case 'pv':
 				$(".title").html("PV版块");
+				$(".cale2").css('display','none')
 				break;
 			case 'uv':
 				$(".title").html("UV版块");
+				$(".cale2").css('display','none')
 				break;
 			case 'leftD':
 				$(".title").html("日留存");
@@ -483,7 +485,6 @@ try{
 				break;
 			case 'lau':
 				$(".title").html("APP启动");
-				$(".cale2").css('display','none')
 				break;
 			case 'interval':
 				$(".title").html("APP使用时长");
@@ -532,6 +533,9 @@ try{
 				$(".title").html("订单销售");
 				$(".tab").css("font-size","10px")
 				break;
+			case 'card-sale':
+				$(".title").html("卡销售汇总");
+				break;
 		}
 	}else
 		alert("System Error!")
@@ -560,6 +564,15 @@ $.initDate = function(){
 	}).on('changeDate', function(ev){   });
 	$('.form_date').datetimepicker('setEndDate',vdt);
 }
+$.init7Days = function(){
+	var dt = new Date();
+	var dt= new Date(dt.getTime()-(1000*60*60*24*6));//set today
+	var m="0"+(dt.getMonth()+1);
+	var d="0"+(dt.getDate());
+	vdt=dt.getFullYear()+"-"+m.substr(m.length-2,2)+"-"+d.substr(d.length-2,2);
+	$('#ip-d-start').val(vdt)
+	$('#iph-d-start').val(vdt)
+}
 $(document).ready(function(){
 	setTimeout(function(){
 		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDashBoard");
@@ -569,14 +582,14 @@ $(document).ready(function(){
 	$('.tab-close').click(function(){
 		$(".dv-ext").hide();
 		$(".dv-ext-in").hide();
-		$('#ip-d-start').val(vdt)
-		$('#iph-d-start').val(vdt)
 		$("#chart").hide();
-		$(".tab").css("overflow","auto").css("height","").css("margin-top","-20px");
+		//$(".tab").css("overflow","auto").css("height","").css("margin-top","-20px");
 		$(".cale").css("display","block")
 		$(".cale2").css('display','block')
 		$(".navi").show()
 		$(".tab").css("font-size","14px")
+		$('.a-pg').html("1")
+		$('#iph-pages').val(0)
 		$.initDate();
 	})
 	$(".btn-nav").click(function(){
@@ -591,7 +604,7 @@ $(document).ready(function(){
 		}
 	})
 	$(".conv-show").click(function(){
-		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getFunnel")+"&dtBegin="+escape($('#iph-d-start').val())+"&dtEnd="+escape($('#iph-d-end').val())+"&sid="+escape($(this).attr('data-type'));
+		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getFunnel")+"&dtBegin="+escape($('#iph-d-start').val())+"&sid="+escape($(this).attr('data-type'));
 		createXMLHttpRequest(url,"fresh=" +Math.random());
 	})
 
@@ -600,8 +613,12 @@ $(document).ready(function(){
 	})
 
 	$('.tab-show').click(function(){
-		$(".hid-pr").val($(this).attr("type"));
-		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDetail")+"&dtBegin="+escape($('#iph-d-start').val())+"&dtEnd="+escape($('#iph-d-end').val())+"&typ="+escape($(".hid-pr").val());
+		var typ=$(this).attr("type");
+		if (typ=="down" || typ=="lively" || typ=="reg" || typ=="lau" || typ=="pv" || typ=="uv" || typ=="time" || typ=="point" || typ=="interval"){
+			$.init7Days();
+		}
+		$(".hid-pr").val(typ);
+		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDetail")+"&dtBegin="+escape($('#iph-d-start').val())+"&dtEnd="+escape($('#iph-d-end').val())+"&typ="+escape(typ)+"&pg="+escape($(".a-pg").html());
 		createXMLHttpRequest(url,"fresh=" +Math.random());
 		scroll(0,0);
 		$(".navi").hide()
@@ -615,12 +632,29 @@ $(document).ready(function(){
 			alert("End date is wrong")
 			return false;
 		}		
-		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj=getDetail&dtBegin="+escape($('#iph-d-start').val())+"&dtEnd="+escape($('#iph-d-end').val())+"&typ="+escape($(".hid-pr").val());
+		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj=getDetail&dtBegin="+escape($('#iph-d-start').val())+"&dtEnd="+escape($('#iph-d-end').val())+"&typ="+escape($(".hid-pr").val())+"&pg="+escape($(".a-pg").html());
 		createXMLHttpRequest(url,"fresh=" +Math.random());
 		//alert(url)
 		
 	})
 	$.initDate()
+	
+	$(".li-pre").click(function(){
+		if(eval($(".a-pg").html())>1){
+			$('.a-pg').html(parseInt($(".a-pg").html())-1)
+		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDetail")+"&dtBegin="+escape($('#iph-d-start').val())+"&dtEnd="+escape($('#iph-d-end').val())+"&typ="+escape($(".hid-pr").val())+"&pg="+escape($(".a-pg").html());
+		createXMLHttpRequest(url,"fresh=" +Math.random());
+		$(".navi").hide()
+		}
+	})
+	$(".li-nxt").click(function(){
+		if(eval($(".a-pg").html())<$("#iph-pages").val()){
+			$('.a-pg').html(parseInt($(".a-pg").html())+1)
+		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDetail")+"&dtBegin="+escape($('#iph-d-start').val())+"&dtEnd="+escape($('#iph-d-end').val())+"&typ="+escape($(".hid-pr").val())+"&pg="+escape($(".a-pg").html());
+		createXMLHttpRequest(url,"fresh=" +Math.random());
+		$(".navi").hide()
+		}
+	})
 })
 </script>
 </head>
@@ -743,6 +777,14 @@ $(document).ready(function(){
 <span class="glyphicon glyphicon-stats tab-show icon-corner" aria-hidden="true" style="cursor:pointer" type="debit0-all"></span>
 </div></div>
 <div class="dv-debit0 font80 fontBoard" ></div>
+</section></div>
+
+<div class="col-xs-12 col-sm-8 col-md-4 dv-block">
+<section class="sect" style="background-color:#4169E1;">
+<div class="dv-title">点卡销售<div style="float:right;">
+<span class="glyphicon glyphicon-th-list tab-show icon-corner" aria-hidden="true" style="cursor:pointer" type="card-sale"></span>
+</div></div>
+<div class="dv-card-sale font80 fontBoard" ></div>
 </section></div>
 
 <div class="col-xs-12 col-md-12"></div>
@@ -883,7 +925,17 @@ $(document).ready(function(){
 </div>
 <span class="glyphicon glyphicon-remove tab-close" aria-hidden="true" style="color:#000;font-size:40px;float:right;cursor:pointer"></span>
 </div>
-<div class="tab" style="padding:20px;width:99%;height:auto;margin-top:20px"></div>
+<div class='title font20' style='width:55%;text-align:right'></div>
+<div class="tab" style="padding:0px 20px;width:99%;height:auto"></div>
+  <ul class="pagination" style="float:right;padding:0px 20px">
+    <li><a href="#">&laquo;</a></li>
+    <li><a href="#" class='li-pre'>&lt;</a></li>
+    <li><a href="#" class='a-pg'>1</a></li>
+    <li><a href="#" class='li-nxt'>&gt;</a></li>
+    <li><a href="#">&raquo;</a></li>
+  </ul>
+ <input type="hidden" id="iph-page" value="" />
+<input type="hidden" id="iph-pages" value="" />
 <div id="chart" style="margin:-40px 0px 0px 50px;width:80%;height:250px;display:none;"></div>
 </div>
 <input type=hidden class='hid-pr'/>
