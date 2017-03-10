@@ -292,8 +292,7 @@ try{
 		$(".dv-register-l1").html("<br>"+rt[rt.length-1]);
 		$(".dv-register-l2").html("<br>"+vchReturn.split('##')[3].split('$$')[3]);
 		//$(".dv-register-r1").html("<br>"+rt[rt.length-2])
-		//	日均注册
-		$(".dv-register-r1").html("<br>"+$.isInfinity(Math.round(avg/7)))
+
 		//	近期注册图表
 		var chartDt= new Array
 		var avg=0;
@@ -303,6 +302,10 @@ try{
 		for (i=0;i<7;i++){
 			avg+=parseInt(chartData[i]);
 		}
+		//	日均注册
+		$(".dv-register-r1").html("<br>"+$.isInfinity(Math.round(avg/7)))
+		
+		
 		chartData.unshift(" ");
 		chartData.pop();
 		chartData=chartData.join(",");
@@ -393,6 +396,7 @@ try{
 	}else if(vf=='getDetail'||vf=='getDetailWheel'){
 		$(".tab").html(vchReturn.split("##")[2]);
 		$("#iph-pages").val(vchReturn.split("##")[3])
+		$(".li-pages").html("共 "+vchReturn.split("##")[3]+"页")
 		var v=$(".hid-pr").val();
 		if(v=="down" || v=="lively" || v=="reg" || v=="lau"){
 			var pr=0;
@@ -584,6 +588,7 @@ $(document).ready(function(){
 		$(".dv-ext-in").hide();
 		$("#chart").hide();
 		//$(".tab").css("overflow","auto").css("height","").css("margin-top","-20px");
+		$(".tab").css("overflow","auto").css("height","auto")
 		$(".cale").css("display","block")
 		$(".cale2").css('display','block')
 		$(".navi").show()
@@ -781,7 +786,7 @@ $(document).ready(function(){
 
 <div class="col-xs-12 col-sm-8 col-md-4 dv-block">
 <section class="sect" style="background-color:#4169E1;">
-<div class="dv-title">点卡种类<div style="float:right;">
+<div class="dv-title">点卡种类数<div style="float:right;">
 <span class="glyphicon glyphicon-th-list tab-show icon-corner" aria-hidden="true" style="cursor:pointer" type="card-sale"></span>
 </div></div>
 <div class="dv-card-sale font80 fontBoard" ></div>
@@ -933,6 +938,7 @@ $(document).ready(function(){
     <li><a href="#" class='a-pg'>1</a></li>
     <li><a href="#" class='li-nxt'>&gt;</a></li>
     <li><a href="#">&raquo;</a></li>
+	<li><a href="#" class='li-pages'></a></li>
   </ul>
  <input type="hidden" id="iph-page" value="" />
 <input type="hidden" id="iph-pages" value="" />
