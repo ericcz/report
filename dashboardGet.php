@@ -168,7 +168,8 @@ function fnPaging($tabTitle,$jsonOri,$rowF,$pageRow){
 	}else
 		$rowE=$rowF+$pageRow-1;
 		
-		echo $rowF;
+		echo $json_count.'u';
+		echo  $pageRow.'u';
 		echo $rowE;
 	for($i=$rowF;$i<=$rowE;$i++){
 		for ($j=0;$j<$GLOBALS["cols"];$j++){
