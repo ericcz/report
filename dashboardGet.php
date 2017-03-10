@@ -164,13 +164,9 @@ function fnPaging($tabTitle,$jsonOri,$rowF,$pageRow){
 	$json=json_decode($jsonOri,true);
 	$json_count=count($json);
 	if (($json_count-$rowF)<$pageRow){
-		$rowE=$json_count%$pageRow+$rowF-1;
+		$rowE=$json_count;
 	}else
 		$rowE=$rowF+$pageRow-1;
-		
-		echo $json_count.'u';
-		echo  $pageRow.'u';
-		echo $rowE;
 	for($i=$rowF;$i<=$rowE;$i++){
 		for ($j=0;$j<$GLOBALS["cols"];$j++){
 			$cell.="<td>".$json[$i-1]['col'.$j]."</td>";
