@@ -299,13 +299,11 @@ try{
 		chartDt=vchReturn.split("##")[3].split("$$")[1].split(",");
 		chartDt.pop();
 		var chartData=vchReturn.split("##")[3].split("$$")[2].split(",");
-		for (i=0;i<7;i++){
+		for (i=0;i<chartData.length;i++){
 			avg+=parseInt(chartData[i]);
 		}
 		//	日均注册
-		//$(".dv-register-r1").html("<br>"+$.isInfinity(Math.round(avg/7)))
-		$(".dv-register-r1").html("<br>3")
-		
+		$(".dv-register-r1").html("<br>"+$.isInfinity(Math.round(avg/7)))
 		
 		chartData.unshift(" ");
 		chartData.pop();
@@ -661,6 +659,19 @@ $(document).ready(function(){
 		$(".navi").hide()
 		}
 	})
+	$(".li-fst").click(function(){
+		$('.a-pg').html("1")
+		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDetail")+"&dtBegin="+escape($('#iph-d-start').val())+"&dtEnd="+escape($('#iph-d-end').val())+"&typ="+escape($(".hid-pr").val())+"&pg="+escape($(".a-pg").html());
+		createXMLHttpRequest(url,"fresh=" +Math.random());
+		$(".navi").hide()
+
+	})
+	$(".li-lst").click(function(){
+		$('.a-pg').html($("#iph-pages").val())
+		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDetail")+"&dtBegin="+escape($('#iph-d-start').val())+"&dtEnd="+escape($('#iph-d-end').val())+"&typ="+escape($(".hid-pr").val())+"&pg="+escape($(".a-pg").html());
+		createXMLHttpRequest(url,"fresh=" +Math.random());
+		$(".navi").hide()
+	})
 })
 </script>
 </head>
@@ -934,11 +945,11 @@ $(document).ready(function(){
 <div class='title font20' style='width:55%;text-align:right'></div>
 <div class="tab" style="padding:0px 20px;width:99%;height:auto"></div>
   <ul class="pagination" style="float:right;padding:0px 20px">
-    <li><a href="#">&laquo;</a></li>
+    <li><a href="#" class='li-fst'>&laquo;</a></li>
     <li><a href="#" class='li-pre'>&lt;</a></li>
     <li><a href="#" class='a-pg'>1</a></li>
     <li><a href="#" class='li-nxt'>&gt;</a></li>
-    <li><a href="#">&raquo;</a></li>
+    <li><a href="#" class='li-lst'>&raquo;</a></li>
 	<li><a href="#" class='li-pages'></a></li>
   </ul>
  <input type="hidden" id="iph-page" value="" />
