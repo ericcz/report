@@ -394,8 +394,9 @@ try{
 		$(".conv-tab").html(vchReturn.split("##")[4])
 	}else if(vf=='getDetail'||vf=='getDetailWheel'){
 		$(".tab").html(vchReturn.split("##")[2]);
-		$("#iph-pages").val(vchReturn.split("##")[3])
-		$(".li-pages").html("共 "+vchReturn.split("##")[3]+"页")
+		var pgs=vchReturn.split("##")[vchReturn.split("##").length-1];
+		$("#iph-pages").val(pgs)
+		$(".li-pages").html("共 "+pgs+"页")
 		var v=$(".hid-pr").val();
 		if(v=="down" || v=="lively" || v=="reg" || v=="lau"){
 			var pr=0;
@@ -429,8 +430,8 @@ try{
 		}
 		if (v=="pv"||v=="uv"){
 			var chartDt= new Array
-			chartDt=vchReturn.split("##")[4].split(",");
-			var chartData=vchReturn.split("##")[5];
+			chartDt=vchReturn.split("##")[3].split(",");
+			var chartData=vchReturn.split("##")[4];
 			highChart_lineBasic(chartData.substring(0,chartData.length-1),"","chart",chartDt);
 			$("#chart").show()
 		}
@@ -475,12 +476,15 @@ try{
 				break;
 			case 'leftD':
 				$(".title").html("日留存");
+				$(".cale2").css('display','none')
 				break;
 			case 'leftW':
 				$(".title").html("周留存");
+				$(".cale2").css('display','none')
 				break;
 			case 'leftM':
 				$(".title").html("月留存");
+				$(".cale2").css('display','none')
 				break;
 			case 'time':
 				$(".title").html("APP使用时点");
@@ -498,7 +502,11 @@ try{
 				$(".cale2").css('display','none')
 				break;
 			case 'point':
-				$(".title").html("积分范围");
+				$(".title").html("换游币范围");
+				$(".cale2").css('display','none')
+				break;
+			case 'loc':
+				$(".title").html("日活省分布");
 				$(".cale2").css('display','none')
 				break;
 			case 'wheel':
@@ -567,9 +575,9 @@ $.initDate = function(){
 	}).on('changeDate', function(ev){   });
 	$('.form_date').datetimepicker('setEndDate',vdt);
 }
-$.init7Days = function(){
+$.initDays = function(days){
 	var dt = new Date();
-	var dt= new Date(dt.getTime()-(1000*60*60*24*6));//set today
+	var dt= new Date(dt.getTime()-(1000*60*60*24*days));//set today
 	var m="0"+(dt.getMonth()+1);
 	var d="0"+(dt.getDate());
 	vdt=dt.getFullYear()+"-"+m.substr(m.length-2,2)+"-"+d.substr(d.length-2,2);
@@ -618,8 +626,17 @@ $(document).ready(function(){
 
 	$('.tab-show').click(function(){
 		var typ=$(this).attr("type");
-		if (typ=="down" || typ=="lively" || typ=="reg" || typ=="lau" || typ=="pv" || typ=="uv" || typ=="time" || typ=="point" || typ=="interval"){
-			$.init7Days();
+		if (typ=="down" || typ=="lively" || typ=="reg" || typ=="lau" || typ=="pv" || typ=="uv" || typ=="time" || typ=="point" || typ=="interval" || typ=="loc"){
+			$.initDays(6);
+		}
+		if(typ=="leftD"){
+			$.initDays(8);
+		}
+		if(typ=="leftW"){
+			$.initDays(56);
+		}
+		if(typ=="leftM"){
+			$.initDays(240);
 		}
 		$(".hid-pr").val(typ);
 		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDetail")+"&dtBegin="+escape($('#iph-d-start').val())+"&dtEnd="+escape($('#iph-d-end').val())+"&typ="+escape(typ)+"&pg="+escape($(".a-pg").html());

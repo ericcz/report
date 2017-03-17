@@ -55,19 +55,19 @@ function fnDetail(){
 	switch($typ){
 	case 'leftD': 
 		$title = '第一天,第二天,第三天,第四天,第五天,第六天,第七天';
-		$dc=fnDetailListC($title);
+		$dc=fnDetailListC($title)."##1";
 	break;
 	case 'leftW': 
 		$title = '第一周,第二周,第三周,第四周,第五周,第六周,第七周';
-		$dc=fnDetailListC($title);
+		$dc=fnDetailListC($title)."##1";
 	break;
 	case 'leftM': 
 		$title = '第一月,第二月,第三月,第四月,第五月,第六月,第七月';
-		$dc=fnDetailListC($title);
+		$dc=fnDetailListC($title)."##1";
 	break;
 	case 'interval-c': 
 		$title = '1-3秒,3-10秒,10-30秒,30-60秒,1-3分钟,3-10分钟,10-30分钟,30分钟以上';
-		$dc=fnDetailListB($title);
+		$dc=fnDetailListB($title,$title)."##1";
 	break;
 	case 'debit': 
 		$title = '生效日期,有效期,姓名,电话,酒店,售价,赠送金额,结余,绑定会员卡,激活联盟会员';
@@ -210,7 +210,7 @@ function fnDetailListA($title){
 	return $dc;
 }
 
-function fnDetailListB($title,$dtBegin){	//download;lively;register
+function fnDetailListB($title,$dtBegin){	//download;lively;register;lau;loc
 	$dc="";$arrDs=[];$chartDt="";$chartData="";$chartDataT="";$t="";$ro="";
 	$pid = $GLOBALS["pid"];
 	$typ = $_REQUEST['typ'];
@@ -283,8 +283,8 @@ function fnDetailListC($title){	//Left Day Week Month
 	$dc="";$arrDs=[];$chartDt="";$chartData="";$chartDataT="";$t="";$ro="";
 	$pid = $GLOBALS["pid"];
 	$typ = $_REQUEST['typ'];
-	$dt = $_REQUEST['dtBegin'];
-
+	$dtBegin = $_REQUEST['dtBegin'];
+	$dtEnd="";
 	$dc=fnTitle($title);
 	for ($i=0;$i<7;$i++){
 		$arrDt[]=$i+1;
@@ -295,7 +295,7 @@ function fnDetailListC($title){	//Left Day Week Month
 	$pg = $_REQUEST['pg'];
 	$proc ='cspDashboard_detail';
 	$result=mysqli_real_query($GLOBALS["conn"],"set names utf8");
-	$result=mysqli_real_query($GLOBALS["conn"],"call $proc('$typ','$dtBegin','$dtEnd','$pg')");
+	$result=mysqli_real_query($GLOBALS["conn"],"call $proc('$typ','$dtBegin','$dtEnd')");
 	while($GLOBALS["conn"]->more_results()){
 		$result=mysqli_store_result($GLOBALS["conn"]);
 		$GLOBALS["conn"]->next_result();
