@@ -67,7 +67,7 @@ function fnDetail(){
 	break;
 	case 'interval-c': 
 		$title = '1-3秒,3-10秒,10-30秒,30-60秒,1-3分钟,3-10分钟,10-30分钟,30分钟以上';
-		$dc=fnDetailListB($title,$title)."##1";
+		$dc=fnDetailListB($title,$dtBegin)."##1";
 	break;
 	case 'debit': 
 		$title = '生效日期,有效期,姓名,电话,酒店,售价,赠送金额,结余,绑定会员卡,激活联盟会员';
@@ -267,7 +267,9 @@ function fnDetailListB($title,$dtBegin){	//download;lively;register;lau;loc
 			$chartDataT.=$row[1].",";
 			$i+=1;
 		}
-		for ($i=0;$i<count($arrDs);$i++){ $dc.=$arrDc[$i];}
+		if(mysqli_num_rows($result)>0){
+			for ($i=0;$i<count($arrDs);$i++){ $dc.=$arrDc[$i];}
+		}
 		$chartData.=substr($chartDataT,0,strlen($chartDataT)-1).";";
 		for ($i=0;$i<count($arrDt);$i++){ $chartDt.=$arrDt[$i].",";}
 	}else
