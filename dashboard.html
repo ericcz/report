@@ -515,37 +515,46 @@ try{
 				break;
 			case 'debit':
 				$(".title").html("储值卡销售");
+				$(".bt-exp").css('display','block')
 				break;
 			case 'debit-m':
 				$(".title").html("当月酒店累积售卡");
 				$(".cale2").css('display','none')
 				$('.form_date').datetimepicker({startView: 3})
+				$(".bt-exp").css('display','block')
 				break;
 			case 'debit-all':
 				$(".title").html("酒店总售卡信息");
 				$(".cale").css('display','none')
+				$(".bt-exp").css('display','block')
 				break;
 			case 'debit0':
 				$(".title").html("退卡明细表");
+				$(".bt-exp").css('display','block')
 				break;
 			case 'debit0-all':
 				$(".title").html("总退卡信息");
 				$(".cale").css('display','none')
+				$(".bt-exp").css('display','block')
 				break;
 			case 'member':
 				$(".title").html("企业会员");
 				$(".cale").css('display','none')
+				$(".bt-exp").css('display','block')
 				break;
 			case 'hotel':
 				$(".title").html("酒店库存");
 				$(".cale2").css('display','none')
+				$(".bt-exp").css('display','block')
 				break;
 			case 'hotel-sale-d':
 				$(".title").html("订单销售");
 				$(".tab").css("font-size","10px")
+				$(".bt-exp").css('display','block')
 				break;
 			case 'card-sale':
 				$(".title").html("卡销售汇总");
+				$(".bt-exp").css('display','block')
 				break;
 		}
 	}else
@@ -598,6 +607,7 @@ $(document).ready(function(){
 		$(".tab").css("overflow","auto").css("height","auto")
 		$(".cale").css("display","block")
 		$(".cale2").css('display','block')
+		$(".bt-exp").css('display','none')
 		$(".navi").show()
 		$(".tab").css("font-size","14px")
 		$('.a-pg').html("1")
@@ -630,13 +640,13 @@ $(document).ready(function(){
 			$.initDays(6);
 		}
 		if(typ=="leftD"){
-			$.initDays(8);
+			$.initDays(1);
 		}
 		if(typ=="leftW"){
-			$.initDays(56);
+			$.initDays(1);
 		}
 		if(typ=="leftM"){
-			$.initDays(240);
+			$.initDays(1);
 		}
 		$(".hid-pr").val(typ);
 		url="dashboardGet.php?pid="+escape(document.cookie.split('#')[0])+"&obj="+escape("getDetail")+"&dtBegin="+escape($('#iph-d-start').val())+"&dtEnd="+escape($('#iph-d-end').val())+"&typ="+escape(typ)+"&pg="+escape($(".a-pg").html());
@@ -657,6 +667,10 @@ $(document).ready(function(){
 		createXMLHttpRequest(url,"fresh=" +Math.random());
 		//alert(url)
 		
+	})
+	$('.bt-exp').click(function(){
+		var op=window.open();
+		op.location="expcsv.php?pid="+escape(document.cookie.split('#')[0])+"&obj=getExpcsv&dtBegin="+escape($('#iph-d-start').val())+"&dtEnd="+escape($('#iph-d-end').val())+"&typ="+escape($(".hid-pr").val());
 	})
 	$.initDate()
 	
@@ -815,7 +829,7 @@ $(document).ready(function(){
 
 <div class="col-xs-12 col-sm-8 col-md-4 dv-block">
 <section class="sect" style="background-color:#4169E1;">
-<div class="dv-title">点卡种类数<div style="float:right;">
+<div class="dv-title">储值卡种类数<div style="float:right;">
 <span class="glyphicon glyphicon-th-list tab-show icon-corner" aria-hidden="true" style="cursor:pointer" type="card-sale"></span>
 </div></div>
 <div class="dv-card-sale font80 fontBoard" ></div>
@@ -895,7 +909,6 @@ $(document).ready(function(){
 </div>
 <table class="table table-hover font20" style="cursor:pointer;">
 <tr class='tab-show info' type='point'><td>换游币范围</td></tr>
-<!--tr class='tr-lv active' type='launch'><td>APP启动数</td><td class='td-launch'></td></tr-->
 <tr class='tab-show warning' type='time'><td>APP时段</td></tr>
 <tr class='tab-show success' type='interval'><td>APP用户时长</td></tr>
 <tr class='tab-show info' type='interval-c'><td>APP用户时长(渠道)</td></tr>
@@ -954,6 +967,9 @@ $(document).ready(function(){
 	<input type='text' class="form-control form_date" id='ip-d-end' data-date-format="yyyy-mm-dd" data-link-field="iph-d-end" data-link-format="yyyy-mm-dd" size="12" readonly style='width:120px;float:left;' placeholder="EndDate" /></div>
 	<button type="submit" class="btn btn-info bt-exec btn-sm" id="bt-exec" style="float:left;margin:2px 20px">
 	<span>查询</span>
+	</button>
+	<button type="submit" class="btn btn-success bt-exp btn-sm" id="bt-exp" style="float:left;margin:2px;display:none">
+	<span>导出</span>
 	</button>
 	<input type="hidden" id="iph-d-start" value="" /><input type="hidden" id="iph-d-end" value="" />
 </div>

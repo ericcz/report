@@ -1,8 +1,8 @@
 <?php
 include_once "dbcon.php";
 
-$pgnum=10;
-$pgs=0;
+$rows=10;	//rows per page
+$pgs=0;		//total pages
 $cols=0;
 $pid = $_REQUEST['pid'];
 $obj = $_REQUEST['obj'];
@@ -43,14 +43,14 @@ function fnDashBoard(){
 	return $dc;
 }
 function fnDetail(){
-	$dc="";$title="";
-	$pgnum=$GLOBALS["pgnum"];
-	$pid = $GLOBALS["pid"];
+	$dc="";
+	$title="";
+	$rows=$GLOBALS["rows"];
 	$typ = $_REQUEST['typ'];
 	$dtBegin = $_REQUEST['dtBegin'];
 	$dtEnd = $_REQUEST['dtEnd'];
 	$pg = $_REQUEST['pg'];
-	$rcf=$pg*$pgnum-$pgnum+1;
+	$rcf=($pg-1)*$rows+1;
 	
 	switch($typ){
 	case 'leftD': 
@@ -72,56 +72,58 @@ function fnDetail(){
 	case 'debit': 
 		$title = '生效日期,有效期,姓名,电话,酒店,售价,赠送金额,结余,绑定会员卡,激活联盟会员';
 		$json=fnDetailListA($title);
-		$dc=fnPaging(fnTitle($title),$json,$rcf,$pgnum);
-		$dc.="##".fnGetPages($GLOBALS["pgs"],$pgnum);
+		
+		//fnGet_exp($title,$json);
+		$dc=fnPaging($title,$json,$rcf,$rows);
+		$dc.="##".fnGetPages($GLOBALS["pgs"],$rows);
 	break;
 	case 'debit-m': 
 		$title = '酒店,售卡数量,销售金额,赠送金额,绑定会员卡,激活联盟会员';
 		$json=fnDetailListA($title);
-		$dc=fnPaging(fnTitle($title),$json,$rcf,$pgnum);
-		$dc.="##".fnGetPages($GLOBALS["pgs"],$pgnum);
+		$dc=fnPaging($title,$json,$rcf,$rows);
+		$dc.="##".fnGetPages($GLOBALS["pgs"],$rows);
 	break;
 	case 'debit-all': 
 		$title = '酒店,售卡数量,销售金额,赠送金额,结余,绑定会员卡,激活联盟会员';
 		$json=fnDetailListA($title);
-		$dc=fnPaging(fnTitle($title),$json,$rcf,$pgnum);
-		$dc.="##".fnGetPages($GLOBALS["pgs"],$pgnum);
+		$dc=fnPaging($title,$json,$rcf,$rows);
+		$dc.="##".fnGetPages($GLOBALS["pgs"],$rows);
 	break;
 	case 'debit0': 
 		$title = '生效日期,有效期,姓名,酒店,售价,赠送金额,结余';
 		$json=fnDetailListA($title);
-		$dc=fnPaging(fnTitle($title),$json,$rcf,$pgnum);
-		$dc.="##".fnGetPages($GLOBALS["pgs"],$pgnum);
+		$dc=fnPaging($title,$json,$rcf,$rows);
+		$dc.="##".fnGetPages($GLOBALS["pgs"],$rows);
 	break;
 	case 'debit0-all': 
 		$title = '酒店,退卡数量,退卡金额,退卡赠送金额,退卡结余';
 		$json=fnDetailListA($title);
-		$dc=fnPaging(fnTitle($title),$json,$rcf,$pgnum);
-		$dc.="##".fnGetPages($GLOBALS["pgs"],$pgnum);
+		$dc=fnPaging($title,$json,$rcf,$rows);
+		$dc.="##".fnGetPages($GLOBALS["pgs"],$rows);
 	break;
 	case 'member': 
 		$title = '加入日期,电话,姓名,酒店,间夜数,剩余换游币,赠送换游币';
 		$json=fnDetailListA($title);
-		$dc=fnPaging(fnTitle($title),$json,$rcf,$pgnum);
-		$dc.="##".fnGetPages($GLOBALS["pgs"],$pgnum);
+		$dc=fnPaging($title,$json,$rcf,$rows);
+		$dc.="##".fnGetPages($GLOBALS["pgs"],$rows);
 	break;
 	case 'hotel': 
 		$title = '日期,城市,酒店名称,间夜数,可用数,最低价';
 		$json=fnDetailListA($title);
-		$dc=fnPaging(fnTitle($title),$json,$rcf,$pgnum);
-		$dc.="##".fnGetPages($GLOBALS["pgs"],$pgnum);
+		$dc=fnPaging($title,$json,$rcf,$rows);
+		$dc.="##".fnGetPages($GLOBALS["pgs"],$rows);
 	break;
 	case 'hotel-sale-d': 
 		$title = '日期,酒店,订单内容,订单类型,联系电话,联系人,入住人,入住日期,退房日期,现金,换游币,间夜数';
 		$json=fnDetailListA($title);
-		$dc=fnPaging(fnTitle($title),$json,$rcf,$pgnum);
-		$dc.="##".fnGetPages($GLOBALS["pgs"],$pgnum);
+		$dc=fnPaging($title,$json,$rcf,$rows);
+		$dc.="##".fnGetPages($GLOBALS["pgs"],$rows);
 	break;
 	case 'card-sale': 
 		$title = '酒店名,储值卡类型,销售数';
 		$json=fnDetailListA($title);
-		$dc=fnPaging(fnTitle($title),$json,$rcf,$pgnum);
-		$dc.="##".fnGetPages($GLOBALS["pgs"],$pgnum);
+		$dc=fnPaging($title,$json,$rcf,$rows);
+		$dc.="##".fnGetPages($GLOBALS["pgs"],$rows);
 	break;
 	default:
 		$p=round((strtotime($dtEnd)-strtotime($dtBegin))/3600/24)+1;
@@ -140,17 +142,17 @@ function fnDetail(){
 	}
 	return $dc;
 }
-function fnGetPages($p,$pgnum){
+function fnGetPages($p,$rows){
 	$i=0;
-	if($p%$pgnum>0){
-		$i=floor($p/$pgnum)+1;
+	if($p%$rows>0){
+		$i=floor($p/$rows)+1;
 	}else
-		$i=floor($p/$pgnum);
+		$i=floor($p/$rows);
 	return $i;
 }
-function fnTitle($t){
+function fnTitle($tabTitle){
 	$title="";
-	$titleArr=explode(',',$t);
+	$titleArr=explode(',',$tabTitle);
 	for ($i=0;$i<count($titleArr);$i++){
 		$title.="<td>".$titleArr[$i]."</td>";
 	}
@@ -174,11 +176,11 @@ function fnPaging($tabTitle,$jsonOri,$rowF,$pageRow){
 		$dic.="<tr><td>".$i."</td>".$cell."</tr>";
 		$cell="";
 	}
-	$dic=$tabTitle.$dic."</table>";
+	$dic=fnTitle($tabTitle).$dic."</table>";
 	return $dic;
 }
 function fnDetailListA($title){
-	$dc="";
+	$dc="";$i=0;
 	$pid = $GLOBALS["pid"];
 	$typ = $_REQUEST['typ'];
 	$dtBegin = $_REQUEST['dtBegin'];
@@ -260,10 +262,7 @@ function fnDetailListB($title,$dtBegin){	//download;lively;register;lau;loc
 				$i+=1;
 				$chartDataT.="0,";
 			}
-			if (substr($typ,0,4)=='left'){
-				$arrDc[$i]="<td class='col".$i."'>".$row[1]."</td>";
-			}else
-				$arrDc[$i]="<td class='col".$i."'>".round($row[1])."</td>";
+			$arrDc[$i]="<td class='col".$i."'>".round($row[1])."</td>";
 			$chartDataT.=$row[1].",";
 			$i+=1;
 		}
@@ -394,7 +393,31 @@ function fnFunnel(){
 	return $dc;
 }
 
+function fnGet_exp($title,$jsonOri){
+	$dc="";
+	$file=date('Ymd').'.csv';
+	$json=json_decode($jsonOri,true);
+	$json_count=count($json);
+
+	for($i=1;$i<=$json_count;$i++){
+		for ($j=0;$j<$GLOBALS["cols"];$j++){
+			$dc.=$json[$i-1]['col'.$j].",";
+		}
+		$dc.="\n";
+	}
+	$dc=$title."\n".$dc;
+	export_csv($file,$dc);
+}
+function export_csv($filename,$data) { 
+    header("Content-type:text/csv"); 
+    header("Content-Disposition:attachment;filename=".$filename); 
+    header('Cache-Control:must-revalidate,post-check=0,pre-check=0'); 
+    header('Expires:0'); 
+    header('Pragma:public'); 
+    echo $data;
+}
+
+
 echo "1##".$obj."##".$desc;
 mysqli_close($conn);
 ?>
-
