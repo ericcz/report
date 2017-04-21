@@ -114,7 +114,7 @@ function fnDetail(){
 		$dc.="##".fnGetPages($GLOBALS["pgs"],$rows);
 	break;
 	case 'hotel-sale-d': 
-		$title = '日期,酒店,订单内容,订单类型,联系电话,联系人,入住人,入住日期,退房日期,现金,换游币,间夜数';
+		$title = '日期,酒店,订单内容,订单类型,联系电话,联系人,入住人,入住日期,退房日期,现金,换游币,间夜数,来源,企业会员,权益会员,通惠卡会员';
 		$json=fnDetailListA($title);
 		$dc=fnPaging($title,$json,$rcf,$rows);
 		$dc.="##".fnGetPages($GLOBALS["pgs"],$rows);
